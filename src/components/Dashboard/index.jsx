@@ -95,13 +95,13 @@ const Dashboard = () => {
 
         {/* Overview Section */}
         <div className="overview-section">
-          <div className="overview-header">
-            <h1>Overview</h1>
-          </div>
-          <div>
-            <h2>Widgets here</h2>
-          </div>
+          <h3>Continue Learning</h3>
         </div>
+
+        <div className="overview-section">
+          <h3>Recommened Courses</h3>
+        </div>
+
       </div>
 
       {/* Sidebar */}
@@ -109,7 +109,10 @@ const Dashboard = () => {
         <Leaderboard leaderboardData={dashboardData.leaderboard} />
 
         <Card className="sidebar-card">
-          <h4 className="card-header" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <h4
+            className="card-header"
+            style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
+          >
             Titan AI suggestion
             <img
               src={customStarsIcon}
@@ -121,7 +124,11 @@ const Dashboard = () => {
             {aiSuggestions.length > 0 ? (
               <div className="card-list ai-suggestion-list">
                 {aiSuggestions.map((suggestion) => (
-                  <div className="ai-suggestion-item" key={`suggestion-${suggestion}`} style={{ position: 'relative' }}>
+                  <div
+                    className="ai-suggestion-item"
+                    key={`suggestion-${suggestion}`}
+                    style={{ position: 'relative' }}
+                  >
                     {suggestion}
                     <img
                       src={customStarsIcon}
