@@ -39,8 +39,8 @@ const ContinueLearning = () => {
           <Card className="border-0">
             <div className="d-flex">
               <CourseCardImage cardId={mostRecentCourse.cardId} orientation="horizontal" />
-              <Card.Body className="d-flex flex-row justify-content-between mtop">
-                <div>
+              <Card.Body className="d-flex flex-row mtop">
+                <div style={{ width: '80%' }}>
                   <Card.Header
                     title={<CourseCardTitle cardId={mostRecentCourse.cardId} />}
                     actions={<CourseCardMenu cardId={mostRecentCourse.cardId} />}
@@ -50,9 +50,17 @@ const ContinueLearning = () => {
                     <CourseCardDetails cardId={mostRecentCourse.cardId} />
                   </Card.Section>
                 </div>
-                <Card.Footer className="border-0 pt-2">
+                <div
+                  style={{
+                    width: '20%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'flex-end',
+                    marginTop: '2rem',
+                  }}
+                >
                   <CourseCardActions cardId={mostRecentCourse.cardId} />
-                </Card.Footer>
+                </div>
               </Card.Body>
             </div>
           </Card>
