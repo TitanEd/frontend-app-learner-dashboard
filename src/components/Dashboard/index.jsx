@@ -11,15 +11,20 @@ import './index.scss';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 import { getConfig } from '@edx/frontend-platform';
+import { useInitializeDashboard } from '../../containers/Dashboard/hooks';
 import customStarsIcon from '../../assets/custom-stars.svg';
 import MetricCard from './components/MetricCard';
 import Leaderboard from './components/Leaderboard';
 import messages from './components/messages';
+import ContinueLearning from './ContinueLearning';
 
 const Dashboard = () => {
   const [dashboardData, setDashboardData] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // Initialize dashboard to load course data
+  useInitializeDashboard();
+  
   const intl = useIntl();
 
   useEffect(() => {
@@ -96,6 +101,7 @@ const Dashboard = () => {
         {/* Overview Section */}
         <div className="overview-section">
           <h3>Continue Learning</h3>
+          <ContinueLearning />
         </div>
 
         <div className="overview-section">
