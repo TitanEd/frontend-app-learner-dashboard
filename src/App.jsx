@@ -26,6 +26,7 @@ import AppWrapper from 'containers/WidgetContainers/AppWrapper';
 import LearnerDashboardHeader from 'containers/LearnerDashboardHeader';
 
 import { getConfig } from '@edx/frontend-platform';
+import { PluginSlot } from '@openedx/frontend-plugin-framework';
 import messages from './messages';
 import './App.scss';
 
@@ -79,7 +80,9 @@ export const App = () => {
       </Helmet>
       <div>
         <AppWrapper>
-          <LearnerDashboardHeader />
+          <PluginSlot id="header_footer_hide_plugin_slot">
+            <LearnerDashboardHeader />
+          </PluginSlot>
           <main>
             {hasNetworkFailure
               ? (
@@ -91,7 +94,9 @@ export const App = () => {
               )}
           </main>
         </AppWrapper>
-        <FooterSlot />
+        <PluginSlot id="header_footer_hide_plugin_slot">
+          <FooterSlot />
+        </PluginSlot>
       </div>
     </>
   );

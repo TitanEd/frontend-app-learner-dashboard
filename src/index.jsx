@@ -29,13 +29,19 @@ import messages from './i18n';
 import App from './App';
 import NoticesWrapper from './components/NoticesWrapper';
 
+import 'titaned-lib/dist/index.css';
+import './styles/styles-overrides.scss';
+import Layout from './Layout';
+
 subscribe(APP_READY, () => {
   ReactDOM.render(
     <AppProvider store={store}>
       <NoticesWrapper>
         <Routes>
-          <Route path="/" element={<PageWrap><App /></PageWrap>} />
-          <Route path="*" element={<Navigate to="/" replace />} />
+          <Route path="/" element={<Layout />}>
+            <Route path="/" element={<PageWrap><App /></PageWrap>} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Route>
         </Routes>
       </NoticesWrapper>
     </AppProvider>,
