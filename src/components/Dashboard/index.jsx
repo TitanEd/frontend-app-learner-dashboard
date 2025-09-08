@@ -13,6 +13,7 @@ import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 import { getConfig } from '@edx/frontend-platform';
 import customStarsIcon from '../../assets/custom-stars.svg';
 import MetricCard from './components/MetricCard';
+import Leaderboard from './components/Leaderboard';
 import messages from './components/messages';
 
 const Dashboard = () => {
@@ -105,6 +106,8 @@ const Dashboard = () => {
 
       {/* Sidebar */}
       <div className="dashboard-sidebar">
+        <Leaderboard leaderboardData={dashboardData.leaderboard} />
+
         <Card className="sidebar-card">
           <h4 className="card-header" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             Titan AI suggestion

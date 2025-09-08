@@ -26,6 +26,29 @@
         "icon": "fas fa-users"
       }
     ],
+    "leaderboard": [
+      {
+        "id": 1,
+        "rank": 1,
+        "name": "Davis Curtis",
+        "avatar": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face",
+        "streak": 15
+      },
+      {
+        "id": 2,
+        "rank": 2,
+        "name": "Alena Donin",
+        "avatar": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face",
+        "streak": 12
+      },
+      {
+        "id": 3,
+        "rank": 3,
+        "name": "Craig Gouse",
+        "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=40&h=40&fit=crop&crop=face",
+        "streak": 8
+      }
+    ],
     "titanAISuggestions": [
       "Consider adding more interactive elements to engage students",
       "Review course completion rates and identify areas for improvement",
