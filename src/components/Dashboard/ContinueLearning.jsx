@@ -27,31 +27,40 @@ const ContinueLearning = () => {
   - new Date(a.enrollment.lastEnrolled))[0];
 
   return (
-    <div>
+    <div style={{
+      border: '1px solid #D5D7DA',
+      borderRadius: '12px',
+      padding: '16px',
+    }}
+    >
+      {/* Course Card */}
       {hasCourses && mostRecentCourse ? (
-        <div className="mb-4.5 course-card" id={mostRecentCourse.cardId} data-testid="CourseCard">
-          <Card orientation={orientation}>
-            <div className="d-flex flex-column w-100">
-              <div {...({ className: 'd-flex' })}>
-                <CourseCardImage cardId={mostRecentCourse.cardId} orientation="horizontal" />
-                <Card.Body>
+        <div className="course-card" id={mostRecentCourse.cardId} data-testid="CourseCard">
+          <Card className="border-0">
+            <div className="d-flex">
+              <CourseCardImage cardId={mostRecentCourse.cardId} orientation="horizontal" />
+              <Card.Body className="d-flex flex-row justify-content-between mtop">
+                <div>
                   <Card.Header
                     title={<CourseCardTitle cardId={mostRecentCourse.cardId} />}
                     actions={<CourseCardMenu cardId={mostRecentCourse.cardId} />}
+                    className="border-0 pb-2"
                   />
                   <Card.Section className="pt-0">
                     <CourseCardDetails cardId={mostRecentCourse.cardId} />
                   </Card.Section>
-                  <Card.Footer orientation={orientation}>
-                    <CourseCardActions cardId={mostRecentCourse.cardId} />
-                  </Card.Footer>
-                </Card.Body>
-              </div>
+                </div>
+                <Card.Footer className="border-0 pt-2">
+                  <CourseCardActions cardId={mostRecentCourse.cardId} />
+                </Card.Footer>
+              </Card.Body>
             </div>
           </Card>
         </div>
       ) : (
-        <p className="text-muted">No course in progress to resume.</p>
+        <div className="text-center py-4">
+          <p className="text-muted mb-0">No course in progress to resume.</p>
+        </div>
       )}
     </div>
   );

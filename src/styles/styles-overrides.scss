@@ -9,3 +9,24 @@
   width: 16px;
   height: 18px;
 }
+
+.course-card {
+  max-height: 150px !important;
+  
+  .pgn__card .pgn__card-wrapper-image-cap.horizontal .pgn__card-image-cap {
+    border-radius: 1rem !important;
+  }
+  
+  .pgn__card .pgn__card-wrapper-image-cap.horizontal {
+    width: 240px !important;
+    height: 120px !important;
+  }
+
+  .pgn__card-header-actions {
+    display: none !important;
+  }
+
+  .mtop {
+    margin-top: -2rem !important;
+  }
+}

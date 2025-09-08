@@ -100,7 +100,14 @@ const Dashboard = () => {
 
         {/* Overview Section */}
         <div className="overview-section">
-          <h3>Continue Learning</h3>
+          {/* <h3>Continue Learning</h3> */}
+          {/* Header with title and View All link */}
+          <div className="d-flex justify-content-between align-items-center mb-3">
+            <h3 className="mb-0">Continue Learning</h3>
+            <a href="w" style={{ color: '#1cb0f6', textDecoration: 'none', fontSize: '14px' }}>
+              View All
+            </a>
+          </div>
           <ContinueLearning />
         </div>
 
