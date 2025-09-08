@@ -111,7 +111,7 @@ const Dashboard = () => {
             <img
               src={customStarsIcon}
               alt="Custom Stars"
-              style={{ width: '20px', height: '20px' }}
+              style={{ width: '23px', height: '25px' }}
             />
           </h4>
           <Card.Section className="card-section temp-flow">
