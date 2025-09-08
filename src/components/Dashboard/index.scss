@@ -1,0 +1,161 @@
+.dashboard {
+  padding: 2rem 0;
+
+  .welcome-section {
+    text-align: center;
+    padding: 3rem 0;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 1rem;
+    margin-bottom: 2rem;
+
+    .welcome-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .welcome-subtitle {
+      font-size: 1.2rem;
+      opacity: 0.9;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+  }
+
+  .section-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #2c3e50;
+    border-bottom: 3px solid #3498db;
+    padding-bottom: 0.5rem;
+    display: inline-block;
+  }
+
+  .quick-action-card {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    height: 100%;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+      border-color: #3498db;
+    }
+
+    .action-icon {
+      font-size: 2.5rem;
+      color: #3498db;
+    }
+
+    .action-title {
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 0.5rem;
+    }
+
+    .action-description {
+      color: #7f8c8d;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+
+    &.primary {
+      .action-icon {
+        color: #3498db;
+      }
+    }
+
+    &.success {
+      .action-icon {
+        color: #27ae60;
+      }
+    }
+
+    &.info {
+      .action-icon {
+        color: #17a2b8;
+      }
+    }
+
+    &.warning {
+      .action-icon {
+        color: #f39c12;
+      }
+    }
+  }
+
+  .activities-list {
+    .activity-card {
+      border-left: 4px solid #3498db;
+      transition: all 0.2s ease;
+
+      &:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      .activity-title {
+        color: #2c3e50;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+      }
+
+      .activity-description {
+        color: #7f8c8d;
+        font-size: 0.9rem;
+      }
+
+      .activity-time {
+        font-size: 0.8rem;
+        white-space: nowrap;
+      }
+    }
+  }
+
+  .progress-card {
+    .progress-stats {
+      .stat-item {
+        text-align: center;
+        padding: 1rem 0;
+        border-bottom: 1px solid #ecf0f1;
+
+        &:last-child {
+          border-bottom: none;
+        }
+
+        .stat-number {
+          font-size: 2rem;
+          font-weight: 700;
+          color: #3498db;
+          margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+          color: #7f8c8d;
+          font-size: 0.9rem;
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+
+  // Responsive adjustments
+  @media (max-width: 768px) {
+    .welcome-section {
+      padding: 2rem 1rem;
+
+      .welcome-title {
+        font-size: 2rem;
+      }
+
+      .welcome-subtitle {
+        font-size: 1rem;
+      }
+    }
+
+    .quick-action-card {
+      margin-bottom: 1rem;
+    }
+  }
+}
