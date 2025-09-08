@@ -16,7 +16,6 @@
     "lint-fix": "fedx-scripts eslint --fix --ext .jsx,.js src/",
     "semantic-release": "semantic-release",
     "start": "set PUBLIC_PATH=/learner-dashboard/&&fedx-scripts webpack-dev-server --progress --host apps.local.openedx.io",
-    
     "test": "TZ=GMT fedx-scripts jest --coverage --passWithNoTests",
     "quality": "npm run lint-fix && npm run test",
     "watch-tests": "jest --watch",
