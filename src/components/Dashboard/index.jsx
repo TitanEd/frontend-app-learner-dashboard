@@ -1,171 +1,165 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
-  Container, Row, Col, Card, Button,
+  Card,
+  Icon,
 } from '@openedx/paragon';
 import {
-  Home, LibraryBooks, Calendar, Analytics, Lightbulb, Assistant,
+  RadioButtonUnchecked,
 } from '@openedx/paragon/icons';
 import './index.scss';
+// import { CSS } from '@dnd-kit/utilities';
+import { useIntl } from '@edx/frontend-platform/i18n';
+import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
+import { getConfig } from '@edx/frontend-platform';
+import customStarsIcon from '../../assets/custom-stars.svg';
+import MetricCard from './components/MetricCard';
+import messages from './components/messages';
 
 const Dashboard = () => {
-  const quickActions = [
-    {
-      title: 'My Courses',
-      description: 'View and manage your enrolled courses',
-      icon: <LibraryBooks />,
-      path: '/my-courses',
-      color: 'primary',
-    },
-    {
-      title: 'Calendar',
-      description: 'Check your upcoming assignments and events',
-      icon: <Calendar />,
-      path: '/calendar',
-      color: 'success',
-    },
-    {
-      title: 'Insights & Reports',
-      description: 'View your learning progress and analytics',
-      icon: <Analytics />,
-      path: '/reports',
-      color: 'info',
-    },
-    {
-      title: 'Titan AI',
-      description: 'Get help from our AI assistant',
-      icon: <Assistant />,
-      path: '/ai-assistant',
-      color: 'warning',
-    },
-  ];
+  const [dashboardData, setDashboardData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const recentActivities = [
-    {
-      title: 'Course Progress Update',
-      description: 'You completed 3 lessons in "Introduction to React"',
-      time: '2 hours ago',
-      type: 'success',
-    },
-    {
-      title: 'New Assignment',
-      description: 'Assignment 2 is now available in "Advanced JavaScript"',
-      time: '1 day ago',
-      type: 'info',
-    },
-    {
-      title: 'Course Reminder',
-      description: 'Live session starts in 30 minutes',
-      time: '2 days ago',
-      type: 'warning',
-    },
-  ];
+  const intl = useIntl();
 
-  const handleQuickAction = (path) => {
-    if (path === '/my-courses') {
-      window.location.href = `${window.LMS_BASE_URL || ''}/dashboard`;
-    } else {
-      // For other routes, you can implement navigation logic here
-      console.log(`Navigate to ${path}`);
-    }
-  };
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        // const isLocal = process.env.NODE_ENV !== 'prod' && process.env.NODE_ENV !== 'production';
+        const isLocal = true;
+        console.log(isLocal, 'TEST');
+        console.log(process.env.NODE_ENV, 'process.env.NODE_ENV');
+        if (isLocal) {
+          // Local mock API
+          const response = await fetch('http://localhost:3003/dashboard');
+          const data = await response.json();
+          console.log(data);
+          setDashboardData(data);
+        } else {
+          // Real API endpoints
+          const baseUrl = `${getConfig().LMS_BASE_URL}/titaned/api/v1/instructor-dashboard`;
+          const client = getAuthenticatedHttpClient();
+          // Fetch all in parallel, but handle errors for each
+          const [metricsRes, aiRes, todoRes] = await Promise.allSettled([
+            client.get(`${baseUrl}/metrics`),
+            client.get(`${baseUrl}/widgets`),
+            client.get(`${baseUrl}/ai-suggestions`),
+            client.get(`${baseUrl}/todo-list`),
+          ]);
+
+          const metrics = metricsRes.status === 'fulfilled' ? metricsRes.value.data : [];
+          const titanAISuggestions = aiRes.status === 'fulfilled' ? aiRes.value.data : [];
+          const todoList = todoRes.status === 'fulfilled' ? todoRes.value.data : [];
+
+          setDashboardData({
+            metrics, titanAISuggestions, todoList,
+          });
+        }
+      } catch (error) {
+        console.error('Error fetching dashboard data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDashboardData();
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!dashboardData) {
+    return <div>Error loading dashboard data</div>;
+  }
+
+  // Provide default suggestions if none are present
+  const aiSuggestions = dashboardData.titanAISuggestions;
 
   return (
-    <div className="dashboard">
-      <Container fluid size="xl">
-        {/* Welcome Section */}
-        <Row className="mb-4">
-          <Col>
-            <div className="welcome-section">
-              <h1 className="welcome-title">Welcome to TitanEd Learning Platform</h1>
-              <p className="welcome-subtitle">
-                Your personalized learning dashboard to track progress, access courses,
-                and enhance your educational journey.
-              </p>
-            </div>
-          </Col>
-        </Row>
+    <div className="dashboard-wrapper">
+      <div className="dashboard-main-content">
+        {/* Top Metric Cards */}
+        <div className="dashboard-header">{intl.formatMessage(messages.dashboardPageTitle)}</div>
+        <div className="metrics-container">
+          {dashboardData.metrics && dashboardData.metrics.map((metric, index) => (
+            <MetricCard
+              key={metric.id}
+              icon={metric.icon}
+              value={metric.value}
+              label={metric.label}
+              index={index}
+            />
+          ))}
+        </div>
 
-        {/* Quick Actions */}
-        <Row className="mb-5">
-          <Col>
-            <h2 className="section-title mb-4">Quick Actions</h2>
-            <Row>
-              {quickActions.map((action, index) => (
-                <Col key={index} xs={12} sm={6} lg={3} className="mb-3">
-                  <Card
-                    className={`quick-action-card h-100 ${action.color}`}
-                    onClick={() => handleQuickAction(action.path)}
-                  >
-                    <Card.Body className="text-center">
-                      <div className="action-icon mb-3">
-                        {action.icon}
-                      </div>
-                      <h5 className="action-title">{action.title}</h5>
-                      <p className="action-description">{action.description}</p>
-                      <Button
-                        variant="outline-primary"
-                        size="sm"
-                        className="mt-2"
-                      >
-                        Go to {action.title}
-                      </Button>
-                    </Card.Body>
-                  </Card>
-                </Col>
-              ))}
-            </Row>
-          </Col>
-        </Row>
+        {/* Overview Section */}
+        <div className="overview-section">
+          <div className="overview-header">
+            <h1>Overview</h1>
+          </div>
+          <div>
+            <h2>Widgets here</h2>
+          </div>
+        </div>
+      </div>
 
-        {/* Recent Activities */}
-        <Row>
-          <Col lg={8}>
-            <h2 className="section-title mb-4">Recent Activities</h2>
-            <div className="activities-list">
-              {recentActivities.map((activity, index) => (
-                <Card key={index} className="mb-3 activity-card">
-                  <Card.Body>
-                    <div className="d-flex justify-content-between align-items-start">
-                      <div className="flex-grow-1">
-                        <h6 className="activity-title">{activity.title}</h6>
-                        <p className="activity-description mb-0">{activity.description}</p>
-                      </div>
-                      <small className="activity-time text-muted">{activity.time}</small>
-                    </div>
-                  </Card.Body>
-                </Card>
-              ))}
-            </div>
-          </Col>
+      {/* Sidebar */}
+      <div className="dashboard-sidebar">
+        <Card className="sidebar-card">
+          <h4 className="card-header" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            Titan AI suggestion
+            <img
+              src={customStarsIcon}
+              alt="Custom Stars"
+              style={{ width: '20px', height: '20px' }}
+            />
+          </h4>
+          <Card.Section className="card-section temp-flow">
+            {aiSuggestions.length > 0 ? (
+              <div className="card-list ai-suggestion-list">
+                {aiSuggestions.map((suggestion) => (
+                  <div className="ai-suggestion-item" key={`suggestion-${suggestion}`} style={{ position: 'relative' }}>
+                    {suggestion}
+                    <img
+                      src={customStarsIcon}
+                      alt="Custom Stars"
+                      className="ai-suggestions-icon"
+                    />
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-muted">No suggestions yet.</p>
+            )}
+          </Card.Section>
+        </Card>
 
-          {/* Learning Progress */}
-          <Col lg={4}>
-            <h2 className="section-title mb-4">Learning Progress</h2>
-            <Card className="progress-card">
-              <Card.Body>
-                <div className="progress-stats">
-                  <div className="stat-item">
-                    <h4 className="stat-number">12</h4>
-                    <p className="stat-label">Courses Enrolled</p>
+        <Card className="sidebar-card">
+          <h4 className="card-header">Todo List</h4>
+          <Card.Section className="card-section temp-flow">
+            {dashboardData.todoList.length > 0 ? (
+              <div className="card-list todo-list">
+                {dashboardData.todoList.map((todo) => (
+                  <div className="todo-item" key={`todo-${todo}`}>
+                    <Icon
+                      src={RadioButtonUnchecked}
+                      style={{
+                        marginRight: '0.75rem',
+                        color: '#454545',
+                        minWidth: 22,
+                        minHeight: 22,
+                      }}
+                    />
+                    {todo}
                   </div>
-                  <div className="stat-item">
-                    <h4 className="stat-number">8</h4>
-                    <p className="stat-label">Courses Completed</p>
-                  </div>
-                  <div className="stat-item">
-                    <h4 className="stat-number">156</h4>
-                    <p className="stat-label">Lessons Completed</p>
-                  </div>
-                  <div className="stat-item">
-                    <h4 className="stat-number">92%</h4>
-                    <p className="stat-label">Average Score</p>
-                  </div>
-                </div>
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
-      </Container>
+                ))}
+              </div>
+            ) : (
+              <p className="text-muted">No tasks added.</p>
+            )}
+          </Card.Section>
+        </Card>
+      </div>
     </div>
   );
 };
