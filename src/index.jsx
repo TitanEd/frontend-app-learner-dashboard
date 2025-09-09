@@ -28,7 +28,7 @@ import messages from './i18n';
 
 import App from './App';
 import NoticesWrapper from './components/NoticesWrapper';
-import HomeDashboard from './components/Dashboard';
+// import Dashboard from './components/Dashboard';
 
 import 'titaned-lib/dist/index.css';
 import './styles/styles-overrides.scss';
@@ -41,7 +41,7 @@ subscribe(APP_READY, () => {
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route path="/" element={<PageWrap><App /></PageWrap>} />
-            <Route path="/home" element={<PageWrap><HomeDashboard /></PageWrap>} />
+            {/* <Route path="/home" element={<PageWrap><Dashboard /></PageWrap>} /> */}
             <Route path="*" element={<Navigate to="/" replace />} />
           </Route>
         </Routes>
