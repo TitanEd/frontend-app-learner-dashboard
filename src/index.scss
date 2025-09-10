@@ -556,3 +556,24 @@ body {
   border-radius: 12px;
   padding: 16px 16px 16px 0;
 }
+
+/* Dynamic Widgets Single Column Layout */
+.overview-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-top: 1rem;
+  max-width: 100%;
+}
+
+/* Widget card styling */
+.overview-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.2s ease;
+
+  &:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+}

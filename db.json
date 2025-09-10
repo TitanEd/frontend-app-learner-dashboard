@@ -1,4 +1,102 @@
 {
+  "widgets": [
+    {
+      "id": "widget-1",
+      "type": "chart",
+      "title": "Course Progress Overview",
+      "enabled": true,
+      "content": {
+        "chartType": "bar",
+        "referenceLabels": ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+        "data": [
+          {
+            "label": "Completed Courses",
+            "value": [12, 19, 15, 25, 22, 30]
+          },
+          {
+            "label": "In Progress",
+            "value": [8, 12, 10, 15, 18, 20]
+          }
+        ],
+        "colors": ["#2B2399", "#4CAF50"]
+      }
+    },
+    {
+      "id": "widget-2",
+      "type": "chart",
+      "title": "Learning Analytics",
+      "enabled": true,
+      "content": {
+        "chartType": "pie",
+        "data": [
+          {
+            "label": "Video Content",
+            "value": 45
+          },
+          {
+            "label": "Reading Materials",
+            "value": 25
+          },
+          {
+            "label": "Interactive Quizzes",
+            "value": 20
+          },
+          {
+            "label": "Assignments",
+            "value": 10
+          }
+        ],
+        "colors": ["#FF6B6B", "#4ECDC4", "#45B7D1", "#96CEB4"]
+      }
+    },
+    {
+      "id": "widget-3",
+      "type": "text",
+      "title": "Recent Announcements",
+      "enabled": true,
+      "content": "<div style='padding: 16px;'><h4 style='color: #2B2399; margin-bottom: 12px;'>Important Updates</h4><ul style='margin: 0; padding-left: 20px;'><li style='margin-bottom: 8px;'>New course materials uploaded for Advanced Mathematics</li><li style='margin-bottom: 8px;'>Mid-term exam schedule announced</li><li style='margin-bottom: 8px;'>Office hours updated for this week</li></ul></div>"
+    },
+    {
+      "id": "widget-4",
+      "type": "youtube",
+      "title": "Featured Video",
+      "enabled": true,
+      "content": {
+        "videoId": "dQw4w9WgXcQ",
+        "title": "Welcome to Our Learning Platform",
+        "description": "Get started with our comprehensive learning management system and discover all the features available to enhance your educational journey.",
+        "autoplay": false
+      }
+    },
+    {
+      "id": "widget-5",
+      "type": "chart",
+      "title": "Student Engagement Trends",
+      "enabled": true,
+      "content": {
+        "chartType": "line",
+        "referenceLabels": ["Week 1", "Week 2", "Week 3", "Week 4", "Week 5", "Week 6"],
+        "data": [
+          {
+            "label": "Active Students",
+            "value": [65, 72, 68, 85, 90, 88]
+          },
+          {
+            "label": "Course Completion",
+            "value": [45, 52, 58, 65, 72, 78]
+          }
+        ],
+        "colors": ["#2B2399", "#FF6B6B"]
+      }
+    },
+    {
+      "id": "widget-6",
+      "type": "html",
+      "title": "Quick Actions",
+      "enabled": true,
+      "content": "<div style='padding: 16px; text-align: center;'><h4 style='color: #2B2399; margin-bottom: 16px;'>Quick Actions</h4><div style='display: grid; grid-template-columns: 1fr 1fr; gap: 12px;'><button style='padding: 12px; background: #2B2399; color: white; border: none; border-radius: 8px; cursor: pointer;'>View Grades</button><button style='padding: 12px; background: #4CAF50; color: white; border: none; border-radius: 8px; cursor: pointer;'>Submit Assignment</button><button style='padding: 12px; background: #FF9800; color: white; border: none; border-radius: 8px; cursor: pointer;'>Join Discussion</button><button style='padding: 12px; background: #9C27B0; color: white; border: none; border-radius: 8px; cursor: pointer;'>Download Resources</button></div></div>"
+    }
+  ],
   "dashboard": {
     "metrics": [
       {
@@ -59,7 +157,6 @@
       "Update course syllabus for next semester",
       "Schedule faculty meeting",
       "Prepare presentation for upcoming conference"
-    ],
-    "widgets": []
+    ]
   }
 }

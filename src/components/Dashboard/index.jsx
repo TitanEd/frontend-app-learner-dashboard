@@ -18,6 +18,8 @@ import Leaderboard from './components/Leaderboard';
 import messages from './components/messages';
 // import ContinueLearning from './ContinueLearning';
 import ContinueLearningProgressBar from './ContinueLearningProgressBar';
+import useWidgets from '../../hooks/useWidgets';
+import WidgetCard from './components/WidgetCard';
 
 const Dashboard = () => {
   const [dashboardData, setDashboardData] = useState(null);
@@ -25,6 +27,11 @@ const Dashboard = () => {
 
   // Initialize dashboard to load course data
   useInitializeDashboard();
+
+  // Fetch widgets data
+  const {
+    widgets, loading: widgetsLoading, error: widgetsError, refreshWidgets,
+  } = useWidgets();
 
   const intl = useIntl();
 
@@ -116,8 +123,69 @@ const Dashboard = () => {
           <ContinueLearningProgressBar />
         </div>
 
+        {/* Dynamic Widgets Section */}
         <div className="overview-section">
-          <h3>Recommened Courses</h3>
+          <div className="d-flex justify-content-between align-items-center mb-3">
+            <h3 className="mb-0">Dynamic Widgets</h3>
+            <button
+              type="button"
+              onClick={refreshWidgets}
+              className="btn btn-outline-primary btn-sm"
+              disabled={widgetsLoading}
+              style={{
+                fontSize: '14px',
+                fontWeight: '600',
+                borderColor: '#2B2399',
+                color: '#2B2399',
+              }}
+            >
+              {widgetsLoading ? 'Refreshing...' : 'Refresh'}
+            </button>
+          </div>
+
+          {widgetsError && (
+            <div className="alert alert-warning mb-3" role="alert">
+              <strong>Warning:</strong> {widgetsError}
+            </div>
+          )}
+
+          {widgetsLoading && (
+            <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '200px' }}>
+              <div className="spinner-border text-primary" role="status">
+                <span className="sr-only">Loading widgets...</span>
+              </div>
+            </div>
+          )}
+
+          {!widgetsLoading && widgets.length > 0 && (
+            <div className="overview-left">
+              {widgets
+                .filter(widget => widget.enabled)
+                .map(widget => (
+                  <WidgetCard
+                    key={widget.id}
+                    type={widget.type}
+                    title={widget.title}
+                    content={widget.content}
+                    styles={widget.styles}
+                  />
+                ))}
+            </div>
+          )}
+
+          {!widgetsLoading && widgets.length === 0 && (
+            <div className="text-center py-5">
+              <p className="text-muted">No widgets available at the moment.</p>
+              <button
+                type="button"
+                onClick={refreshWidgets}
+                className="btn btn-primary"
+                style={{ backgroundColor: '#2B2399', borderColor: '#2B2399' }}
+              >
+                Load Widgets
+              </button>
+            </div>
+          )}
         </div>
 
       </div>
