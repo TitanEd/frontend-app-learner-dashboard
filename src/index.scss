@@ -447,28 +447,6 @@ body {
   height: 56px !important;
 }
 
-// Import component-specific sass files
-// @import "courseware/course/celebration/CelebrationModal.scss";
-// @import "courseware/course/sidebar/sidebars/discussions/Discussions.scss";
-// @import "courseware/course/sidebar/sidebars/notifications/NotificationIcon.scss";
-// @import "courseware/course/sequence/lock-paywall/LockPaywall.scss";
-// @import "shared/streak-celebration/StreakCelebrationModal.scss";
-// @import "courseware/course/content-tools/calculator/calculator.scss";
-// @import "courseware/course/content-tools/contentTools.scss";
-// @import "course-home/dates-tab/timeline/Day.scss";
-// @import "generic/upgrade-notification/UpgradeNotification.scss";
-// @import "generic/upsell-bullets/UpsellBullets.scss";
-// @import "course-home/outline-tab/widgets/ProctoringInfoPanel.scss";
-// @import "course-home/outline-tab/widgets/FlagButton.scss";
-// @import "course-home/progress-tab/course-completion/CompletionDonutChart.scss";
-// @import "course-home/progress-tab/grades/course-grade/GradeBar.scss";
-// @import "courseware/course/course-exit/CourseRecommendations";
-// @import "product-tours/newUserCourseHomeTour/NewUserCourseHomeTourModal.scss";
-// @import "course-home/courseware-search/courseware-search.scss";
-// @import "course-tabs/course-tabs-navigation.scss";
-// @import "courseware/course/sidebar/common/SidebarBase.scss";
-// @import "courseware/course/sidebar/sidebars/course-outline/CourseOutlineTray.scss";
-
 .app-container {
   display: flex;
   flex-direction: column;
@@ -576,5 +554,5 @@ body {
 .course-card-individual {
   border: 1px solid #D5D7DA;
   border-radius: 12px;
-  padding: 16px;
+  padding: 16px 16px 16px 0;
 }
