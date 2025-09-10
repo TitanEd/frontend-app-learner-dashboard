@@ -16,7 +16,8 @@ import customStarsIcon from '../../assets/custom-stars.svg';
 import MetricCard from './components/MetricCard';
 import Leaderboard from './components/Leaderboard';
 import messages from './components/messages';
-import ContinueLearning from './ContinueLearning';
+// import ContinueLearning from './ContinueLearning';
+import ContinueLearningProgressBar from './ContinueLearningProgressBar';
 
 const Dashboard = () => {
   const [dashboardData, setDashboardData] = useState(null);
@@ -111,7 +112,8 @@ const Dashboard = () => {
               View All
             </a>
           </div>
-          <ContinueLearning />
+          {/* <ContinueLearning /> */}
+          <ContinueLearningProgressBar />
         </div>
 
         <div className="overview-section">

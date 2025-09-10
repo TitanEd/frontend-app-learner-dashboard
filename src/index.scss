@@ -539,3 +539,32 @@ body {
 .sidebar-container::-webkit-scrollbar-thumb:hover {
   background-color: #555; /* color of the scrollbar thumb on hover */
 }
+
+/* Loading animation for progress bars */
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Course title ellipsis styling */
+.course-title-ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  display: block;
+}
+
+/* Individual course card styling */
+.course-card-individual {
+  border: 1px solid #D5D7DA;
+  border-radius: 12px;
+  padding: 16px;
+}
