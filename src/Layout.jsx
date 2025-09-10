@@ -8,6 +8,15 @@ import {
 } from '@openedx/paragon/icons';
 import getUserMenuItems from '../src/utils/getUserMenuItems';
 import './index.scss';
+import announcementIcon from './assets/announcement-icon.svg';
+import communicationIcon from './assets/communication-icon.svg';
+import dashboardIcon from './assets/dashboard-icon.svg';
+import resourcesIcon from './assets/resources-icon.svg';
+import plannerIcon from './assets/planner-icon.svg';
+import calendarIcon from './assets/calendar-icon.svg';
+import aiAssistantIcon from './assets/ai-assistant-icon.svg';
+import insightsIcon from './assets/insights-icon.svg';
+import myCoursesIcon from './assets/my-courses-icon.svg';
 
 // API to fetch sidebar items
 const fetchNavigationItems = async () => {
@@ -64,72 +73,65 @@ const Layout = () => {
           const sidebarItemsConfig = [
             {
               // label: intl.formatMessage(messages.sidebarDashboardTitle),
-              label: 'Home',
+              label: 'Dashboard',
               path: '/home',
-              icon: <Home />,
+              icon: <img src={dashboardIcon} alt="Dashboard" style={{ width: '24px', height: '24px' }} />,
               isVisible: true, // Always visible
-            },
-            {
-              // label: intl.formatMessage(messages.sidebarCreateNewCourseTitle),
-              label: 'Create New Course',
-              path: '/new-course',
-              icon: <LibraryAdd />,
-              isVisible: menuConfig.allow_to_create_new_course || false,
             },
             {
               // label: intl.formatMessage(messages.sidebarMyCoursesTitle),
               label: 'My Courses',
-              path: '/my-courses',
-              icon: <LmsBook />,
+              path: '/',
+              icon: <img src={myCoursesIcon} alt="My Courses" style={{ width: '24px', height: '24px' }} />,
               isVisible: true, // Always visible
             },
             {
               // label: intl.formatMessage(messages.sidebarContentLibrariesTitle),
-              label: 'Content Libraries',
-              path: '/libraries',
-              icon: <LibraryBooks />,
+              label: 'Announcement',
+              path: '/announcement',
+              icon: <img src={announcementIcon} alt="Announcement" style={{ width: '24px', height: '24px' }} />,
               isVisible: true, // Always visible
             },
             {
               // label: intl.formatMessage(messages.sidebarCalendarTitle),
               label: 'Calendar',
               path: '/calendar',
-              icon: <Calendar />,
+              icon: <img src={calendarIcon} alt="Calendar" style={{ width: '24px', height: '24px' }} />,
               isVisible: true, // Always visible
             },
             {
-              // label: intl.formatMessage(messages.sidebarClassPlannerTitle),
+              // label: intl.formatMessage(messages.sidebarCalendarTitle),
               label: 'Class Planner',
               path: '/class-planner',
-              icon: <Analytics />,
-              isVisible: menuConfig.show_class_planner || false,
+              icon: <img src={plannerIcon} alt="Class Planner" style={{ width: '24px', height: '24px' }} />,
+              isVisible: true, // Always visible
             },
             {
               // label: intl.formatMessage(messages.sidebarInsightsReportsTitle),
               label: 'Insights & Reports',
               path: '/reports',
-              icon: <Lightbulb />,
+              icon: <img src={insightsIcon} alt="Insights & Reports" style={{ width: '24px', height: '24px' }} />,
               isVisible: menuConfig.show_insights_and_reports || false,
             },
             {
               // label: intl.formatMessage(messages.sidebarTitanAITitle),
-              label: 'Titan AI',
+              label: 'Titan AI Assistant',
               path: '/ai-assistant',
-              icon: <Assistant />,
+              icon: <img src={aiAssistantIcon} alt="Titan AI Assistant" style={{ width: '24px', height: '24px' }} />,
               isVisible: menuConfig.assistant_is_enabled || false,
             },
             {
               // label: intl.formatMessage(messages.sidebarSharedResourcesTitle),
-              label: 'Shared Resources',
-              path: '/shared-resources',
-              icon: <FolderShared />,
+              label: 'Resources',
+              path: '/resources',
+              icon: <img src={resourcesIcon} alt="Resources" style={{ width: '24px', height: '24px' }} />,
               isVisible: menuConfig.resources_is_enabled || false,
             },
             {
               // label: intl.formatMessage(messages.sidebarTaxonomiesTitle),
-              label: 'Taxonomies',
-              path: '/taxonomies',
-              icon: <Assignment />,
+              label: 'Communication',
+              path: '/communication',
+              icon: <img src={communicationIcon} alt="Communication" style={{ width: '24px', height: '24px' }} />,
               isVisible: true, // Always visible
             },
           ];
