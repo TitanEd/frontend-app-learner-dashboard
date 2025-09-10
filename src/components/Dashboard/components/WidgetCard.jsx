@@ -183,7 +183,7 @@ const WidgetCard = ({
 
   return (
     <Card className="overview-card">
-      <h4 className="card-header">{title}</h4>
+      {title && <h4 className="card-header">{title}</h4>}
       <Card.Section className="card-section">
         {(type === 'text' || type === 'html') && (
           <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content, purifyConfig) }} />

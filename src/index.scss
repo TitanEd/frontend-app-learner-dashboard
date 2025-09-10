@@ -557,13 +557,9 @@ body {
   padding: 16px 16px 16px 0;
 }
 
-/* Dynamic Widgets Single Column Layout */
-.overview-left {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-  margin-top: 1rem;
-  max-width: 100%;
+/* Individual Widget Sections */
+.overview-section {
+  margin-bottom: 2rem;
 }
 
 /* Widget card styling */

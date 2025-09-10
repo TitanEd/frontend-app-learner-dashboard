@@ -123,57 +123,41 @@ const Dashboard = () => {
           <ContinueLearningProgressBar />
         </div>
 
-        {/* Dynamic Widgets Section */}
-        <div className="overview-section">
-          <div className="d-flex justify-content-between align-items-center mb-3">
-            <h3 className="mb-0">Dynamic Widgets</h3>
-            <button
-              type="button"
-              onClick={refreshWidgets}
-              className="btn btn-outline-primary btn-sm"
-              disabled={widgetsLoading}
-              style={{
-                fontSize: '14px',
-                fontWeight: '600',
-                borderColor: '#2B2399',
-                color: '#2B2399',
-              }}
-            >
-              {widgetsLoading ? 'Refreshing...' : 'Refresh'}
-            </button>
-          </div>
-
-          {widgetsError && (
-            <div className="alert alert-warning mb-3" role="alert">
-              <strong>Warning:</strong> {widgetsError}
-            </div>
-          )}
-
-          {widgetsLoading && (
+        {/* Individual Widget Sections */}
+        {widgetsLoading && (
+          <div className="overview-section">
             <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '200px' }}>
               <div className="spinner-border text-primary" role="status">
                 <span className="sr-only">Loading widgets...</span>
               </div>
             </div>
-          )}
+          </div>
+        )}
 
-          {!widgetsLoading && widgets.length > 0 && (
-            <div className="overview-left">
-              {widgets
-                .filter(widget => widget.enabled)
-                .map(widget => (
-                  <WidgetCard
-                    key={widget.id}
-                    type={widget.type}
-                    title={widget.title}
-                    content={widget.content}
-                    styles={widget.styles}
-                  />
-                ))}
+        {widgetsError && (
+          <div className="overview-section">
+            <div className="alert alert-warning" role="alert">
+              <strong>Warning:</strong> {widgetsError}
             </div>
-          )}
+          </div>
+        )}
 
-          {!widgetsLoading && widgets.length === 0 && (
+        {!widgetsLoading && widgets.length > 0 && widgets
+          .filter(widget => widget.enabled)
+          .map(widget => (
+            <div key={widget.id} className="overview-section">
+              <h3 className="mb-3">{widget.title}</h3>
+              <WidgetCard
+                type={widget.type}
+                title=""
+                content={widget.content}
+                styles={widget.styles}
+              />
+            </div>
+          ))}
+
+        {!widgetsLoading && widgets.length === 0 && (
+          <div className="overview-section">
             <div className="text-center py-5">
               <p className="text-muted">No widgets available at the moment.</p>
               <button
@@ -185,8 +169,8 @@ const Dashboard = () => {
                 Load Widgets
               </button>
             </div>
-          )}
-        </div>
+          </div>
+        )}
 
       </div>
 
