@@ -562,6 +562,16 @@ body {
   display: block;
 }
 
+/* Apply ellipsis to the actual course title elements */
+.course-title-ellipsis .course-card-title,
+.course-title-ellipsis h3 .course-card-title {
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  max-width: 100% !important;
+  display: block !important;
+}
+
 /* Individual course card styling */
 .course-card-individual {
   border: 1px solid #D5D7DA;

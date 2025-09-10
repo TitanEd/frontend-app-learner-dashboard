@@ -1,34 +1,36 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import useCourseProgress from './hooks/useCourseProgress';
+import useCourseProgress from '../../hooks/useCourseProgress';
 
-// Simple Progress Bar Component
+// SVG Progress Bar Component
 const CourseProgressBar = ({ progress = 0, loading = false }) => {
   const progressPercentage = Math.min(Math.max(progress, 0), 100);
+  const barWidth = 280;
+  const barHeight = 8;
+  const completedWidth = (progressPercentage / 100) * barWidth;
 
   if (loading) {
     return (
       <div className="course-progress-container" style={{ marginTop: '8px' }}>
-        <div
-          className="progress"
-          style={{
-            height: '6px',
-            backgroundColor: '#E9ECEF',
-            borderRadius: '3px',
-            overflow: 'hidden',
-            marginBottom: '8px',
-          }}
+        <svg
+          width={barWidth}
+          height={barHeight}
+          viewBox={`0 0 ${barWidth} ${barHeight}`}
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          style={{ marginBottom: '8px' }}
         >
-          <div
-            className="progress-bar"
+          <rect width={barWidth} height={barHeight} rx="4" fill="#F5F5F5" />
+          <rect
+            width={barWidth}
+            height={barHeight}
+            rx="4"
+            fill="#F5F5F5"
             style={{
-              width: '100%',
-              backgroundColor: '#E9ECEF',
-              borderRadius: '3px',
               animation: 'pulse 1.5s ease-in-out infinite alternate',
             }}
           />
-        </div>
+        </svg>
         <div>
           <span className="text-muted small">Loading...</span>
         </div>
@@ -38,31 +40,29 @@ const CourseProgressBar = ({ progress = 0, loading = false }) => {
 
   return (
     <div className="course-progress-container" style={{ marginTop: '8px' }}>
-      <div
-        className="progress"
-        style={{
-          height: '6px',
-          backgroundColor: '#E9ECEF',
-          borderRadius: '3px',
-          overflow: 'hidden',
-          marginBottom: '8px',
-        }}
+      <svg
+        width={barWidth}
+        height={barHeight}
+        viewBox={`0 0 ${barWidth} ${barHeight}`}
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        style={{ marginBottom: '8px' }}
+        role="img"
+        aria-label={`Course progress: ${progressPercentage}%`}
       >
-        <div
-          className="progress-bar"
-          role="progressbar"
-          aria-label={`Course progress: ${progressPercentage}%`}
+        {/* Background bar */}
+        <rect width={barWidth} height={barHeight} rx="4" fill="#F5F5F5" />
+        {/* Progress bar */}
+        <rect
+          width={completedWidth}
+          height={barHeight}
+          rx="4"
+          fill="#2B2399"
           style={{
-            width: `${progressPercentage}%`,
-            backgroundColor: '#11047A',
             transition: 'width 0.3s ease',
-            borderRadius: '3px',
           }}
-          aria-valuenow={progressPercentage}
-          aria-valuemin="0"
-          aria-valuemax="100"
         />
-      </div>
+      </svg>
       <div>
         <span className="text-muted small">{progressPercentage}% Completed</span>
       </div>
