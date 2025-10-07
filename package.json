@@ -72,6 +72,7 @@
     "react-intl": "6.8.0",
     "react-pdf": "^7.0.0",
     "react-redux": "^7.2.4",
+    "react-router": "^6.27.0",
     "react-router-dom": "6.27.0",
     "react-share": "^4.4.0",
     "react-zendesk": "^0.1.13",
@@ -81,7 +82,7 @@
     "redux-thunk": "2.4.2",
     "regenerator-runtime": "^0.14.0",
     "reselect": "^4.0.0",
-    "titaned-lib": "^0.0.106",
+    "titaned-lib": "^0.0.138",
     "universal-cookie": "^4.0.4",
     "util": "^0.12.4",
     "whatwg-fetch": "^3.6.2"

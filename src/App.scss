@@ -27,9 +27,9 @@ $input-focus-box-shadow: $input-box-shadow; // hack to get upgrade to paragon 4.
   input[type=checkbox] {
     transform: none;
   }
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
+  // display: flex;
+  // flex-direction: column;
+  // min-height: 100vh;
 
   main {
     flex-grow: 1;

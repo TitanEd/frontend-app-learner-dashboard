@@ -6,9 +6,23 @@
 @import "~@edx/frontend-component-footer/dist/footer";
 @import "~@edx/frontend-component-header/dist/index";
 
-body {
-  overflow: hidden;
+html, body.new-ui {
+  overflow: hidden !important; /* Prevent outer scrollbar for new UI */
 }
+
+/* Allow scrolling for old UI */
+html, body.old-ui {
+  overflow: auto !important; /* Allow scrolling for old UI */
+}
+
+html.old-ui {
+  overflow: auto !important; /* Allow scrolling for old UI */
+}
+
+html.new-ui {
+  overflow: hidden !important; /* Prevent outer scrollbar for new UI */
+}
+
 
 #root {
   display: flex;
@@ -495,7 +509,7 @@ body {
   height: calc(100vh - 0px);
 
   @media (max-height: 690px) {
-    // height: calc(100vh - 5rem);
+    height: calc(100vh - 5rem);
   }
 }
 

@@ -4,9 +4,12 @@ import {
   PLUGIN_OPERATIONS,
 } from '@openedx/frontend-plugin-framework';
 
-const config = {
-  ...process.env,
-  pluginSlots: {
+const getPluginSlots = () => {
+  if (typeof window !== 'undefined' && localStorage.getItem('oldUI') === 'true') {
+    return {};
+  }
+
+  return {
     header_footer_hide_plugin_slot: {
       plugins: [
         {
@@ -20,6 +23,14 @@ const config = {
         },
       ],
     },
+  };
+};
+
+// Load environment variables from .env file
+const config = {
+  ...process.env,
+  get pluginSlots() {
+    return getPluginSlots();
   },
 };
 

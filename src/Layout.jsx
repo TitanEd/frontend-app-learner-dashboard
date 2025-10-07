@@ -1,54 +1,82 @@
+/* eslint-disable no-console */
 import React, { useContext, useEffect, useState } from 'react';
-import { Outlet, useLocation, useNavigate } from 'react-router';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { MainHeader, Sidebar, SidebarProvider } from 'titaned-lib';
 import { AppContext } from '@edx/frontend-platform/react';
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
+import { Spinner } from '@openedx/paragon';
 import {
   Analytics, Assignment, Assistant, Calendar, FolderShared, Home, LibraryAdd, LibraryBooks, Lightbulb, LmsBook,
 } from '@openedx/paragon/icons';
-import getUserMenuItems from '../src/utils/getUserMenuItems';
-import './index.scss';
-import announcementIcon from './assets/announcement-icon.svg';
-import communicationIcon from './assets/communication-icon.svg';
-import dashboardIcon from './assets/dashboard-icon.svg';
-import resourcesIcon from './assets/resources-icon.svg';
-import plannerIcon from './assets/planner-icon.svg';
-import calendarIcon from './assets/calendar-icon.svg';
-import aiAssistantIcon from './assets/ai-assistant-icon.svg';
-import insightsIcon from './assets/insights-icon.svg';
-import myCoursesIcon from './assets/my-courses-icon.svg';
+import { getConfig } from '@edx/frontend-platform';
+import { useIntl } from '@edx/frontend-platform/i18n';
+import getUserMenuItems from './utils/getUserMenuItems.ts';
+import { setUIPreference } from './services/uiPreferenceService';
+import messages from './messages';
+// import { applyTheme } from './styles/themeLoader';
 
 // API to fetch sidebar items
 const fetchNavigationItems = async () => {
-  const response = await getAuthenticatedHttpClient().get('https://staging.titaned.com/titaned/api/v1/menu-config/');
+  try {
+    const response = await getAuthenticatedHttpClient().get(`${getConfig().LMS_BASE_URL}/titaned/api/v1/menu-config/`);
+    // const response = await getAuthenticatedHttpClient().get(
+    //   'https://staging.titaned.com/titaned/api/v1/menu-config/'
+    // );
 
-  if (response.status !== 200) {
-    throw new Error('Failed to fetch Navigation Items');
+    // https://staging.titaned.com
+    if (response.status !== 200) {
+      throw new Error('Failed to fetch Navigation Items');
+    }
+
+    return response.data;
+  } catch (error) {
+    console.warn('Failed to fetch navigation items, using defaults:', error);
+    // Return default values when API fails
+    return {
+      allow_to_create_new_course: false,
+      show_class_planner: false,
+      show_insights_and_reports: false,
+      assistant_is_enabled: false,
+      resources_is_enabled: false,
+      enable_search_in_header: false,
+      enabled_re_sync: false,
+      enable_switch_to_learner: false,
+      enable_help_center: false,
+      language_selector_is_enabled: false,
+      notification_is_enabled: false,
+      enabled_languages: [],
+    };
   }
-
-  return response.data;
 };
 
 const Layout = () => {
   const { authenticatedUser, config } = useContext(AppContext);
+  console.log('authenticatedUser', authenticatedUser);
+  console.log('config', config);
   const { LMS_BASE_URL, LOGOUT_URL } = config;
 
+  const intl = useIntl();
+
   const [loadingSidebar, setLoadingSidebar] = useState(true);
+  const [headerButtons, setHeaderButtons] = useState({});
+  const [languageSelectorList, setLanguageSelectorList] = useState([]);
 
   const navigate = useNavigate();
   const location = useLocation();
 
   const presentPath = location.pathname;
+  console.log('presentPath', presentPath);
 
   const handleLanguageChange = () => {
     const { pathname } = location;
-    const cleanPath = pathname.replace('/learning', '');
-    window.location.href = `/learning${cleanPath}`;
+    const cleanPath = pathname.replace('/account', '');
+    window.location.href = `/account${cleanPath}`;
   };
 
   const [sidebarItems, setSidebarItems] = useState([
     {
-      label: 'Home',
+      // label: 'Home',
+      label: intl.formatMessage(messages.sidebarDashboardTitle),
       path: '/home',
       icon: <Home />,
     },
@@ -64,6 +92,9 @@ const Layout = () => {
   useEffect(() => {
     let isMounted = true;
 
+    // Apply theme from JSON
+    // applyTheme(); // Load default theme from /theme.json
+
     const fetchMenu = async () => {
       try {
         const menuConfig = await fetchNavigationItems();
@@ -72,67 +103,81 @@ const Layout = () => {
           // Define all sidebar items with their visibility conditions
           const sidebarItemsConfig = [
             {
-              // label: intl.formatMessage(messages.sidebarDashboardTitle),
-              label: 'Dashboard',
+              label: intl.formatMessage(messages.sidebarDashboardTitle),
+              // label: 'Home',
               path: '/home',
-              icon: <img src={dashboardIcon} alt="Dashboard" style={{ width: '24px', height: '24px' }} />,
+              icon: <Home />,
               isVisible: true, // Always visible
             },
             {
-              // label: intl.formatMessage(messages.sidebarMyCoursesTitle),
-              label: 'My Courses',
-              path: '/',
-              icon: <img src={myCoursesIcon} alt="My Courses" style={{ width: '24px', height: '24px' }} />,
+              label: intl.formatMessage(messages.sidebarCreateNewCourseTitle),
+              // label: 'Create New Course',
+              path: '/new-course',
+              icon: <LibraryAdd />,
+              isVisible: menuConfig.allow_to_create_new_course || false,
+            },
+            {
+              label: intl.formatMessage(messages.sidebarMyCoursesTitle),
+              // label: 'My Courses',
+              path: '/my-courses',
+              icon: <LmsBook />,
               isVisible: true, // Always visible
             },
             {
-              // label: intl.formatMessage(messages.sidebarContentLibrariesTitle),
-              label: 'Announcement',
-              path: '/announcement',
-              icon: <img src={announcementIcon} alt="Announcement" style={{ width: '24px', height: '24px' }} />,
+              label: intl.formatMessage(messages.sidebarContentLibrariesTitle),
+              // label: 'Content Libraries',
+              path: '/libraries',
+              icon: <LibraryBooks />,
               isVisible: true, // Always visible
             },
             {
-              // label: intl.formatMessage(messages.sidebarCalendarTitle),
-              label: 'Calendar',
+              label: intl.formatMessage(messages.sidebarCalendarTitle),
+              // label: 'Calendar',
               path: '/calendar',
-              icon: <img src={calendarIcon} alt="Calendar" style={{ width: '24px', height: '24px' }} />,
+              icon: <Calendar />,
               isVisible: true, // Always visible
             },
             {
-              // label: intl.formatMessage(messages.sidebarCalendarTitle),
-              label: 'Class Planner',
+              label: intl.formatMessage(messages.sidebarClassPlannerTitle),
+              // label: 'Class Planner',
               path: '/class-planner',
-              icon: <img src={plannerIcon} alt="Class Planner" style={{ width: '24px', height: '24px' }} />,
-              isVisible: true, // Always visible
+              icon: <Analytics />,
+              isVisible: menuConfig.show_class_planner || false,
             },
             {
-              // label: intl.formatMessage(messages.sidebarInsightsReportsTitle),
-              label: 'Insights & Reports',
+              label: intl.formatMessage(messages.sidebarInsightsReportsTitle),
+              // label: 'Insights & Reports',
               path: '/reports',
-              icon: <img src={insightsIcon} alt="Insights & Reports" style={{ width: '24px', height: '24px' }} />,
+              icon: <Lightbulb />,
               isVisible: menuConfig.show_insights_and_reports || false,
             },
             {
-              // label: intl.formatMessage(messages.sidebarTitanAITitle),
-              label: 'Titan AI Assistant',
+              label: intl.formatMessage(messages.sidebarTitanAITitle),
+              // label: 'Titan AI',
               path: '/ai-assistant',
-              icon: <img src={aiAssistantIcon} alt="Titan AI Assistant" style={{ width: '24px', height: '24px' }} />,
+              icon: <Assistant />,
               isVisible: menuConfig.assistant_is_enabled || false,
             },
             {
-              // label: intl.formatMessage(messages.sidebarSharedResourcesTitle),
-              label: 'Resources',
-              path: '/resources',
-              icon: <img src={resourcesIcon} alt="Resources" style={{ width: '24px', height: '24px' }} />,
+              label: intl.formatMessage(messages.sidebarSharedResourcesTitle),
+              // label: 'Shared Resources',
+              path: '/shared-resources',
+              icon: <FolderShared />,
               isVisible: menuConfig.resources_is_enabled || false,
             },
             {
-              // label: intl.formatMessage(messages.sidebarTaxonomiesTitle),
-              label: 'Communication',
-              path: '/communication',
-              icon: <img src={communicationIcon} alt="Communication" style={{ width: '24px', height: '24px' }} />,
+              label: intl.formatMessage(messages.sidebarTaxonomiesTitle),
+              // label: 'Taxonomies',
+              path: '/taxonomies',
+              icon: <Assignment />,
               isVisible: true, // Always visible
+            },
+            {
+              label: intl.formatMessage(messages.sidebarSwitchToOldViewTitle),
+              // label: 'Switch to Old View',
+              path: 'switch-to-old-view',
+              icon: <FolderShared />,
+              isVisible: true,
             },
           ];
 
@@ -150,80 +195,98 @@ const Layout = () => {
           //   translation: menuConfig.language_selector_is_enabled || false,
           //   notification: menuConfig.notification_is_enabled || false,
           // };
+          const headerButtonsConfig = {
+            reSync: menuConfig.enabled_re_sync || false,
+            contextSwitcher: menuConfig.enable_switch_to_learner || false,
+            help: menuConfig.enable_help_center || false,
+            translation: menuConfig.language_selector_is_enabled || false,
+            notification: menuConfig.notification_is_enabled || false,
+          };
 
-          // setHeaderButtons(headerButtonsConfig);
+          setHeaderButtons(headerButtonsConfig);
+
+          if (menuConfig.enabled_languages) {
+            setLanguageSelectorList(menuConfig.enabled_languages);
+          }
         }
       } catch (error) {
         // Fallback to always-visible items when API fails
         const fallbackItems = [
           {
-            // label: intl.formatMessage(messages.sidebarDashboardTitle),
-            label: 'Home',
+            label: intl.formatMessage(messages.sidebarDashboardTitle),
+            // label: 'Home',
             path: '/home',
             icon: <Home />,
             isVisible: true,
           },
           {
-            // label: intl.formatMessage(messages.sidebarCreateNewCourseTitle),
-            label: 'Create New Course',
+            label: intl.formatMessage(messages.sidebarCreateNewCourseTitle),
+            // label: 'Create New Course',
             path: '/new-course',
             icon: <LibraryAdd />,
             isVisible: false, // Hide when API fails
           },
           {
-            // label: intl.formatMessage(messages.sidebarMyCoursesTitle),
-            label: 'My Courses',
+            label: intl.formatMessage(messages.sidebarMyCoursesTitle),
+            // label: 'My Courses',
             path: '/my-courses',
             icon: <LmsBook />,
             isVisible: true,
           },
           {
-            // label: intl.formatMessage(messages.sidebarContentLibrariesTitle),
-            label: 'Content Libraries',
+            label: intl.formatMessage(messages.sidebarContentLibrariesTitle),
+            // label: 'Content Libraries',
             path: '/libraries',
             icon: <LibraryBooks />,
             isVisible: true,
           },
           {
-            // label: intl.formatMessage(messages.sidebarCalendarTitle),
-            label: 'Calendar',
+            label: intl.formatMessage(messages.sidebarCalendarTitle),
+            // label: 'Calendar',
             path: '/calendar',
             icon: <Calendar />,
             isVisible: true,
           },
           {
-            // label: intl.formatMessage(messages.sidebarClassPlannerTitle),
-            label: 'Class Planner',
+            label: intl.formatMessage(messages.sidebarClassPlannerTitle),
+            // label: 'Class Planner',
             path: '/class-planner',
             icon: <Analytics />,
             isVisible: false, // Hide when API fails
           },
           {
-            // label: intl.formatMessage(messages.sidebarInsightsReportsTitle),
-            label: 'Insights & Reports',
+            label: intl.formatMessage(messages.sidebarInsightsReportsTitle),
+            // label: 'Insights & Reports',
             path: '/reports',
             icon: <Lightbulb />,
             isVisible: false, // Hide when API fails
           },
           {
-            // label: intl.formatMessage(messages.sidebarTitanAITitle),
-            label: 'Titan AI',
+            label: intl.formatMessage(messages.sidebarTitanAITitle),
+            // label: 'Titan AI',
             path: '/ai-assistant',
             icon: <Assistant />,
             isVisible: false, // Hide when API fails
           },
           {
-            // label: intl.formatMessage(messages.sidebarSharedResourcesTitle),
-            label: 'Shared Resources',
+            label: intl.formatMessage(messages.sidebarSharedResourcesTitle),
+            // label: 'Shared Resources',
             path: '/shared-resources',
             icon: <FolderShared />,
             isVisible: false, // Hide when API fails
           },
           {
-            // label: intl.formatMessage(messages.sidebarTaxonomiesTitle),
-            label: 'Taxonomies',
+            label: intl.formatMessage(messages.sidebarTaxonomiesTitle),
+            // label: 'Taxonomies',
             path: '/taxonomies',
             icon: <Assignment />,
+            isVisible: true,
+          },
+          {
+            label: intl.formatMessage(messages.sidebarSwitchToOldViewTitle),
+            // label: 'Switch to Old View',
+            path: 'switch-to-old-view',
+            icon: <FolderShared />,
             isVisible: true,
           },
         ];
@@ -242,8 +305,16 @@ const Layout = () => {
         //   translation: false,
         //   notification: false,
         // };
+        const fallbackHeaderButtonsConfig = {
+          reSync: true,
+          contextSwitcher: true,
+          help: true,
+          translation: false,
+          notification: false,
+        };
 
-        // setHeaderButtons(fallbackHeaderButtonsConfig);
+        setHeaderButtons(fallbackHeaderButtonsConfig);
+        setLanguageSelectorList([]);
       } finally {
         setLoadingSidebar(false);
       }
@@ -256,9 +327,20 @@ const Layout = () => {
     };
   }, []);
 
-  const handleNavigate = (path) => {
-    if (path === '/my-courses') {
-      window.location.href = `${LMS_BASE_URL}/dashboard`;
+  const handleNavigate = async (path) => {
+    if (path === 'switch-to-old-view') {
+      try {
+        console.log('Switching to old UI...');
+        const success = await setUIPreference(false);
+        if (success) {
+          console.log('Successfully switched to old UI, reloading page...');
+          window.location.href = '/account/';
+        } else {
+          console.error('Failed to switch to old UI');
+        }
+      } catch (error) {
+        console.error('Error switching to old UI:', error);
+      }
     } else {
       navigate(path);
     }
@@ -270,22 +352,26 @@ const Layout = () => {
       <SidebarProvider>
         <div className="header-container">
           <MainHeader
-            logoUrl="/titanEd_logo.png"
+            // logoUrl="/titanEd_logo.png"
+            logoUrl={config.LOGO_URL}
               // menuAlignment={headerData.menu.align}
               // menuList={headerData.menu.menuList}
               // loginSignupButtons={headerData.menu.loginSignupButtons}
             authenticatedUser={authenticatedUser}
             userMenuItems={userMenuItems}
             onLanguageChange={handleLanguageChange}
-            getBaseUrl={() => '/learning'}
-            // headerButtons={headerButtons}
+            // getBaseUrl={() => '/account'}
+            headerButtons={headerButtons}
+            languageSelectorList={languageSelectorList}
           />
         </div>
         {/* Sidebar and Main Content */}
         <div className="content-wrapper">
           <div className="sidebar-container">
             {loadingSidebar ? (
-              <div>Loading menu...</div>
+              <div className="d-flex justify-content-center" style={{ height: '100%', width: '80px', paddingTop: '1rem' }}>
+                <Spinner animation="border" variant="primary" />
+              </div>
             ) : (
               <Sidebar
                 buttons={sidebarItems}
