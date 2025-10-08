@@ -38,8 +38,8 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        // const isLocal = process.env.NODE_ENV !== 'prod' && process.env.NODE_ENV !== 'production';
-        const isLocal = true;
+        const isLocal = process.env.NODE_ENV !== 'prod' && process.env.NODE_ENV !== 'production';
+        // const isLocal = true;
         console.log(isLocal, 'TEST');
         console.log(process.env.NODE_ENV, 'process.env.NODE_ENV');
         if (isLocal) {
