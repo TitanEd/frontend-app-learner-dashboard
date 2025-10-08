@@ -38,36 +38,53 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const isLocal = process.env.NODE_ENV !== 'prod' && process.env.NODE_ENV !== 'production';
+        // const isLocal = process.env.NODE_ENV !== 'prod' && process.env.NODE_ENV !== 'production';
         // const isLocal = true;
-        console.log(isLocal, 'TEST');
-        console.log(process.env.NODE_ENV, 'process.env.NODE_ENV');
-        if (isLocal) {
-          // Local mock API
-          const response = await fetch('http://localhost:3003/dashboard');
-          const data = await response.json();
-          console.log(data);
-          setDashboardData(data);
-        } else {
-          // Real API endpoints
-          const baseUrl = `${getConfig().LMS_BASE_URL}/titaned/api/v1/instructor-dashboard`;
-          const client = getAuthenticatedHttpClient();
-          // Fetch all in parallel, but handle errors for each
-          const [metricsRes, aiRes, todoRes] = await Promise.allSettled([
-            client.get(`${baseUrl}/metrics`),
-            client.get(`${baseUrl}/widgets`),
-            client.get(`${baseUrl}/ai-suggestions`),
-            client.get(`${baseUrl}/todo-list`),
-          ]);
+        // console.log(isLocal, 'TEST');
+        // console.log(process.env.NODE_ENV, 'process.env.NODE_ENV');
+        // if (isLocal) {
+        //   // Local mock API
+        //   const response = await fetch('http://localhost:3003/dashboard');
+        //   const data = await response.json();
+        //   console.log(data);
+        //   setDashboardData(data);
+        // } else {
+        //   // Real API endpoints
+        //   const baseUrl = `${getConfig().LMS_BASE_URL}/titaned/api/v1/instructor-dashboard`;
+        //   const client = getAuthenticatedHttpClient();
+        //   // Fetch all in parallel, but handle errors for each
+        //   const [metricsRes, aiRes, todoRes] = await Promise.allSettled([
+        //     client.get(`${baseUrl}/metrics`),
+        //     client.get(`${baseUrl}/widgets`),
+        //     client.get(`${baseUrl}/ai-suggestions`),
+        //     client.get(`${baseUrl}/todo-list`),
+        //   ]);
 
-          const metrics = metricsRes.status === 'fulfilled' ? metricsRes.value.data : [];
-          const titanAISuggestions = aiRes.status === 'fulfilled' ? aiRes.value.data : [];
-          const todoList = todoRes.status === 'fulfilled' ? todoRes.value.data : [];
+        //   const metrics = metricsRes.status === 'fulfilled' ? metricsRes.value.data : [];
+        //   const titanAISuggestions = aiRes.status === 'fulfilled' ? aiRes.value.data : [];
+        //   const todoList = todoRes.status === 'fulfilled' ? todoRes.value.data : [];
 
-          setDashboardData({
-            metrics, titanAISuggestions, todoList,
-          });
-        }
+        //   setDashboardData({
+        //     metrics, titanAISuggestions, todoList,
+        //   });
+        // }
+        const baseUrl = `${getConfig().LMS_BASE_URL}/titaned/api/v1/instructor-dashboard`;
+        const client = getAuthenticatedHttpClient();
+        // Fetch all in parallel, but handle errors for each
+        const [metricsRes, aiRes, todoRes] = await Promise.allSettled([
+          client.get(`${baseUrl}/metrics`),
+          client.get(`${baseUrl}/widgets`),
+          client.get(`${baseUrl}/ai-suggestions`),
+          client.get(`${baseUrl}/todo-list`),
+        ]);
+
+        const metrics = metricsRes.status === 'fulfilled' ? metricsRes.value.data : [];
+        const titanAISuggestions = aiRes.status === 'fulfilled' ? aiRes.value.data : [];
+        const todoList = todoRes.status === 'fulfilled' ? todoRes.value.data : [];
+
+        setDashboardData({
+          metrics, titanAISuggestions, todoList,
+        });
       } catch (error) {
         console.error('Error fetching dashboard data:', error);
       } finally {
@@ -176,7 +193,7 @@ const Dashboard = () => {
 
       {/* Sidebar */}
       <div className="dashboard-sidebar">
-        <Leaderboard leaderboardData={dashboardData.leaderboard} />
+        {/* <Leaderboard leaderboardData={dashboardData.leaderboard} /> */}
 
         <Card className="sidebar-card">
           <h4
