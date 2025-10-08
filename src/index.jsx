@@ -77,7 +77,7 @@ const MainApp = () => {
 
         // Then, fetch both UI preference and menu config in one API call
         console.log('Fetching menu config and UI preference...');
-        const response = await getAuthenticatedHttpClient().get(`${getConfig().LMS_BASE_URL}/titaned/api/v1/menu-config/`);
+        const response = await getAuthenticatedHttpClient().get(`${getConfig().STUDIO_BASE_URL}/titaned/api/v1/menu-config/`);
 
         if (response.status === 200 && response.data) {
           console.log('Menu config:', response.data);
