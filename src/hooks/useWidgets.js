@@ -27,7 +27,8 @@ const useWidgets = () => {
         } else {
           // Real API
           const client = getAuthenticatedHttpClient();
-          const response = await client.get('https://staging.titaned.com/titaned/api/v1/instructor-dashboard/widgets');
+          const baseUrl = `${getConfig().LMS_BASE_URL}/titaned/api/v1/instructor-dashboard`;
+          const response = await client.get(`${baseUrl}/widgets`);
           setWidgets(response.data || []);
         }
       } catch (err) {
@@ -53,7 +54,8 @@ const useWidgets = () => {
       } else {
         // Real API
         const client = getAuthenticatedHttpClient();
-        const response = await client.get('https://staging.titaned.com/titaned/api/v1/instructor-dashboard/widgets');
+        const baseUrl = `${getConfig().LMS_BASE_URL}/titaned/api/v1/instructor-dashboard`;
+        const response = await client.get(`${baseUrl}/widgets`);
         setWidgets(response.data || []);
       }
     } catch (err) {

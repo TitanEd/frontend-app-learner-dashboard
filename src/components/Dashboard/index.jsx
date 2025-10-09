@@ -73,7 +73,6 @@ const Dashboard = () => {
         // Fetch all in parallel, but handle errors for each
         const [metricsRes, aiRes, todoRes] = await Promise.allSettled([
           client.get(`${baseUrl}/metrics`),
-          client.get(`${baseUrl}/widgets`),
           client.get(`${baseUrl}/ai-suggestions`),
           client.get(`${baseUrl}/todo-list`),
         ]);
