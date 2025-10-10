@@ -69,8 +69,8 @@ const Layout = () => {
 
   const handleLanguageChange = () => {
     const { pathname } = location;
-    const cleanPath = pathname.replace('/account', '');
-    window.location.href = `/account${cleanPath}`;
+    const cleanPath = pathname.replace('/learner-dashboard', '');
+    window.location.href = `/learner-dashboard${cleanPath}`;
   };
 
   const [sidebarItems, setSidebarItems] = useState([
@@ -334,7 +334,7 @@ const Layout = () => {
         const success = await setUIPreference(false);
         if (success) {
           console.log('Successfully switched to old UI, reloading page...');
-          window.location.href = '/account/';
+          window.location.href = '/learner-dashboard/';
         } else {
           console.error('Failed to switch to old UI');
         }
