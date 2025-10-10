@@ -40,3 +40,10 @@
     margin: map-get($spacers, 2) 0;
   }
 }
+
+.cardList-direction-alignment{
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+ 

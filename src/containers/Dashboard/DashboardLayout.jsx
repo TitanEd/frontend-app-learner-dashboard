@@ -5,6 +5,7 @@ import { Container, Col, Row } from '@openedx/paragon';
 
 import WidgetSidebarSlot from 'plugin-slots/WidgetSidebarSlot';
 
+import { PluginSlot } from '@openedx/frontend-plugin-framework';
 import hooks from './hooks';
 
 export const columnConfig = {
@@ -35,17 +36,25 @@ export const DashboardLayout = ({ children }) => {
     : columnConfig.courseList.noSidebar;
 
   return (
-    <Container fluid size="xl">
-      <Row>
-        <Col {...courseListColumnProps} className="course-list-column">
-          {children}
-        </Col>
-        <Col {...columnConfig.sidebar} className="sidebar-column">
-          {!isCollapsed && (<h2 className="course-list-title">&nbsp;</h2>)}
-          <WidgetSidebarSlot />
-        </Col>
-      </Row>
-    </Container>
+    <PluginSlot
+      id="custom_dashboard_layout_plugin_slot"
+      pluginProps={{
+        courseListColumnProps,
+        children,
+      }}
+    >
+      <Container fluid size="xl">
+        <Row>
+          <Col {...courseListColumnProps} className="course-list-column">
+            {children}
+          </Col>
+          <Col {...columnConfig.sidebar} className="sidebar-column">
+            {!isCollapsed && (<h2 className="course-list-title">&nbsp;</h2>)}
+            <WidgetSidebarSlot />
+          </Col>
+        </Row>
+      </Container>
+    </PluginSlot>
   );
 };
 DashboardLayout.propTypes = {
