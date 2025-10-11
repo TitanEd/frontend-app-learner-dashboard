@@ -586,3 +586,60 @@ html.new-ui {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
 }
+
+
+
+ 
+/* UI Switch Button Styles */
+.ui-switch-button {
+  position: absolute;
+  top: 2rem !important;
+  // transform: translateY(-50%);
+  border-radius: 6px;
+  z-index: 9999;
+  background-color: var(--primary);
+  color: white;
+  padding: 8px 12px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: bold;
+  width: fit-content;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+ 
+  /* Use left positioning to stay consistent relative to header content */
+  left: 50%;
+  transform: translateY(-50%) translateX(-50px);
+  /* Center horizontally, then move right towards search icon */
+ 
+  /* Responsive adjustments - move right more as screen gets bigger */
+  @media (min-width: 680px) {
+    transform: translateY(-50%) translateX(0px);
+  }
+ 
+  @media (min-width: 841px) {
+    transform: translateY(-50%) translateX(115px);
+  }
+ 
+  @media (min-width: 841px) and (max-width:920px) {
+    padding: 6px 4px;
+    font-size: 12px;
+  }
+ 
+  @media (min-width: 1440px) {
+    transform: translateY(-50%) translateX(100px);
+  }
+ 
+  @media (min-width: 1920px) {
+    transform: translateY(-50%) translateX(150px);
+  }
+ 
+  /* Fallback for very small screens */
+  @media (max-width: 480px) {
+    transform: translateY(-50%) translateX(-80px);
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+}
+ 

@@ -3,20 +3,24 @@ import { reduxHooks } from 'hooks';
 // import CourseCard from 'containers/CourseCard';
 import { Card } from '@openedx/paragon';
 
-import CourseCardBanners from 'containers/CourseCard/components/CourseCardBanners';
+// import CourseCardBanners from 'containers/CourseCard/components/CourseCardBanners';
 import CourseCardImage from 'containers/CourseCard/components/CourseCardImage';
 import CourseCardMenu from 'containers/CourseCard/components/CourseCardMenu';
 import CourseCardActions from 'containers/CourseCard/components/CourseCardActions';
 import CourseCardDetails from 'containers/CourseCard/components/CourseCardDetails';
 import CourseCardTitle from 'containers/CourseCard/components/CourseCardTitle';
+import { useIntl } from '@edx/frontend-platform/i18n';
 import { useCourseListData } from '../../containers/CoursesPanel/hooks';
+
+import messages from './components/messages';
 
 const ContinueLearning = () => {
   const hasCourses = reduxHooks.useHasCourses();
   const courseListData = useCourseListData();
+  const intl = useIntl();
 
   const { visibleList } = courseListData;
-  const orientation = 'horizontal';
+  // const orientation = 'horizontal';
 
   // Filter for courses that have been started (hasStarted: true) and have a resumeUrl
   const startedCourses = visibleList?.filter(course => course.enrollment?.hasStarted === true
@@ -67,7 +71,7 @@ const ContinueLearning = () => {
         </div>
       ) : (
         <div className="text-center py-4">
-          <p className="text-muted mb-0">No course in progress to resume.</p>
+          <p className="text-muted mb-0">{intl.formatMessage(messages.noCourseToResumeSingular)}</p>
         </div>
       )}
     </div>

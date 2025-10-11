@@ -1,6 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useIntl } from '@edx/frontend-platform/i18n';
 import useCourseProgress from '../../hooks/useCourseProgress';
+
+import messages from './components/messages';
 
 // SVG Progress Bar Component
 const CourseProgressBar = ({ progress = 0, loading = false }) => {
@@ -8,6 +11,7 @@ const CourseProgressBar = ({ progress = 0, loading = false }) => {
   const barWidth = 280;
   const barHeight = 8;
   const completedWidth = (progressPercentage / 100) * barWidth;
+  const intl = useIntl();
 
   if (loading) {
     return (
@@ -32,7 +36,7 @@ const CourseProgressBar = ({ progress = 0, loading = false }) => {
           />
         </svg>
         <div>
-          <span className="text-muted small">Loading...</span>
+          <span className="text-muted small">{intl.formatMessage(messages.loadingSmall)}</span>
         </div>
       </div>
     );
@@ -64,7 +68,7 @@ const CourseProgressBar = ({ progress = 0, loading = false }) => {
         />
       </svg>
       <div>
-        <span className="text-muted small">{progressPercentage}% Completed</span>
+        <span className="text-muted small">{progressPercentage}% {intl.formatMessage(messages.completedSuffix)}</span>
       </div>
     </div>
   );

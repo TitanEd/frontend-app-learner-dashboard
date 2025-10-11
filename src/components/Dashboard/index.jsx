@@ -24,6 +24,8 @@ import WidgetCard from './components/WidgetCard';
 const Dashboard = () => {
   const [dashboardData, setDashboardData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isTodoEnabled, setIsTodoEnabled] = useState(false);
+  const [isTitanAISuggestionEnabled, setIsTitanAISuggestionEnabled] = useState(false);
 
   // Initialize dashboard to load course data
   useInitializeDashboard();
@@ -91,15 +93,35 @@ const Dashboard = () => {
       }
     };
 
+    const fetchSideBarRenderCardData = async () => {
+      try {
+        const response = await getAuthenticatedHttpClient().get(`${getConfig().LMS_BASE_URL}/titaned/api/v1/menu-config/`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        if (data?.is_todo_enabled) {
+          setIsTodoEnabled(true);
+        }
+        if (data?.titanai_suggestion_is_enabled) {
+          setIsTitanAISuggestionEnabled(true);
+        }
+      } catch (error) {
+        setIsTodoEnabled(false);
+        setIsTitanAISuggestionEnabled(false);
+      }
+    };
+
     fetchDashboardData();
+    fetchSideBarRenderCardData();
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div>{intl.formatMessage(messages.loading)}</div>;
   }
 
   if (!dashboardData) {
-    return <div>Error loading dashboard data</div>;
+    return <div>{intl.formatMessage(messages.errorLoadingData)}</div>;
   }
 
   // Provide default suggestions if none are present
@@ -125,14 +147,14 @@ const Dashboard = () => {
         {/* Overview Section */}
         <div className="overview-section">
           <div className="d-flex justify-content-between align-items-center mb-3">
-            <h3 className="mb-0">Continue Learning</h3>
+            <h3 className="mb-0">{intl.formatMessage(messages.continueLearningTitle)}</h3>
             <a
-              href="w"
+              href="my-courses"
               style={{
                 color: '#11047A', textDecoration: 'none', fontSize: '14px', fontWeight: '600',
               }}
             >
-              View All
+              {intl.formatMessage(messages.viewAll)}
             </a>
           </div>
           {/* <ContinueLearning /> */}
@@ -144,7 +166,7 @@ const Dashboard = () => {
           <div className="overview-section">
             <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '200px' }}>
               <div className="spinner-border text-primary" role="status">
-                <span className="sr-only">Loading widgets...</span>
+                <span className="sr-only">{intl.formatMessage(messages.loadingWidgetsSr)}</span>
               </div>
             </div>
           </div>
@@ -153,7 +175,7 @@ const Dashboard = () => {
         {widgetsError && (
           <div className="overview-section">
             <div className="alert alert-warning" role="alert">
-              <strong>Warning:</strong> {widgetsError}
+              <strong>{intl.formatMessage(messages.warningLabel)}</strong> {widgetsError}
             </div>
           </div>
         )}
@@ -175,14 +197,14 @@ const Dashboard = () => {
         {!widgetsLoading && widgets.length === 0 && (
           <div className="overview-section">
             <div className="text-center py-5">
-              <p className="text-muted">No widgets available at the moment.</p>
+              <p className="text-muted">{intl.formatMessage(messages.noWidgetsAvailable)}</p>
               <button
                 type="button"
                 onClick={refreshWidgets}
                 className="btn btn-primary"
-                style={{ backgroundColor: '#2B2399', borderColor: '#2B2399' }}
+                // style={{ backgroundColor: '#2B2399', borderColor: '#2B2399' }}
               >
-                Load Widgets
+                {intl.formatMessage(messages.loadWidgets)}
               </button>
             </div>
           </div>
@@ -191,70 +213,84 @@ const Dashboard = () => {
       </div>
 
       {/* Sidebar */}
-      <div className="dashboard-sidebar">
-        {/* <Leaderboard leaderboardData={dashboardData.leaderboard} /> */}
+      <div
+        className={
+          !isTodoEnabled && !isTitanAISuggestionEnabled
+            ? 'dashboard-sidebar-no-display'
+            : 'dashboard-sidebar'
+        }
+      >
+        {/* Titan AI Suggestions */}
+        { isTitanAISuggestionEnabled && (
+          <Card className="sidebar-card">
+            <h4
+              className="card-header"
+              style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
+            >
+              {intl.formatMessage(messages.titanAiSuggestion)}
+              <img
+                src={customStarsIcon}
+                alt="Custom Stars"
+                style={{ width: '23px', height: '25px' }}
+              />
+            </h4>
+            <Card.Section className="card-section temp-flow">
+              {aiSuggestions?.length > 0 ? (
+                <div className="card-list ai-suggestion-list">
+                  {aiSuggestions?.map((suggestion) => (
+                    <div
+                      className="ai-suggestion-item"
+                      key={`suggestion-${suggestion}`}
+                      style={{ position: 'relative' }}
+                    >
+                      {suggestion}
+                      <img
+                        src={customStarsIcon}
+                        alt="Custom Stars"
+                        className="ai-suggestions-icon"
+                      />
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-muted">
+                  {intl.formatMessage(messages.noSuggestionsYet)}
+                </p>
+              )}
+            </Card.Section>
+          </Card>
+        )}
 
-        <Card className="sidebar-card">
-          <h4
-            className="card-header"
-            style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
-          >
-            Titan AI suggestion
-            <img
-              src={customStarsIcon}
-              alt="Custom Stars"
-              style={{ width: '23px', height: '25px' }}
-            />
-          </h4>
-          <Card.Section className="card-section temp-flow">
-            {aiSuggestions.length > 0 ? (
-              <div className="card-list ai-suggestion-list">
-                {aiSuggestions.map((suggestion) => (
-                  <div
-                    className="ai-suggestion-item"
-                    key={`suggestion-${suggestion}`}
-                    style={{ position: 'relative' }}
-                  >
-                    {suggestion}
-                    <img
-                      src={customStarsIcon}
-                      alt="Custom Stars"
-                      className="ai-suggestions-icon"
-                    />
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <p className="text-muted">No suggestions yet.</p>
-            )}
-          </Card.Section>
-        </Card>
-
-        <Card className="sidebar-card">
-          <h4 className="card-header">Todo List</h4>
-          <Card.Section className="card-section temp-flow">
-            {dashboardData.todoList.length > 0 ? (
-              <div className="card-list todo-list">
-                {dashboardData.todoList.map((todo) => (
-                  <div className="todo-item" key={`todo-${todo}`}>
-                    <Icon
-                      src={RadioButtonUnchecked}
-                      style={{
-                        marginRight: '0.75rem',
-                        color: '#454545',
-                        minWidth: 22,
-                        minHeight: 22,
-                      }}
-                    />
-                    {todo}
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <p className="text-muted">No tasks added.</p>
-            )}
-          </Card.Section>
-        </Card>
+        {/* Todo List */}
+        { isTodoEnabled && (
+          <Card className="sidebar-card">
+            <h4 className="card-header">{intl.formatMessage(messages.todoList)}</h4>
+            <Card.Section className="card-section temp-flow">
+              {dashboardData?.todoList?.length > 0 ? (
+                <div className="card-list todo-list">
+                  {dashboardData?.todoList?.map((todo) => (
+                    <div className="todo-item" key={`todo-${todo}`}>
+                      <Icon
+                        src={RadioButtonUnchecked}
+                        style={{
+                          marginRight: '0.75rem',
+                          color: '#454545',
+                          minWidth: 22,
+                          minHeight: 22,
+                        }}
+                      />
+                      {todo}
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-muted">
+                  {intl.formatMessage(messages.noTasksAdded)}
+                </p>
+              )}
+            </Card.Section>
+          </Card>
+        )}
       </div>
     </div>
   );

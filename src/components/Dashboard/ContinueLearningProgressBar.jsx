@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React from 'react';
 import { reduxHooks } from 'hooks';
 // import CourseCard from 'containers/CourseCard';
@@ -6,14 +7,18 @@ import { Card } from '@openedx/paragon';
 import CourseCardMenu from 'containers/CourseCard/components/CourseCardMenu';
 import CourseCardActions from 'containers/CourseCard/components/CourseCardActions';
 import CourseCardTitle from 'containers/CourseCard/components/CourseCardTitle';
+import { useIntl } from '@edx/frontend-platform/i18n';
 import { useCourseListData } from '../../containers/CoursesPanel/hooks';
 import CourseProgressWrapper from './CourseProgressWrapper';
+
+import messages from './components/messages';
 
 const ContinueLearningProgressBar = () => {
   const hasCourses = reduxHooks.useHasCourses();
   const courseListData = useCourseListData();
 
   const { visibleList } = courseListData;
+  const intl = useIntl();
 
   // Filter for courses that have been started (hasStarted: true) and have a resumeUrl
   const startedCourses = visibleList?.filter(
@@ -39,6 +44,7 @@ const ContinueLearningProgressBar = () => {
       {/* Course Cards Grid */}
       {hasCourses && recentCourses.length > 0 ? (
         <div
+          className="continue-learning-grid"
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
@@ -53,8 +59,8 @@ const ContinueLearningProgressBar = () => {
               data-testid="CourseCard"
             >
               <Card className="border-0">
-                <Card.Body className="d-flex flex-row mtop">
-                  <div style={{ width: '80%' }}>
+                <Card.Body className="d-flex flex-row mtop card-body-flex">
+                  <div style={{ width: '80%' }} className="course-progress-wrapper">
                     <Card.Header
                       title={(
                         <div className="course-title-ellipsis">
@@ -71,6 +77,7 @@ const ContinueLearningProgressBar = () => {
                     </Card.Section>
                   </div>
                   <div
+                    className="course-card-actions-wrapper"
                     style={{
                       width: '20%',
                       display: 'flex',
@@ -88,7 +95,7 @@ const ContinueLearningProgressBar = () => {
         </div>
       ) : (
         <div className="text-center py-4 course-card-individual">
-          <p className="text-muted mb-0">No courses in progress to resume.</p>
+          <p className="text-muted mb-0">{intl.formatMessage(messages.noCourseInProgress)}</p>
         </div>
       )}
     </div>
