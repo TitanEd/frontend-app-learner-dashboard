@@ -141,8 +141,9 @@ const MainApp = () => {
         <Routes>
           {oldUI === 'false' ? (
             <Route path="/" element={<Layout />}>
-              <Route path="/" element={<PageWrap><App /></PageWrap>} />
-              <Route path="/home" element={<PageWrap><HomeDashboard /></PageWrap>} />
+              {/* <Route path="/" element={<PageWrap><App /></PageWrap>} /> */}
+              <Route path="/" element={<PageWrap><HomeDashboard /></PageWrap>} />
+              <Route path="/my-courses" element={<PageWrap><App /></PageWrap>} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Route>
           ) : (

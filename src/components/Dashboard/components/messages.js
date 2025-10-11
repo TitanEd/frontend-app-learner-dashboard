@@ -6,6 +6,11 @@ const messages = defineMessages({
     defaultMessage: 'Dashboard',
     description: 'Title of the dashboard page',
   },
+  pageTitle: {
+    id: 'learner-dash.title',
+    description: 'Page title: Learner Home',
+    defaultMessage: 'Learner Home',
+  },
   loading: {
     id: 'dashboard.loading',
     defaultMessage: 'Loading...',

@@ -77,7 +77,7 @@ const Layout = () => {
     {
       // label: 'Home',
       label: intl.formatMessage(messages.sidebarDashboardTitle),
-      path: '/home',
+      path: '/',
       icon: <Home />,
     },
   ]);
@@ -105,7 +105,7 @@ const Layout = () => {
             {
               label: intl.formatMessage(messages.sidebarDashboardTitle),
               // label: 'Home',
-              path: '/home',
+              path: '/',
               icon: <Home />,
               isVisible: true, // Always visible
             },
@@ -215,7 +215,7 @@ const Layout = () => {
           {
             label: intl.formatMessage(messages.sidebarDashboardTitle),
             // label: 'Home',
-            path: '/home',
+            path: '/',
             icon: <Home />,
             isVisible: true,
           },

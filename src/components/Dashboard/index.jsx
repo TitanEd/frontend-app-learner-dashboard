@@ -20,6 +20,7 @@ import messages from './components/messages';
 import ContinueLearningProgressBar from './ContinueLearningProgressBar';
 import useWidgets from '../../hooks/useWidgets';
 import WidgetCard from './components/WidgetCard';
+import { Helmet } from 'react-helmet';
 
 const Dashboard = () => {
   const [dashboardData, setDashboardData] = useState(null);
@@ -129,6 +130,10 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-wrapper">
+      <Helmet>
+        <title>{intl.formatMessage(messages.pageTitle)}</title>
+        <link rel="shortcut icon" href={getConfig().FAVICON_URL} type="image/x-icon" />
+      </Helmet>
       <div className="dashboard-main-content">
         {/* Top Metric Cards */}
         <div className="dashboard-header">{intl.formatMessage(messages.dashboardPageTitle)}</div>
