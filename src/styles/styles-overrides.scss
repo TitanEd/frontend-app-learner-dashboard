@@ -561,6 +561,14 @@ margin: 10px;
     padding-right: 12px !important;
   }
 
+  .dashboard-main-content {
+    padding-left: 0px !important;
+  }
+
+  .recommended-course-card {
+    width: 17rem !important;
+  }
+
   /* If buttons still protrude due to shadows/borders, cap their visible width */
   .course-card.course-card-individual .course-card-actions-wrapper .btn,
   .course-card.course-card-individual .course-card-actions-wrapper .resume-btn {
@@ -586,3 +594,29 @@ margin: 10px;
     font-size: medium !important; 
 }
 
+.recommended-course-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  padding: 0;
+  padding-right: 1rem;
+  max-width: 1800px;
+  margin: 0 auto;
+
+  @media (min-width: 768px) {
+      grid-template-columns: repeat(2, minmax(280px, 1fr));
+  }
+
+  @media (min-width: 992px) {
+      grid-template-columns: repeat(2, minmax(280px, 1fr));
+  }
+
+  @media (min-width: 1200px) {
+      grid-template-columns: repeat(4, minmax(280px, 1fr));
+  }
+
+  @media (min-width: 1600px) {
+      grid-template-columns: repeat(4, minmax(260px, 1fr));
+      gap: 1.5rem;
+  }
+}

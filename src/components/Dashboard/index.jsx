@@ -6,21 +6,24 @@ import {
 import {
   RadioButtonUnchecked,
 } from '@openedx/paragon/icons';
-import './index.scss';
-// import { CSS } from '@dnd-kit/utilities';
+import { Helmet } from 'react-helmet';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 import { getConfig } from '@edx/frontend-platform';
 import { useInitializeDashboard } from '../../containers/Dashboard/hooks';
 import customStarsIcon from '../../assets/custom-stars.svg';
 import MetricCard from './components/MetricCard';
-import Leaderboard from './components/Leaderboard';
 import messages from './components/messages';
 // import ContinueLearning from './ContinueLearning';
 import ContinueLearningProgressBar from './ContinueLearningProgressBar';
 import useWidgets from '../../hooks/useWidgets';
 import WidgetCard from './components/WidgetCard';
-import { Helmet } from 'react-helmet';
+import { reduxHooks } from '../../hooks';
+import { useCourseListData } from '../../containers/CoursesPanel/hooks';
+import RecommendedCourseCard from './components/RecommendedCourseCard.tsx';
+import { RequestKeys } from '../../data/constants/requests';
+import './index.scss';
+// import { CSS } from '@dnd-kit/utilities';
 
 const Dashboard = () => {
   const [dashboardData, setDashboardData] = useState(null);
@@ -36,7 +39,17 @@ const Dashboard = () => {
     widgets, loading: widgetsLoading, error: widgetsError, refreshWidgets,
   } = useWidgets();
 
+  const hasCourses = reduxHooks.useHasCourses();
+  const courseListData = useCourseListData();
+  const coursesLoading = reduxHooks.useRequestIsPending(RequestKeys.initialize);
+  console.log(courseListData, 'courseListData in Dashboard::');
+  console.log(hasCourses, 'hasCourses in Dashboard:::');
+
+  const { visibleList } = courseListData;
+
   const intl = useIntl();
+
+  const getCourseListData = () => visibleList.slice(0, 4);
 
   useEffect(() => {
     const fetchDashboardData = async () => {
@@ -164,6 +177,59 @@ const Dashboard = () => {
           </div>
           {/* <ContinueLearning /> */}
           <ContinueLearningProgressBar />
+        </div>
+
+        {/* Recommended Courses Section */}
+        <div className="overview-section">
+          <div className="d-flex justify-content-between align-items-center mb-3">
+            <h3 className="mb-0">{intl.formatMessage(messages.recommendedCoursesTitle)}</h3>
+            {!coursesLoading && getCourseListData().length > 0 && (
+              <a
+                href="my-courses"
+                style={{
+                  color: '#11047A', textDecoration: 'none', fontSize: '14px', fontWeight: '600',
+                }}
+              >
+                {intl.formatMessage(messages.viewAll)}
+              </a>
+            )}
+          </div>
+
+          {coursesLoading && (
+            <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '200px' }}>
+              <div className="spinner-border text-primary" role="status">
+                <span className="sr-only">Loading recommended courses...</span>
+              </div>
+            </div>
+          )}
+
+          {!coursesLoading && getCourseListData().length > 0 && (
+            <div className="recommended-course-grid">
+              {getCourseListData().map((course) => (
+                // eslint-disable-next-line react/no-array-index-key
+                <div key={course.cardId}>
+                  <RecommendedCourseCard
+                    imageSrc={course?.course?.bannerImgSrc}
+                    title={course?.course?.courseName}
+                    metadata={course?.course?.courseNumber}
+                    onViewLive={() => {
+                      if (course?.courseRun?.homeUrl) {
+                        window.location.href = course.courseRun.homeUrl;
+                      }
+                    }}
+                    // onEditCourse={() => {}}
+                    // onReRun={() => {}}
+                  />
+                </div>
+              ))}
+            </div>
+          )}
+
+          {!coursesLoading && getCourseListData().length === 0 && (
+            <div className="text-center py-5">
+              <p className="text-muted">{intl.formatMessage(messages.noRecommendedCoursesAvailable)}</p>
+            </div>
+          )}
         </div>
 
         {/* Individual Widget Sections */}

@@ -26,6 +26,16 @@ const messages = defineMessages({
     defaultMessage: 'Continue Learning',
     description: 'Section title for continue learning',
   },
+  recommendedCoursesTitle: {
+    id: 'dashboard.recommendedCourses.title',
+    defaultMessage: 'Recommended Courses',
+    description: 'Section title for recommended courses',
+  },
+  noRecommendedCoursesAvailable: {
+    id: 'dashboard.recommendedCourses.none',
+    defaultMessage: 'No recommended courses available.',
+    description: 'Shown when there are no recommended courses to display',
+  },
   viewAll: {
     id: 'dashboard.viewAll',
     defaultMessage: 'View All',
