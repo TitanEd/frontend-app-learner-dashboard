@@ -3,18 +3,10 @@ import PropTypes from 'prop-types';
 import { Card } from '@openedx/paragon';
 import './MetricCard.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import {
-  faUsers, faChartBar, faTachometerAlt, faClock,
-} from '@fortawesome/free-solid-svg-icons';
 import { SUPPORTED_ICON_CLASSES } from './constants';
-// Import custom SVG icons
-import bookOpen from '../../../assets/icons/book-open.svg';
-import chartBarIcon from '../../../assets/icons/chart-bar-icon.svg';
-import certificateIcon from '../../../assets/icons/certificate-icon.svg';
-import clockIcon from '../../../assets/icons/clock-icon.svg';
+// import { fas } from '@fortawesome/free-solid-svg-icons';
 
-library.add(faUsers, faChartBar, faTachometerAlt, faClock);
+// library.add(fas);
 
 const MetricCard = ({
   icon, value, label, index,
@@ -31,17 +23,6 @@ const MetricCard = ({
     return colors[cardIndex % colors.length];
   };
 
-  // Map icon names to SVG imports
-  const getIconSrc = (iconName) => {
-    const iconMap = {
-      'fas fa-users': clockIcon,
-      'fas fa-chart-bar': certificateIcon,
-      'fas fa-tachometer-alt': chartBarIcon,
-      'fas fa-clock': bookOpen,
-    };
-    return iconMap[iconName] || chartBarIcon; // fallback to chart-bar
-  };
-
   const cardStyle = getCardStyle(index || 0);
 
   return (
@@ -54,16 +35,11 @@ const MetricCard = ({
           className="metric-card-visual-icon"
           style={{ background: cardStyle.iconBg }}
         >
-          {/* {SUPPORTED_ICON_CLASSES.includes(icon) ? (
-            <FontAwesomeIcon icon={icon.replace('fas fa-', '')} />
+          {SUPPORTED_ICON_CLASSES.includes(icon) ? (
+            <FontAwesomeIcon icon={`${icon}`} />
           ) : (
-            <FontAwesomeIcon icon="chart-bar" />
-          )} */}
-          <img
-            src={getIconSrc(icon)}
-            alt={label}
-            style={{ width: '40px', height: '40px' }}
-          />
+            <FontAwesomeIcon icon="fas fa-chart-bar" />
+          )}
         </div>
         <div className="metric-card-visual-text">
           <div className="metric-card-visual-value">{value}</div>
