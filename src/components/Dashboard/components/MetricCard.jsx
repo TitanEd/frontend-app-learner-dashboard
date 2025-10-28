@@ -23,6 +23,8 @@ const MetricCard = ({
     return colors[cardIndex % colors.length];
   };
 
+  console.log('icon in MetricCard', icon);
+
   const cardStyle = getCardStyle(index || 0);
 
   return (
@@ -36,7 +38,7 @@ const MetricCard = ({
           style={{ background: cardStyle.iconBg }}
         >
           {SUPPORTED_ICON_CLASSES.includes(icon) ? (
-            <FontAwesomeIcon icon={`${icon}`} />
+            <FontAwesomeIcon icon={icon.replace('fas fa-', '')} />
           ) : (
             <FontAwesomeIcon icon="fas fa-chart-bar" />
           )}
