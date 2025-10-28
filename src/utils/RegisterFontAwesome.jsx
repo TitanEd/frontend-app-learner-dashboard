@@ -12,13 +12,13 @@ import {
 // } from '@fortawesome/free-solid-svg-icons';
 
 import {
-    faUsers, faChartBar, faTachometerAlt, faClock
-} from '@fortawesome/free-solid-svg-icons'
+  faUsers, faChartBar, faTachometerAlt, faClock, faBook,
+} from '@fortawesome/free-solid-svg-icons';
 
 export default function registerFontAwesomeIcons() {
   // Add brand icons
   library.add(faApple, faFacebook, faGoogle, faMicrosoft);
 
   // Add solid icons (for your dashboard metrics)
-  library.add(faUsers, faChartBar, faTachometerAlt, faClock);
+  library.add(faUsers, faChartBar, faTachometerAlt, faClock, faBook);
 }
