@@ -23,6 +23,7 @@ import { useCourseListData } from '../../containers/CoursesPanel/hooks';
 import RecommendedCourseCard from './components/RecommendedCourseCard.tsx';
 import { RequestKeys } from '../../data/constants/requests';
 import './index.scss';
+import Leaderboard from './components/Leaderboard.jsx';
 // import { CSS } from '@dnd-kit/utilities';
 
 const Dashboard = () => {
@@ -30,6 +31,8 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [isTodoEnabled, setIsTodoEnabled] = useState(false);
   const [isTitanAISuggestionEnabled, setIsTitanAISuggestionEnabled] = useState(false);
+  const [isLeaderboardEnabled, setIsLeaderboardEnabled] = useState(false);
+  const [isLaptopScreen, setIsLaptopScreen] = useState(window.innerWidth < 1600);
 
   // Initialize dashboard to load course data
   useInitializeDashboard();
@@ -49,7 +52,12 @@ const Dashboard = () => {
 
   const intl = useIntl();
 
-  const getCourseListData = () => visibleList.slice(0, 4);
+  const getCourseListData = () => {
+    if (isTodoEnabled && isTitanAISuggestionEnabled && isLeaderboardEnabled && isLaptopScreen) {
+      return visibleList.slice(0, 3);
+    }
+    return visibleList.slice(0, 4);
+  };
 
   useEffect(() => {
     const fetchDashboardData = async () => {
@@ -87,18 +95,18 @@ const Dashboard = () => {
         const baseUrl = `${getConfig().LMS_BASE_URL}/titaned/api/v1/instructor-dashboard`;
         const client = getAuthenticatedHttpClient();
         // Fetch all in parallel, but handle errors for each
-        const [metricsRes, aiRes, todoRes] = await Promise.allSettled([
+        const [metricsRes, leaderboardRes, aiRes, todoRes] = await Promise.allSettled([
           client.get(`${baseUrl}/metrics`),
+          client.get(`${baseUrl}/leaderboard`),
           client.get(`${baseUrl}/ai-suggestions`),
           client.get(`${baseUrl}/todo-list`),
         ]);
-
         const metrics = metricsRes.status === 'fulfilled' ? metricsRes.value.data : [];
+        const leaderboard = leaderboardRes.status === 'fulfilled' ? leaderboardRes.value.data : [];
         const titanAISuggestions = aiRes.status === 'fulfilled' ? aiRes.value.data : [];
         const todoList = todoRes.status === 'fulfilled' ? todoRes.value.data : [];
-
         setDashboardData({
-          metrics, titanAISuggestions, todoList,
+          metrics, leaderboard, titanAISuggestions, todoList,
         });
       } catch (error) {
         console.error('Error fetching dashboard data:', error);
@@ -120,14 +128,27 @@ const Dashboard = () => {
         if (data?.titanai_suggestion_is_enabled) {
           setIsTitanAISuggestionEnabled(true);
         }
+        if (data?.is_leaderboard_enabled) {
+          setIsLeaderboardEnabled(true);
+        }
       } catch (error) {
         setIsTodoEnabled(false);
         setIsTitanAISuggestionEnabled(false);
+        setIsLeaderboardEnabled(false);
       }
     };
 
     fetchDashboardData();
     fetchSideBarRenderCardData();
+  }, []);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsLaptopScreen(window.innerWidth < 1600);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   if (loading) {
@@ -204,7 +225,7 @@ const Dashboard = () => {
           )}
 
           {!coursesLoading && getCourseListData().length > 0 && (
-            <div className="recommended-course-grid">
+            <div className={`recommended-course-grid ${isTodoEnabled && isTitanAISuggestionEnabled && isLeaderboardEnabled ? 'three-columns-laptop' : ''}`}>
               {getCourseListData().map((course) => (
                 // eslint-disable-next-line react/no-array-index-key
                 <div key={course.cardId}>
@@ -212,6 +233,8 @@ const Dashboard = () => {
                     imageSrc={course?.course?.bannerImgSrc}
                     title={course?.course?.courseName}
                     metadata={course?.course?.courseNumber}
+                    noOfStudents={course?.course?.noOfEnrolledStudents || 33}
+                    noOfLessons={course?.course?.noOfTotalLessons || 11}
                     onViewLive={() => {
                       if (course?.courseRun?.homeUrl) {
                         window.location.href = course.courseRun.homeUrl;
@@ -286,11 +309,14 @@ const Dashboard = () => {
       {/* Sidebar */}
       <div
         className={
-          !isTodoEnabled && !isTitanAISuggestionEnabled
+          !isTodoEnabled && !isTitanAISuggestionEnabled && !isLeaderboardEnabled
             ? 'dashboard-sidebar-no-display'
             : 'dashboard-sidebar'
         }
       >
+        {isLeaderboardEnabled && (
+          <Leaderboard leaderboardData={dashboardData.leaderboard} />
+        )}
         {/* Titan AI Suggestions */}
         { isTitanAISuggestionEnabled && (
           <Card className="sidebar-card">

@@ -619,4 +619,16 @@ margin: 10px;
       grid-template-columns: repeat(4, minmax(260px, 1fr));
       gap: 1.5rem;
   }
+
+  // When both isTodoEnabled and isTitanAISuggestionEnabled are present, show 3 cards on laptop screens, 4 on monitors
+  &.three-columns-laptop {
+    @media (min-width: 1200px) and (max-width: 1599px) {
+      grid-template-columns: repeat(3, minmax(280px, 1fr));
+    }
+
+    @media (min-width: 1600px) {
+      grid-template-columns: repeat(4, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+  }
 }
