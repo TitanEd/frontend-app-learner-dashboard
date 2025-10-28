@@ -30,6 +30,7 @@ import { configuration } from './config';
 
 import messages from './i18n';
 
+import registerFontAwesomeIcons from './utils/RegisterFontAwesome';
 import App from './App';
 import NoticesWrapper from './components/NoticesWrapper';
 import HomeDashboard from './components/Dashboard';
@@ -57,6 +58,8 @@ const loadStylesForNewUI = (isOldUI) => {
     import('./styles/old-ui.scss');
   }
 };
+
+registerFontAwesomeIcons();
 
 // Main App component with state management
 const MainApp = () => {
