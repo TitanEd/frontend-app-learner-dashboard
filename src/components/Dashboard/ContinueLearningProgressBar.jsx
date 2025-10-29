@@ -1,93 +1,69 @@
 /* eslint-disable no-console */
-import React from 'react';
-import { reduxHooks } from 'hooks';
-// import CourseCard from 'containers/CourseCard';
+import React, { useEffect, useState } from 'react';
 import { Card } from '@openedx/paragon';
-
-import CourseCardMenu from 'containers/CourseCard/components/CourseCardMenu';
-import CourseCardActions from 'containers/CourseCard/components/CourseCardActions';
-import CourseCardTitle from 'containers/CourseCard/components/CourseCardTitle';
 import { useIntl } from '@edx/frontend-platform/i18n';
-import { useCourseListData } from '../../containers/CoursesPanel/hooks';
-import CourseProgressWrapper from './CourseProgressWrapper';
 
 import messages from './components/messages';
 
 const ContinueLearningProgressBar = () => {
-  const hasCourses = reduxHooks.useHasCourses();
-  const courseListData = useCourseListData();
-
-  const { visibleList } = courseListData;
+  const [recentCourses, setRecentCourses] = useState([]);
   const intl = useIntl();
+  useEffect(() => {
+    const fetchRecentCourses = async () => {
+      try {
+        const response = await fetch('http://localhost:3003/recent-courses');
+        if (!response.ok) {
+          throw new Error('Failed to fetch courses');
+        }
+        const data = await response.json();
+        console.log(data, 'data in ContinueLearningProgressBar::::');
+        setRecentCourses(Array.isArray(data) ? data : []);
+      } catch (error) {
+        console.error('Error fetching recent courses:', error);
+        setRecentCourses([]);
+      }
+    };
+    fetchRecentCourses();
+  }, []);
 
-  // Filter for courses that have been started (hasStarted: true) and have a resumeUrl
-  const startedCourses = visibleList?.filter(
-    (course) => course.enrollment?.hasStarted === true && course.courseRun?.resumeUrl,
-  ) || [];
-
-  // Sort by lastEnrolled date and get up to 4 most recently enrolled courses
-  const recentCourses = startedCourses
-    .sort((a, b) => new Date(b.enrollment.lastEnrolled) - new Date(a.enrollment.lastEnrolled))
-    .slice(0, 4);
-
-  // Debug: Log course data to see what's available
-  console.log('Recent courses data:', recentCourses.map(course => ({
-    cardId: course.cardId,
-    courseId: course.courseRun?.courseId,
-    courseName: course.course?.courseName,
-    hasStarted: course.enrollment?.hasStarted,
-    resumeUrl: course.courseRun?.resumeUrl,
-  })));
+  console.log(recentCourses, 'recentCourses in ContinueLearningProgressBar::::');
 
   return (
-    <div>
-      {/* Course Cards Grid */}
-      {hasCourses && recentCourses.length > 0 ? (
-        <div
-          className="continue-learning-grid"
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-            gap: '16px',
-          }}
-        >
+    <div className="continue-learning-section">
+      {/* Course Cards */}
+      {recentCourses?.length > 0 ? (
+        <div className="continue-learning-cards">
           {recentCourses.map((course) => (
             <div
               key={course.cardId}
-              className="course-card course-card-individual"
+              className="continue-learning-card"
               id={course.cardId}
               data-testid="CourseCard"
             >
-              <Card className="border-0">
-                <Card.Body className="d-flex flex-row mtop card-body-flex">
-                  <div style={{ width: '80%' }} className="course-progress-wrapper">
-                    <Card.Header
-                      title={(
-                        <div className="course-title-ellipsis">
-                          <CourseCardTitle cardId={course.cardId} />
-                        </div>
-                      )}
-                      actions={
-                        <CourseCardMenu cardId={course.cardId} />
-                      }
-                      className="border-0 pb-2"
+              <Card className="continue-learning-card-wrapper">
+                <Card.Body className="continue-learning-card-body">
+                  {/* Course Image */}
+                  <div className="continue-learning-image-container">
+                    <img
+                      src={course.bannerImgSrc}
+                      alt={course.courseName}
+                      className="continue-learning-image"
                     />
-                    <Card.Section className="pt-0">
-                      <CourseProgressWrapper courseId={course.courseRun?.courseId} />
-                    </Card.Section>
                   </div>
-                  <div
-                    className="course-card-actions-wrapper"
-                    style={{
-                      width: '20%',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'flex-end',
-                      marginTop: '2rem',
-                    }}
-                  >
-                    <CourseCardActions cardId={course.cardId} />
+
+                  {/* Course Content */}
+                  <div className="continue-learning-content">
+                    <h3 className="continue-learning-course-title">
+                      {course.courseName}
+                    </h3>
+                    <p className="continue-learning-description">
+                      {course.shortDescription}
+                    </p>
                   </div>
+                  {/* Resume Course Button */}
+                  <button type="button" className="btn btn-primary continue-learning-resume-btn" onClick={() => { window.location.href = course.resumeUrl; }}>
+                    Resume Course
+                  </button>
                 </Card.Body>
               </Card>
             </div>

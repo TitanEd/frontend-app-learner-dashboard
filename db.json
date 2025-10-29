@@ -158,5 +158,14 @@
       "Schedule faculty meeting",
       "Prepare presentation for upcoming conference"
     ]
-  }
+  },
+  "recent-courses": [
+    {
+      
+      "bannerImgSrc": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=300&h=200&fit=crop",
+      "courseName": "Creative Expressions: A Journey Through Color",
+      "shortDescription": "Explore the transformative potential of Al Agents tailored for leaders in this comprehensive course. Delve into innovative strategies that harness artificial intelligence to enhance decision-making, streamline.",
+      "resumeUrl": "https://www.google.com"
+    }
+  ]
 }

@@ -414,6 +414,7 @@ margin: 10px;
     word-break: break-word;
     display: -webkit-box;
     -webkit-line-clamp: 2; /* Limit to 2 lines */
+    line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -630,5 +631,156 @@ margin: 10px;
       grid-template-columns: repeat(4, minmax(260px, 1fr));
       gap: 1.5rem;
     }
+  }
+}
+
+/* Continue Learning Section Styles */
+.continue-learning-section {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.continue-learning-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.continue-learning-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #333333;
+  margin: 0;
+}
+
+// .continue-learning-view-all {
+//   color: #1A237E;
+//   text-decoration: none;
+//   font-size: 16px;
+//   font-weight: 500;
+  
+//   &:hover {
+//     text-decoration: underline;
+//   }
+// }
+
+.dashboard-navigation-link {
+  color: var(--primary) !important;
+  &:hover {
+    color: var(--primary-hover) !important;
+  }
+}
+
+.continue-learning-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.continue-learning-card {
+  width: 100%;
+}
+
+.continue-learning-card-wrapper {
+  border: none !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+  border-radius: 8px !important;
+}
+
+.continue-learning-card-body {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  // padding: 16px !important;
+  gap: 16px !important;
+}
+
+.continue-learning-image-container {
+  flex: 0 0 240px;
+  height: 120px;
+}
+
+.continue-learning-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.continue-learning-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  // min-height: 120px;
+}
+
+.continue-learning-course-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 8px 0;
+  line-height: 1.3;
+}
+
+.continue-learning-description {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.4;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.continue-learning-resume-btn {
+  // background-color: ;
+  // color: #ffffff;
+  border: none;
+  border-radius: 24px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  align-self: center;
+  transition: background-color 0.2s ease;
+  
+  // &:hover {
+  //   background-color: #0D1A5C;
+  // }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .continue-learning-section {
+    padding: 16px;
+  }
+  
+  .continue-learning-title {
+    font-size: 20px;
+  }
+  
+  .continue-learning-card-body {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 12px !important;
+  }
+  
+  .continue-learning-image-container {
+    flex: none;
+    height: 160px;
+  }
+  
+  .continue-learning-content {
+    height: auto;
+  }
+  
+  .continue-learning-resume-btn {
+    align-self: flex-start;
   }
 }

@@ -190,8 +190,9 @@ const Dashboard = () => {
             <a
               href="my-courses"
               style={{
-                color: '#11047A', textDecoration: 'none', fontSize: '14px', fontWeight: '600',
+                textDecoration: 'none', fontSize: '14px', fontWeight: '600',
               }}
+              className="dashboard-navigation-link"
             >
               {intl.formatMessage(messages.viewAll)}
             </a>
@@ -208,8 +209,9 @@ const Dashboard = () => {
               <a
                 href="my-courses"
                 style={{
-                  color: '#11047A', textDecoration: 'none', fontSize: '14px', fontWeight: '600',
+                  textDecoration: 'none', fontSize: '14px', fontWeight: '600',
                 }}
+                className="dashboard-navigation-link"
               >
                 {intl.formatMessage(messages.viewAll)}
               </a>
