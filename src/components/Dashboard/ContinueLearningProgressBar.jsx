@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { Card } from '@openedx/paragon';
 import { useIntl } from '@edx/frontend-platform/i18n';
 
+import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
+import { getConfig } from '@edx/frontend-platform';
 import messages from './components/messages';
 
 const ContinueLearningProgressBar = () => {
@@ -11,13 +13,14 @@ const ContinueLearningProgressBar = () => {
   useEffect(() => {
     const fetchRecentCourses = async () => {
       try {
-        const response = await fetch('http://localhost:3003/recent-courses');
-        if (!response.ok) {
-          throw new Error('Failed to fetch courses');
-        }
-        const data = await response.json();
-        console.log(data, 'data in ContinueLearningProgressBar::::');
-        setRecentCourses(Array.isArray(data) ? data : []);
+        console.log('fetching recent courses');
+        // const response = await fetch('http://localhost:3003/recent-courses');
+        const response = await getAuthenticatedHttpClient().get(`${getConfig().LMS_BASE_URL}/titaned/api/v1/recent-courses/`);
+        // const response = await getAuthenticatedHttpClient().get('https://staging.titaned.com/titaned/api/v1/recent-courses/');
+        console.log(response, 'response in ContinueLearningProgressBar::::');
+        const { data } = response;
+        console.log(data, 'dataaaaaaa in ContinueLearningProgressBar::::');
+        setRecentCourses(Array.isArray(data) ? data : [data]);
       } catch (error) {
         console.error('Error fetching recent courses:', error);
         setRecentCourses([]);
@@ -35,9 +38,9 @@ const ContinueLearningProgressBar = () => {
         <div className="continue-learning-cards">
           {recentCourses.map((course) => (
             <div
-              key={course.cardId}
+              key={course.course_key}
               className="continue-learning-card"
-              id={course.cardId}
+              id={course.course_key}
               data-testid="CourseCard"
             >
               <Card className="continue-learning-card-wrapper">
@@ -45,8 +48,8 @@ const ContinueLearningProgressBar = () => {
                   {/* Course Image */}
                   <div className="continue-learning-image-container">
                     <img
-                      src={course.bannerImgSrc}
-                      alt={course.courseName}
+                      src={course.course_image_url}
+                      alt={course.course_name}
                       className="continue-learning-image"
                     />
                   </div>
@@ -54,14 +57,14 @@ const ContinueLearningProgressBar = () => {
                   {/* Course Content */}
                   <div className="continue-learning-content">
                     <h3 className="continue-learning-course-title">
-                      {course.courseName}
+                      {course.course_name}
                     </h3>
                     <p className="continue-learning-description">
-                      {course.shortDescription}
+                      {course.short_description}
                     </p>
                   </div>
                   {/* Resume Course Button */}
-                  <button type="button" className="btn btn-primary continue-learning-resume-btn" onClick={() => { window.location.href = course.resumeUrl; }}>
+                  <button type="button" className="btn btn-primary continue-learning-resume-btn" onClick={() => { window.location.href = course.course_resume_url; }}>
                     Resume Course
                   </button>
                 </Card.Body>
