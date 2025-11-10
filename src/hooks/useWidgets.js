@@ -27,7 +27,7 @@ const useWidgets = () => {
         } else {
           // Real API
           const client = getAuthenticatedHttpClient();
-          const baseUrl = `${getConfig().LMS_BASE_URL}/titaned/api/v1/instructor-dashboard`;
+          const baseUrl = `${getConfig().LMS_BASE_URL}/titaned/api/v1/lms-dashboard`;
           const response = await client.get(`${baseUrl}/widgets`);
           setWidgets(response.data || []);
         }

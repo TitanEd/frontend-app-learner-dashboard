@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React, { useState, useEffect } from 'react';
 import {
   Card,
@@ -33,6 +34,7 @@ const Dashboard = () => {
   const [isTitanAISuggestionEnabled, setIsTitanAISuggestionEnabled] = useState(false);
   const [isLeaderboardEnabled, setIsLeaderboardEnabled] = useState(false);
   const [isLaptopScreen, setIsLaptopScreen] = useState(window.innerWidth < 1600);
+  const [recommendedCoursesData, setRecommendedCoursesData] = useState([]);
 
   // Initialize dashboard to load course data
   useInitializeDashboard();
@@ -52,11 +54,28 @@ const Dashboard = () => {
 
   const intl = useIntl();
 
+  useEffect(() => {
+    const fetchRecommendedCoursesData = async () => {
+      try {
+        // const response = await getAuthenticatedHttpClient().get('https://staging.titaned.com/titaned/api/v1/recommended-courses/');
+        const response = await getAuthenticatedHttpClient().get(`${getConfig().LMS_BASE_URL}/titaned/api/v1/recommended-courses/`);
+        const { data } = response;
+        setRecommendedCoursesData(data);
+      } catch (error) {
+        console.error('Error fetching recommended courses data:', error);
+        setRecommendedCoursesData([]);
+      }
+    };
+    fetchRecommendedCoursesData();
+  }, []);
+
+  console.log(recommendedCoursesData, 'recommendedCoursesData in Dashboard:::');
+
   const getCourseListData = () => {
     if (isTodoEnabled && isTitanAISuggestionEnabled && isLeaderboardEnabled && isLaptopScreen) {
-      return visibleList.slice(0, 3);
+      return recommendedCoursesData.slice(0, 3);
     }
-    return visibleList.slice(0, 4);
+    return recommendedCoursesData.slice(0, 4);
   };
 
   useEffect(() => {
@@ -92,7 +111,7 @@ const Dashboard = () => {
         //     metrics, titanAISuggestions, todoList,
         //   });
         // }
-        const baseUrl = `${getConfig().LMS_BASE_URL}/titaned/api/v1/instructor-dashboard`;
+        const baseUrl = `${getConfig().LMS_BASE_URL}/titaned/api/v1/lms-dashboard`;
         const client = getAuthenticatedHttpClient();
         // Fetch all in parallel, but handle errors for each
         const [metricsRes, leaderboardRes, aiRes, todoRes] = await Promise.allSettled([
@@ -230,16 +249,16 @@ const Dashboard = () => {
             <div className={`recommended-course-grid ${isTodoEnabled && isTitanAISuggestionEnabled && isLeaderboardEnabled ? 'three-columns-laptop' : ''}`}>
               {getCourseListData().map((course) => (
                 // eslint-disable-next-line react/no-array-index-key
-                <div key={course.cardId}>
+                <div key={course.course_id}>
                   <RecommendedCourseCard
-                    imageSrc={course?.course?.bannerImgSrc}
-                    title={course?.course?.courseName}
-                    metadata={course?.course?.courseNumber}
-                    noOfStudents={course?.course?.noOfEnrolledStudents || 33}
-                    noOfLessons={course?.course?.noOfTotalLessons || 11}
+                    imageSrc={course?.course_image_url}
+                    title={course?.course_name}
+                    metadata={course?.course_number}
+                    noOfStudents={course?.no_of_enrolled_students || 33}
+                    noOfLessons={course?.no_of_total_lessons || 11}
                     onViewLive={() => {
-                      if (course?.courseRun?.homeUrl) {
-                        window.location.href = course.courseRun.homeUrl;
+                      if (course?.course_url) {
+                        window.location.href = course.course_url;
                       }
                     }}
                     // onEditCourse={() => {}}
