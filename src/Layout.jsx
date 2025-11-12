@@ -60,6 +60,7 @@ const Layout = () => {
   const [loadingSidebar, setLoadingSidebar] = useState(true);
   const [headerButtons, setHeaderButtons] = useState({});
   const [languageSelectorList, setLanguageSelectorList] = useState([]);
+  const [userMenuItemsFromAPI, setUserMenuItemsFromAPI] = useState({});
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -82,10 +83,42 @@ const Layout = () => {
     },
   ]);
 
+  useEffect(() => {
+    const fetchUserMenuItemsFromAPI = async () => {
+      try {
+        const response = await getAuthenticatedHttpClient().get(`${getConfig().LMS_BASE_URL}/titaned/api/v1/user-dropdown-menu/`);
+        // const response = await getAuthenticatedHttpClient().get('https://staging.titaned.com/titaned/api/v1/user-dropdown-menu/');
+        const { data } = response;
+        if (data) {
+          setUserMenuItemsFromAPI(data);
+        } else {
+          setUserMenuItemsFromAPI({});
+        }
+      } catch (error) {
+        console.error('Error fetching user menu items:', error);
+        setUserMenuItemsFromAPI({});
+      }
+    };
+    fetchUserMenuItemsFromAPI();
+  }, []);
+
+  console.log('userMenuItemsFromAPI', userMenuItemsFromAPI);
+
+  const updatedAuthenticatedUser = {
+    ...authenticatedUser,
+    username: userMenuItemsFromAPI?.username || authenticatedUser?.username,
+    avatar: userMenuItemsFromAPI?.profile_image?.has_image
+      ? userMenuItemsFromAPI.profile_image.image_url_small
+      : authenticatedUser?.avatar,
+  };
+
+  console.log('updatedAuthenticatedUser', updatedAuthenticatedUser);
+
   const userMenuItems = getUserMenuItems({
     lmsBaseUrl: LMS_BASE_URL,
     logoutUrl: LOGOUT_URL,
-    authenticatedUser,
+    authenticatedUser: updatedAuthenticatedUser,
+    userMenuItemsFromAPI,
     // isAdmin: userIsAdmin,
   });
 
@@ -357,7 +390,7 @@ const Layout = () => {
               // menuAlignment={headerData.menu.align}
               // menuList={headerData.menu.menuList}
               // loginSignupButtons={headerData.menu.loginSignupButtons}
-            authenticatedUser={authenticatedUser}
+            authenticatedUser={updatedAuthenticatedUser}
             userMenuItems={userMenuItems}
             onLanguageChange={handleLanguageChange}
             // getBaseUrl={() => '/account'}
