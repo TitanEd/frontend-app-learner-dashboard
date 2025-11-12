@@ -35,6 +35,7 @@ const Dashboard = () => {
   const [isLeaderboardEnabled, setIsLeaderboardEnabled] = useState(false);
   const [isLaptopScreen, setIsLaptopScreen] = useState(window.innerWidth < 1600);
   const [recommendedCoursesData, setRecommendedCoursesData] = useState([]);
+  const [leaderboardData, setLeaderboardData] = useState([]);
 
   // Initialize dashboard to load course data
   useInitializeDashboard();
@@ -70,6 +71,23 @@ const Dashboard = () => {
   }, []);
 
   console.log(recommendedCoursesData, 'recommendedCoursesData in Dashboard:::');
+
+  useEffect(() => {
+    const fetchLeaderboardData = async () => {
+      try {
+        const response = await getAuthenticatedHttpClient().get(`${getConfig().LMS_BASE_URL}/titaned/api/v1/leaderboard/`);
+        // const response = await getAuthenticatedHttpClient().get('https://staging.titaned.com/titaned/api/v1/leaderboard/');
+        const { data } = response;
+        setLeaderboardData(data);
+      } catch (error) {
+        console.error('Error fetching leaderboard data:', error);
+        setLeaderboardData([]);
+      }
+    };
+    fetchLeaderboardData();
+  }, []);
+
+  console.log(leaderboardData, 'leaderboardData in Dashboard:::');
 
   const getCourseListData = () => {
     if (isTodoEnabled && isTitanAISuggestionEnabled && isLeaderboardEnabled && isLaptopScreen) {
@@ -114,18 +132,18 @@ const Dashboard = () => {
         const baseUrl = `${getConfig().LMS_BASE_URL}/titaned/api/v1/lms-dashboard`;
         const client = getAuthenticatedHttpClient();
         // Fetch all in parallel, but handle errors for each
-        const [metricsRes, leaderboardRes, aiRes, todoRes] = await Promise.allSettled([
+        const [metricsRes, aiRes, todoRes] = await Promise.allSettled([
           client.get(`${baseUrl}/metrics`),
-          client.get(`${baseUrl}/leaderboard`),
+          // client.get(`${baseUrl}/leaderboard`),
           client.get(`${baseUrl}/ai-suggestions`),
           client.get(`${baseUrl}/todo-list`),
         ]);
         const metrics = metricsRes.status === 'fulfilled' ? metricsRes.value.data : [];
-        const leaderboard = leaderboardRes.status === 'fulfilled' ? leaderboardRes.value.data : [];
+        // const leaderboard = leaderboardRes.status === 'fulfilled' ? leaderboardRes.value.data : [];
         const titanAISuggestions = aiRes.status === 'fulfilled' ? aiRes.value.data : [];
         const todoList = todoRes.status === 'fulfilled' ? todoRes.value.data : [];
         setDashboardData({
-          metrics, leaderboard, titanAISuggestions, todoList,
+          metrics, titanAISuggestions, todoList,
         });
       } catch (error) {
         console.error('Error fetching dashboard data:', error);
@@ -337,7 +355,7 @@ const Dashboard = () => {
         }
       >
         {isLeaderboardEnabled && (
-          <Leaderboard leaderboardData={dashboardData.leaderboard} />
+          <Leaderboard leaderboardData={leaderboardData} />
         )}
         {/* Titan AI Suggestions */}
         { isTitanAISuggestionEnabled && (
