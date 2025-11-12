@@ -254,8 +254,9 @@ const Dashboard = () => {
                     imageSrc={course?.course_image_url}
                     title={course?.course_name}
                     metadata={course?.course_number}
-                    noOfStudents={course?.no_of_enrolled_students || 33}
-                    noOfLessons={course?.no_of_total_lessons || 11}
+                    noOfStudents={course?.enrollments_count || 33}
+                    noOfLessons={course?.lessons_count || 11}
+                    courseDate={course?.start_date}
                     onViewLive={() => {
                       if (course?.course_url) {
                         window.location.href = course.course_url;
