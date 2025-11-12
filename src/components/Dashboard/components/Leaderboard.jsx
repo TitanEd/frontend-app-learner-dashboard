@@ -12,14 +12,14 @@ const Leaderboard = ({ leaderboardData = [] }) => {
     <Card className="sidebar-card">
       <div className="card-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <h4>{intl.formatMessage(messages.leaderboardTitle)}</h4>
-        <a
+        {/* <a
           href="www.google.com"
           style={{
             color: '#8B5CF6', textDecoration: 'none', fontSize: '14px', marginRight: '1rem', paddingBottom: '6px',
           }}
         >
           {intl.formatMessage(messages.viewAll)}
-        </a>
+        </a> */}
       </div>
       <Card.Section className="card-section temp-flow">
         {leaderboardData.length > 0 ? (
