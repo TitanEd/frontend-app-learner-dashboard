@@ -155,7 +155,7 @@ const Dashboard = () => {
 
     const fetchSideBarRenderCardData = async () => {
       try {
-        const response = await getAuthenticatedHttpClient().get(`${getConfig().LMS_BASE_URL}/titaned/api/v1/menu-config/`);
+        const response = await getAuthenticatedHttpClient().get(`${getConfig().STUDIO_BASE_URL}/titaned/api/v1/menu-config/`);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -183,6 +183,8 @@ const Dashboard = () => {
     fetchDashboardData();
     fetchSideBarRenderCardData();
   }, []);
+
+  console.log(isRecommendedCoursesEnabled, 'isRecommendedCoursesEnabled in Dashboard:::');
 
   useEffect(() => {
     const handleResize = () => {
