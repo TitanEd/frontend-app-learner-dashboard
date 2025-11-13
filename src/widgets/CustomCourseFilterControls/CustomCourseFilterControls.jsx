@@ -7,6 +7,7 @@ import FilterForm from '../../containers/CourseFilterControls/components/FilterF
 import SortForm from '../../containers/CourseFilterControls/components/SortForm';
 import useCourseFilterControlsData from '../../containers/CourseFilterControls/hooks';
 import messages from '../../containers/CourseFilterControls/messages';
+import MasqueradeBar from '../../containers/MasqueradeBar';
 
 const CustomCourseFilterControls = ({
   hasCourses, filters, sortBy, setSortBy,
@@ -24,6 +25,8 @@ const CustomCourseFilterControls = ({
         alignItems: 'center',
       }}
     >
+      {/* Masquerade Bar */}
+      <MasqueradeBar />
       {/* Course Status Dropdown */}
       <Dropdown style={{ display: 'inline-block' }}>
         <Dropdown.Toggle
