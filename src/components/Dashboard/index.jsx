@@ -36,6 +36,7 @@ const Dashboard = () => {
   const [isLaptopScreen, setIsLaptopScreen] = useState(window.innerWidth < 1600);
   const [recommendedCoursesData, setRecommendedCoursesData] = useState([]);
   const [leaderboardData, setLeaderboardData] = useState([]);
+  const [isRecommendedCoursesEnabled, setIsRecommendedCoursesEnabled] = useState(false);
 
   // Initialize dashboard to load course data
   useInitializeDashboard();
@@ -165,13 +166,17 @@ const Dashboard = () => {
         if (data?.titanai_suggestion_is_enabled) {
           setIsTitanAISuggestionEnabled(true);
         }
-        if (data?.is_leaderboard_enabled) {
+        if (data?.enable_leaderboard) {
           setIsLeaderboardEnabled(true);
+        }
+        if (data?.enable_course_suggestions) {
+          setIsRecommendedCoursesEnabled(true);
         }
       } catch (error) {
         setIsTodoEnabled(false);
         setIsTitanAISuggestionEnabled(false);
         setIsLeaderboardEnabled(false);
+        setIsRecommendedCoursesEnabled(false);
       }
     };
 
@@ -239,6 +244,7 @@ const Dashboard = () => {
         </div>
 
         {/* Recommended Courses Section */}
+        {isRecommendedCoursesEnabled && (
         <div className="overview-section">
           <div className="d-flex justify-content-between align-items-center mb-3">
             <h3 className="mb-0">{intl.formatMessage(messages.recommendedCoursesTitle)}</h3>
@@ -294,6 +300,7 @@ const Dashboard = () => {
             </div>
           )}
         </div>
+        )}
 
         {/* Individual Widget Sections */}
         {widgetsLoading && (
