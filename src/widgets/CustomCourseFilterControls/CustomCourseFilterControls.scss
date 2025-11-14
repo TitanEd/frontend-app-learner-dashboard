@@ -1,0 +1,167 @@
+// Keep filter buttons row inline on desktop
+.filter-buttons-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+// Desktop view - ensure everything stays in one row
+@media (min-width: 769px) {
+  #course-filter-controls {
+    .custom-masquerade-bar {
+      // Form should keep everything inline on desktop - no wrapping
+      &__form {
+        flex-wrap: nowrap !important;
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+      }
+      
+      // Label should not take full width on desktop
+      &__label {
+        flex-basis: auto !important;
+        width: auto !important;
+        flex-shrink: 0;
+      }
+      
+      // Input-button row should stay inline with gap between input and button
+      &__input-button-row {
+        flex-wrap: nowrap !important;
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        gap: 8px !important;
+        flex-shrink: 0;
+      }
+    }
+  }
+}
+
+// Mobile view - masquerade bar below Course Status and Sort
+@media (max-width: 768px) {
+  #course-filter-controls {
+    flex-direction: column;
+    align-items: flex-start;
+    
+    // Filter buttons row stays inline
+    .filter-buttons-row {
+      order: 1;
+      display: flex;
+      flex-direction: row;
+      gap: 10px;
+    }
+    
+    // Masquerade bar goes below
+    .custom-masquerade-bar {
+      order: 2;
+      width: 100%;
+      
+      // Form layout: row but wrap to create label on top, input+button on bottom
+      // Override CustomMasqueradeBar mobile styles
+      &__form {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        align-items: center !important;
+        gap: 10px;
+        width: auto !important;
+      }
+      
+      // Label takes full width (forces new line)
+      &__label {
+        flex-basis: 100%;
+        width: 100%;
+        margin-bottom: 0;
+        flex-shrink: 0;
+      }
+      
+      // Container for input and button to keep them together
+      &__input-button-row {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        gap: 10px;
+        flex-wrap: nowrap !important;
+        flex: 0 0 auto;
+        width: auto;
+      }
+      
+      // Input and submit stay in same row - prevent wrapping
+      // Override CustomMasqueradeBar mobile styles
+      &__input-wrapper {
+        flex: 0 0 auto !important;
+        width: auto !important;
+        min-width: 200px !important;
+        max-width: none !important;
+        margin: 0 !important;
+        align-self: center !important;
+        flex-shrink: 0 !important;
+      }
+      
+      // Submit button next to input - keep aligned even in pending state
+      &__input-button-row > button,
+      &__input-button-row > button[type="submit"],
+      &__input-button-row > .pgn__stateful-button {
+        flex: 0 0 auto !important;
+        flex-shrink: 0 !important;
+        margin: 0 !important;
+        align-self: center !important;
+        vertical-align: middle;
+        width: auto !important;
+        display: inline-flex !important;
+        white-space: nowrap !important;
+      }
+      
+      // Ensure button stays aligned in all states (pending/submitting)
+      &__input-button-row > button[aria-busy="true"],
+      &__input-button-row > button.pending,
+      &__input-button-row > button[data-state="pending"],
+      &__input-button-row > .pgn__stateful-button[aria-busy="true"],
+      &__input-button-row > .pgn__stateful-button.pending,
+      &__input-button-row > .pgn__stateful-button[data-state="pending"] {
+        flex: 0 0 auto !important;
+        flex-shrink: 0 !important;
+        align-self: center !important;
+        margin: 0 !important;
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
+        width: auto !important;
+        display: inline-flex !important;
+        vertical-align: middle !important;
+        white-space: nowrap !important;
+      }
+      
+      // Viewing state - keep label and chip together (mobile only)
+      &__viewing {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        gap: 8px !important;
+        flex-wrap: nowrap !important;
+        width: 50% !important;
+      }
+      
+      &__viewing &__label {
+        flex: 0 0 auto !important;
+        width: auto !important;
+        margin: 0 !important;
+        margin-right: 8px !important;
+        padding: 0 !important;
+      }
+      
+      &__viewing &__chip {
+        flex: 0 0 auto !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        flex-shrink: 0 !important;
+      }
+      
+      // Override any default chip spacing (mobile only)
+      &__viewing .pgn__chip {
+        margin: 0 !important;
+        margin-left: 0 !important;
+      }
+    }
+  }
+}
+

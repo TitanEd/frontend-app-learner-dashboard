@@ -151,7 +151,8 @@
 // Responsive adjustments
 @media (max-width: 768px) {
   .custom-masquerade-bar {
-    flex-direction: column;
+    display: flex;
+    flex-direction: row;
     align-items: flex-start;
     width: 100%;
 

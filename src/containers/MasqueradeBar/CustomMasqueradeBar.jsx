@@ -50,35 +50,37 @@ const CustomMasqueradeBar = ({
             <Icon src={PersonSearch} className="custom-masquerade-bar__icon" />
             <span>{formatMessage(messages.ViewAs)}</span>
           </div>
-          <div className="custom-masquerade-bar__input-wrapper">
-            <FormGroup isInvalid={isMasqueradingFailed} className="custom-masquerade-bar__input-group">
-              <FormControl
-                value={masqueradeInput}
-                onChange={handleMasqueradeInputChange}
-                placeholder={formatMessage(messages.StudentNameInput)}
-                aria-label={formatMessage(messages.StudentNameInput)}
-                size="sm"
-                className="custom-masquerade-bar__input"
-              />
-              {isMasqueradingFailed && (
-                <FormControlFeedback type="invalid" hasIcon={false} className="custom-masquerade-bar__error">
-                  {formatMessage(masqueradeErrorMessage)}
-                </FormControlFeedback>
-              )}
-            </FormGroup>
+          <div className="custom-masquerade-bar__input-button-row">
+            <div className="custom-masquerade-bar__input-wrapper">
+              <FormGroup isInvalid={isMasqueradingFailed} className="custom-masquerade-bar__input-group">
+                <FormControl
+                  value={masqueradeInput}
+                  onChange={handleMasqueradeInputChange}
+                  placeholder={formatMessage(messages.StudentNameInput)}
+                  aria-label={formatMessage(messages.StudentNameInput)}
+                  size="sm"
+                  className="custom-masquerade-bar__input"
+                />
+                {isMasqueradingFailed && (
+                  <FormControlFeedback type="invalid" hasIcon={false} className="custom-masquerade-bar__error">
+                    {formatMessage(masqueradeErrorMessage)}
+                  </FormControlFeedback>
+                )}
+              </FormGroup>
+            </div>
+            <StatefulButton
+              disabled={!masqueradeInput.length}
+              variant="primary"
+              onClick={handleMasqueradeSubmit(masqueradeInput)}
+              labels={{
+                default: formatMessage(messages.SubmitButton),
+              }}
+              size="sm"
+              // className="custom-masquerade-bar__submit"
+              state={isMasqueradingPending ? 'pending' : 'default'}
+              type="submit"
+            />
           </div>
-          <StatefulButton
-            disabled={!masqueradeInput.length}
-            variant="primary"
-            onClick={handleMasqueradeSubmit(masqueradeInput)}
-            labels={{
-              default: formatMessage(messages.SubmitButton),
-            }}
-            size="sm"
-            // className="custom-masquerade-bar__submit"
-            state={isMasqueradingPending ? 'pending' : 'default'}
-            type="submit"
-          />
         </div>
       )}
     </div>
