@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import React, { useContext, useEffect, useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { MainHeader, Sidebar, SidebarProvider } from 'titaned-lib';
+import { MainHeader, Sidebar, SidebarProvider } from 'titaned-frontend-library';
 import { AppContext } from '@edx/frontend-platform/react';
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 import { Spinner } from '@openedx/paragon';

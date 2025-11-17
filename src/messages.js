@@ -76,6 +76,11 @@ const messages = defineMessages({
     defaultMessage: 'Switch to Old View',
     description: 'Title of the switch to old view sidebar item',
   },
+  viewCertificate: {
+    id: 'learner-dashboard.view-certificate',
+    defaultMessage: 'View Certificate',
+    description: 'View certificate button text',
+  },
 });
 
 export default messages;

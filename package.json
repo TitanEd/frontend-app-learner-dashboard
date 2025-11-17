@@ -82,7 +82,7 @@
     "redux-thunk": "2.4.2",
     "regenerator-runtime": "^0.14.0",
     "reselect": "^4.0.0",
-    "titaned-lib": "^0.0.138",
+    "titaned-frontend-library": "^1.0.9",
     "universal-cookie": "^4.0.4",
     "util": "^0.12.4",
     "whatwg-fetch": "^3.6.2"

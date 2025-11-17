@@ -51,7 +51,7 @@ const loadStylesForNewUI = (isOldUI) => {
 
   if (!isOldUI) {
     console.log('Loading titaned-lib styles...');
-    import('titaned-lib/dist/index.css');
+    import('titaned-frontend-library/dist/index.css');
     import('./styles/styles-overrides.scss');
   } else {
     console.log('Skipping titaned-lib styles for old UI');

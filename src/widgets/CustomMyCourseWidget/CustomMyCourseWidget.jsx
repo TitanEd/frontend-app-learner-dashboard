@@ -8,6 +8,7 @@ import {
 } from "@openedx/paragon";
 import { reduxHooks } from "hooks";
 import { Settings } from "@openedx/paragon/icons";
+import { useIntl } from "@edx/frontend-platform/i18n";
 import useCardDetailsData from "../../containers/CourseCard/components/CourseCardDetails/hooks";
 
 import SelectSessionButton from "../../containers/CourseCard/components/CourseCardActions/SelectSessionButton";
@@ -17,11 +18,14 @@ import ViewCourseButton from "../../containers/CourseCard/components/CourseCardA
 // import "./CustomMyCourseWidget.scss";
 import CourseCardActions from "../../containers/CourseCard/components/CourseCardActions";
 import CourseCardMenu from "../../containers/CourseCard/components/CourseCardMenu";
+import ActionButton from "../../containers/CourseCard/components/CourseCardActions/ActionButton";
+import messages from "../../messages";
 
 const fallbackImage = "https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg";
 
 const CustomMyCourseWidget = ({ cardId }) => {
   console.log('cardId', cardId);
+  const { formatMessage } = useIntl();
   // Get course basic details
   const { courseName = "Untitled Course", bannerImgSrc = fallbackImage } = reduxHooks.useCardCourseData(cardId) || {};
   console.log('courseName', courseName);
@@ -39,6 +43,12 @@ const CustomMyCourseWidget = ({ cardId }) => {
   const { isEntitlement, isFulfilled } = reduxHooks.useCardEntitlementData(cardId);
   const { hasStarted } = reduxHooks.useCardEnrollmentData(cardId);
   const { isArchived } = reduxHooks.useCardCourseRunData(cardId);
+  const certificate = reduxHooks.useCardCertificateData(cardId);
+
+  const handleViewCertificateClick = () => {
+    // console.log('handleViewCertificateClick', certificate.certPreviewUrl);
+    window.location.href = certificate.certPreviewUrl;
+  };
 
   return (
     <Card style={{ width: "19rem" }} className="cardContainer">
@@ -78,6 +88,18 @@ const CustomMyCourseWidget = ({ cardId }) => {
             ) : (
               <BeginCourseButton cardId={cardId} />
             ))}
+
+          {certificate.isDownloadable && (
+          <ActionButton
+            // disabled={disableResumeCourse}
+            as="a"
+            href="#"
+            variant="outline-primary"
+            onClick={handleViewCertificateClick}
+          >
+            {formatMessage(messages.viewCertificate)}
+          </ActionButton>
+          )}
         </div>
       </Card.Section>
     </Card>
