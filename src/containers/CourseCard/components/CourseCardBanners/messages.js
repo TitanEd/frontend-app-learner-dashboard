@@ -69,7 +69,7 @@ const messages = defineMessages({
   viewCertificate: {
     id: 'learner-dash.courseCard.banners.viewCertificate',
     description: 'Certificate link text',
-    defaultMessage: 'View Certificate',
+    defaultMessage: 'View Certificate.',
   },
   certMinGrade: {
     id: 'learner-dash.courseCard.banners.certMinGrade',
