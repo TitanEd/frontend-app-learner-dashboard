@@ -253,7 +253,7 @@ const Dashboard = () => {
         <div className="overview-section">
           <div className="d-flex justify-content-between align-items-center mb-3">
             <h3 className="mb-0">{intl.formatMessage(messages.recommendedCoursesTitle)}</h3>
-            {!coursesLoading && getCourseListData().length > 0 && (
+            {/* {!coursesLoading && getCourseListData().length > 0 && (
               <a
                 href="my-courses"
                 style={{
@@ -263,7 +263,7 @@ const Dashboard = () => {
               >
                 {intl.formatMessage(messages.viewAll)}
               </a>
-            )}
+            )} */}
           </div>
 
           {coursesLoading && (
