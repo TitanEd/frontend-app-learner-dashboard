@@ -13,13 +13,10 @@ const ContinueLearningProgressBar = () => {
   useEffect(() => {
     const fetchRecentCourses = async () => {
       try {
-        console.log('fetching recent courses');
         // const response = await fetch('http://localhost:3003/recent-courses');
         const response = await getAuthenticatedHttpClient().get(`${getConfig().LMS_BASE_URL}/titaned/api/v1/recent-courses/`);
         // const response = await getAuthenticatedHttpClient().get('https://staging.titaned.com/titaned/api/v1/recent-courses/');
-        console.log(response, 'response in ContinueLearningProgressBar::::');
         const { data } = response;
-        console.log(data, 'dataaaaaaa in ContinueLearningProgressBar::::');
         setRecentCourses(Array.isArray(data) ? data : [data]);
       } catch (error) {
         console.error('Error fetching recent courses:', error);
@@ -29,7 +26,6 @@ const ContinueLearningProgressBar = () => {
     fetchRecentCourses();
   }, []);
 
-  console.log(recentCourses, 'recentCourses in ContinueLearningProgressBar::::');
 
   return (
     <div className="continue-learning-section">

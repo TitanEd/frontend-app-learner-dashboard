@@ -23,7 +23,6 @@ const MetricCard = ({
     return colors[cardIndex % colors.length];
   };
 
-  console.log('icon in MetricCard', icon);
 
   const cardStyle = getCardStyle(index || 0);
 

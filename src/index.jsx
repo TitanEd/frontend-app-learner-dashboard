@@ -43,18 +43,13 @@ import { applyTheme } from './styles/themeLoader';
 
 // Load styles only for new UI
 const loadStylesForNewUI = (isOldUI) => {
-  console.log('loadStylesForNewUI called with isOldUI:', isOldUI);
   document.body.className = isOldUI ? 'old-ui' : 'new-ui';
   document.documentElement.className = isOldUI ? 'old-ui' : 'new-ui';
-  console.log('Body className set to:', document.body.className);
-  console.log('Html className set to:', document.documentElement.className);
 
   if (!isOldUI) {
-    console.log('Loading titaned-lib styles...');
     import('titaned-frontend-library/dist/index.css');
     import('./styles/styles-overrides.scss');
   } else {
-    console.log('Skipping titaned-lib styles for old UI');
     import('./styles/old-ui.scss');
   }
 };
@@ -66,7 +61,6 @@ const MainApp = () => {
   const [oldUI, setOldUI] = useState(null);
   const [loading, setLoading] = useState(true);
   const [menuConfig, setMenuConfig] = useState(null);
-  console.log('oldUI in Index', oldUI);
 
   // Load UI preference and menu config in one API call to avoid race conditions
   useEffect(() => {
@@ -74,27 +68,21 @@ const MainApp = () => {
       try {
         // First, load from localStorage for immediate display
         const localStorageValue = localStorage.getItem('oldUI') || 'false';
-        console.log('Initial localStorage oldUI:', localStorageValue);
         setOldUI(localStorageValue);
         setLoading(false);
 
         // Then, fetch both UI preference and menu config in one API call
-        console.log('Fetching menu config and UI preference...');
         const response = await getAuthenticatedHttpClient().get(`${getConfig().STUDIO_BASE_URL}/titaned/api/v1/menu-config/`);
 
         if (response.status === 200 && response.data) {
-          console.log('Menu config:', response.data);
           setMenuConfig(response.data);
 
           // Extract UI preference from the same response
           const useNewUI = response.data.use_new_ui === true;
           const apiOldUIValue = !useNewUI ? 'true' : 'false';
-          console.log('API returned use_new_ui:', useNewUI, 'API oldUI:', apiOldUIValue);
 
           // Check if API response matches localStorage
           if (localStorageValue !== apiOldUIValue) {
-            console.log('Mismatch detected! localStorage:', localStorageValue, 'API:', apiOldUIValue);
-            console.log('Updating localStorage and reloading page...');
             localStorage.setItem('oldUI', apiOldUIValue);
             // Reload page to re-run build-time config with correct localStorage
             window.location.reload();

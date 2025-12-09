@@ -22,7 +22,6 @@ export const applyTheme = async () => {
       root.style.setProperty(`--${key.replace(/_/g, '-')}`, value);
     });
 
-    console.log('Theme applied successfully from API:', themeColors);
   } catch (error) {
     console.error('Error applying theme from API:', error.message);
 
@@ -43,6 +42,5 @@ export const applyTheme = async () => {
     Object.entries(fallbackTheme).forEach(([key, value]) => {
       root.style.setProperty(`--${key.replace(/_/g, '-')}`, value);
     });
-    console.log('Fallback theme applied');
   }
 };

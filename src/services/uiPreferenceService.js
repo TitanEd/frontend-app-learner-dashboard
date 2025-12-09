@@ -13,12 +13,10 @@ let isInitialized = false;
 export const getUIPreference = async () => {
   // Return cached value if already initialized
   if (isInitialized && cachedUIPreference !== null) {
-    console.log('Returning cached UI preference:', cachedUIPreference);
     return cachedUIPreference;
   }
 
   try {
-    console.log('Fetching UI preference from API...');
     
     const response = await getAuthenticatedHttpClient().get(
       `${getConfig().STUDIO_BASE_URL}/titaned/api/v1/menu-config/`,
@@ -32,7 +30,6 @@ export const getUIPreference = async () => {
       // Update localStorage for plugin config compatibility
       localStorage.setItem('oldUI', useNewUI ? 'false' : 'true');
       
-      console.log('API returned use_new_ui:', useNewUI, 'Updated localStorage to:', useNewUI ? 'false' : 'true');
       return useNewUI;
     }
 
@@ -59,7 +56,6 @@ export const getUIPreference = async () => {
  */
 export const setUIPreference = async (useNewUI) => {
   try {
-    console.log('Setting UI preference via API:', useNewUI);
     
     const response = await getAuthenticatedHttpClient().post(
       `${getConfig().STUDIO_BASE_URL}/titaned/api/v1/set_ui_preference/`,
@@ -73,7 +69,6 @@ export const setUIPreference = async (useNewUI) => {
       cachedUIPreference = useNewUI;
       localStorage.setItem('oldUI', useNewUI ? 'false' : 'true');
       
-      console.log('UI preference updated successfully:', useNewUI, 'localStorage set to:', useNewUI ? 'false' : 'true');
       return true;
     }
 
@@ -91,5 +86,4 @@ export const setUIPreference = async (useNewUI) => {
 export const clearUIPreferenceCache = () => {
   cachedUIPreference = null;
   isInitialized = false;
-  console.log('UI preference cache cleared');
 };

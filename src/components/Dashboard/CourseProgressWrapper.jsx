@@ -81,7 +81,6 @@ CourseProgressBar.propTypes = {
 
 // Wrapper component that fetches progress data
 const CourseProgressWrapper = ({ courseId }) => {
-  console.log('CourseProgressWrapper received courseId:', courseId);
   const { progress, loading, error } = useCourseProgress(courseId);
 
   if (error) {

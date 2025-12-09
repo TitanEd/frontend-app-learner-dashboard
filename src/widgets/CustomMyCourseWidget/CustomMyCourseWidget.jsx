@@ -24,12 +24,9 @@ import messages from "../../messages";
 const fallbackImage = "https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg";
 
 const CustomMyCourseWidget = ({ cardId }) => {
-  console.log('cardId', cardId);
   const { formatMessage } = useIntl();
   // Get course basic details
   const { courseName = "Untitled Course", bannerImgSrc = fallbackImage } = reduxHooks.useCardCourseData(cardId) || {};
-  console.log('courseName', courseName);
-  console.log('bannerImgSrc', bannerImgSrc);
 
   const displayBannerSrc = bannerImgSrc
     && !bannerImgSrc.includes("images_course_image.jpg")

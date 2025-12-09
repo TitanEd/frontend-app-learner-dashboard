@@ -49,8 +49,6 @@ const Dashboard = () => {
   const hasCourses = reduxHooks.useHasCourses();
   const courseListData = useCourseListData();
   const coursesLoading = reduxHooks.useRequestIsPending(RequestKeys.initialize);
-  console.log(courseListData, 'courseListData in Dashboard::');
-  console.log(hasCourses, 'hasCourses in Dashboard:::');
 
   const { visibleList } = courseListData;
 
@@ -71,7 +69,6 @@ const Dashboard = () => {
     fetchRecommendedCoursesData();
   }, []);
 
-  console.log(recommendedCoursesData, 'recommendedCoursesData in Dashboard:::');
 
   useEffect(() => {
     const fetchLeaderboardData = async () => {
@@ -88,7 +85,6 @@ const Dashboard = () => {
     fetchLeaderboardData();
   }, []);
 
-  console.log(leaderboardData, 'leaderboardData in Dashboard:::');
 
   const getCourseListData = () => {
     if (isTodoEnabled && isTitanAISuggestionEnabled && isLeaderboardEnabled && isLaptopScreen) {
@@ -162,7 +158,6 @@ const Dashboard = () => {
         //   throw new Error(`HTTP error! status: ${response.status}`);
         // }
         const { data } = await response;
-        console.log(data, 'data in fetchSideBarRenderCardData:::');
         if (data?.is_todo_enabled) {
           setIsTodoEnabled(true);
         }
@@ -187,7 +182,6 @@ const Dashboard = () => {
     fetchSideBarRenderCardData();
   }, []);
 
-  console.log(isRecommendedCoursesEnabled, 'isRecommendedCoursesEnabled in Dashboard:::');
 
   useEffect(() => {
     const handleResize = () => {
