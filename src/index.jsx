@@ -86,10 +86,7 @@ const MainApp = () => {
             localStorage.setItem('oldUI', apiOldUIValue);
             // Reload page to re-run build-time config with correct localStorage
             window.location.reload();
-            return;
           }
-
-          console.log('localStorage and API are in sync, no reload needed');
         } else {
           console.warn('API failed, using localStorage value and default menu config');
           setMenuConfig({}); // Set empty object as fallback
