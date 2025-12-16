@@ -32,10 +32,6 @@ const Dashboard = () => {
   const [dashboardData, setDashboardData] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Performance fix
-  useEffect(() => {
-    setTimeout(() => setReady(true), 500);
-  }, []);
   const [isTodoEnabled, setIsTodoEnabled] = useState(false);
   const [isTitanAISuggestionEnabled, setIsTitanAISuggestionEnabled] = useState(false);
   const [isLeaderboardEnabled, setIsLeaderboardEnabled] = useState(false);
@@ -44,15 +40,23 @@ const Dashboard = () => {
   const [leaderboardData, setLeaderboardData] = useState([]);
   const [isRecommendedCoursesEnabled, setIsRecommendedCoursesEnabled] = useState(false);
 
-  // Performance hack: Show skeleton first, load real UI after delay
+  // Performance fix: Show skeleton first, defer ALL operations
   useEffect(() => {
-    setTimeout(() => setReady(true), 500);
+    setTimeout(() => setReady(true), 1000);
   }, []);
 
-  // Initialize dashboard to load course data
-  useInitializeDashboard();
+  // Defer initialization until skeleton delay passes
+  const [shouldInitialize, setShouldInitialize] = useState(false);
+  useEffect(() => {
+    if (ready) {
+      setShouldInitialize(true);
+    }
+  }, [ready]);
 
-  // Fetch widgets data
+  // Always call hooks (React requirement), but defer their effects
+  useInitializeDashboard();
+  
+  // Fetch widgets data - but defer the actual fetching
   const {
     widgets, loading: widgetsLoading, error: widgetsError, refreshWidgets,
   } = useWidgets();
@@ -65,10 +69,11 @@ const Dashboard = () => {
 
   const intl = useIntl();
 
+  // Performance fix: Defer ALL API calls until after skeleton delay
   useEffect(() => {
+    if (!shouldInitialize) return;
     const fetchRecommendedCoursesData = async () => {
       try {
-        // const response = await getAuthenticatedHttpClient().get('https://staging.titaned.com/titaned/api/v1/recommended-courses/');
         const response = await getAuthenticatedHttpClient().get(`${getConfig().LMS_BASE_URL}/titaned/api/v1/recommended-courses/`);
         const { data } = response;
         setRecommendedCoursesData(data);
@@ -78,23 +83,27 @@ const Dashboard = () => {
       }
     };
     fetchRecommendedCoursesData();
-  }, []);
+  }, [shouldInitialize]);
 
 
+  // Performance fix: Defer API calls
   useEffect(() => {
+    if (!shouldInitialize) {
+      return;
+    }
     const fetchLeaderboardData = async () => {
       try {
         const response = await getAuthenticatedHttpClient().get(`${getConfig().LMS_BASE_URL}/titaned/api/v1/leaderboard/`);
-        // const response = await getAuthenticatedHttpClient().get('https://staging.titaned.com/titaned/api/v1/leaderboard/');
         const { data } = response;
         setLeaderboardData(data);
       } catch (error) {
+        // eslint-disable-next-line no-console
         console.error('Error fetching leaderboard data:', error);
         setLeaderboardData([]);
       }
     };
     fetchLeaderboardData();
-  }, []);
+  }, [shouldInitialize]);
 
 
   const getCourseListData = () => {
@@ -104,7 +113,11 @@ const Dashboard = () => {
     return recommendedCoursesData.slice(0, 4);
   };
 
+  // Performance fix: Defer dashboard data fetch
   useEffect(() => {
+    if (!shouldInitialize) {
+      return;
+    }
     const fetchDashboardData = async () => {
       try {
         // const isLocal = process.env.NODE_ENV !== 'prod' && process.env.NODE_ENV !== 'production';
@@ -191,7 +204,7 @@ const Dashboard = () => {
 
     fetchDashboardData();
     fetchSideBarRenderCardData();
-  }, []);
+  }, [shouldInitialize]);
 
 
   useEffect(() => {

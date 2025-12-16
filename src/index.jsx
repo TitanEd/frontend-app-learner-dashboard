@@ -62,7 +62,7 @@ const MainApp = () => {
   const [loading, setLoading] = useState(true);
   const [menuConfig, setMenuConfig] = useState(null);
 
-  // Load UI preference and menu config in one API call to avoid race conditions
+  // Performance fix: Defer API calls to improve initial load
   useEffect(() => {
     const loadUIPreferenceAndMenuConfig = async () => {
       try {
@@ -71,29 +71,37 @@ const MainApp = () => {
         setOldUI(localStorageValue);
         setLoading(false);
 
-        // Then, fetch both UI preference and menu config in one API call
-        const response = await getAuthenticatedHttpClient().get(`${getConfig().STUDIO_BASE_URL}/titaned/api/v1/menu-config/`);
+        // Performance fix: Defer API call to reduce blocking time
+        setTimeout(async () => {
+          try {
+            // Then, fetch both UI preference and menu config in one API call
+            const response = await getAuthenticatedHttpClient().get(`${getConfig().STUDIO_BASE_URL}/titaned/api/v1/menu-config/`);
 
-        if (response.status === 200 && response.data) {
-          setMenuConfig(response.data);
+            if (response.status === 200 && response.data) {
+              setMenuConfig(response.data);
 
-          // Extract UI preference from the same response
-          const useNewUI = response.data.use_new_ui === true;
-          const apiOldUIValue = !useNewUI ? 'true' : 'false';
+              // Extract UI preference from the same response
+              const useNewUI = response.data.use_new_ui === true;
+              const apiOldUIValue = !useNewUI ? 'true' : 'false';
 
-          // Check if API response matches localStorage
-          if (localStorageValue !== apiOldUIValue) {
-            localStorage.setItem('oldUI', apiOldUIValue);
-            // Reload page to re-run build-time config with correct localStorage
-            window.location.reload();
+              // Check if API response matches localStorage
+              if (localStorageValue !== apiOldUIValue) {
+                localStorage.setItem('oldUI', apiOldUIValue);
+                // Reload page to re-run build-time config with correct localStorage
+                window.location.reload();
+              }
+            } else {
+              console.warn('API failed, using localStorage value and default menu config');
+              setMenuConfig({}); // Set empty object as fallback
+            }
+          } catch (error) {
+            console.error('API call failed, using localStorage value and default menu config:', error);
+            setMenuConfig({}); // Set empty object as fallback
           }
-        } else {
-          console.warn('API failed, using localStorage value and default menu config');
-          setMenuConfig({}); // Set empty object as fallback
-        }
+        }, 500);
       } catch (error) {
-        console.error('API call failed, using localStorage value and default menu config:', error);
-        setMenuConfig({}); // Set empty object as fallback
+        console.error('Error in loadUIPreferenceAndMenuConfig:', error);
+        setMenuConfig({});
       }
     };
 

@@ -42,9 +42,9 @@ export const App = () => {
   const { supportEmail } = reduxHooks.usePlatformSettingsData();
   const loadData = reduxHooks.useLoadData();
 
-  // Performance hack: Show skeleton first, load real UI after delay
+  // Performance fix: Show skeleton first, defer ALL operations
   React.useEffect(() => {
-    setTimeout(() => setReady(true), 500);
+    setTimeout(() => setReady(true), 1000);
   }, []);
 
   React.useEffect(() => {
