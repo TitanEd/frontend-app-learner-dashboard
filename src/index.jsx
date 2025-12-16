@@ -114,11 +114,19 @@ const MainApp = () => {
     }
   }, [oldUI]);
 
-  // Show loading screen while UI preference is being fetched
+  // Performance hack: Show lightweight skeleton first
   if (loading || menuConfig === null) {
     return (
-      <div className="d-flex justify-content-center align-items-center flex-column vh-100">
-        <div>Loading... Please wait...</div>
+      <div className="d-flex justify-content-center align-items-center flex-column vh-100" style={{ backgroundColor: '#fff' }}>
+        <div style={{ width: '100%', maxWidth: '1200px', padding: '20px' }}>
+          <div style={{ height: '60px', backgroundColor: '#f0f0f0', borderRadius: '4px', marginBottom: '30px', width: '300px' }}></div>
+          <div style={{ display: 'flex', gap: '20px', marginBottom: '30px' }}>
+            {[1, 2, 3, 4].map(i => (
+              <div key={i} style={{ flex: 1, height: '100px', backgroundColor: '#f0f0f0', borderRadius: '8px' }}></div>
+            ))}
+          </div>
+          <div style={{ height: '400px', backgroundColor: '#f0f0f0', borderRadius: '8px' }}></div>
+        </div>
       </div>
     );
   }

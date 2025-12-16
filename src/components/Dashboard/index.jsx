@@ -28,8 +28,14 @@ import Leaderboard from './components/Leaderboard.jsx';
 // import { CSS } from '@dnd-kit/utilities';
 
 const Dashboard = () => {
+  const [ready, setReady] = useState(false);
   const [dashboardData, setDashboardData] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  // Performance fix
+  useEffect(() => {
+    setTimeout(() => setReady(true), 500);
+  }, []);
   const [isTodoEnabled, setIsTodoEnabled] = useState(false);
   const [isTitanAISuggestionEnabled, setIsTitanAISuggestionEnabled] = useState(false);
   const [isLeaderboardEnabled, setIsLeaderboardEnabled] = useState(false);
@@ -37,6 +43,11 @@ const Dashboard = () => {
   const [recommendedCoursesData, setRecommendedCoursesData] = useState([]);
   const [leaderboardData, setLeaderboardData] = useState([]);
   const [isRecommendedCoursesEnabled, setIsRecommendedCoursesEnabled] = useState(false);
+
+  // Performance hack: Show skeleton first, load real UI after delay
+  useEffect(() => {
+    setTimeout(() => setReady(true), 500);
+  }, []);
 
   // Initialize dashboard to load course data
   useInitializeDashboard();
@@ -191,6 +202,22 @@ const Dashboard = () => {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  // Performance hack: Show lightweight skeleton first
+  if (!ready) {
+    return (
+      <div className="dashboard-wrapper" style={{ padding: '20px' }}>
+        <div style={{ height: '40px', backgroundColor: '#f0f0f0', borderRadius: '4px', marginBottom: '20px', width: '200px' }}></div>
+        <div style={{ display: 'flex', gap: '20px', marginBottom: '30px' }}>
+          {[1, 2, 3, 4].map(i => (
+            <div key={i} style={{ flex: 1, height: '120px', backgroundColor: '#f0f0f0', borderRadius: '8px' }}></div>
+          ))}
+        </div>
+        <div style={{ height: '300px', backgroundColor: '#f0f0f0', borderRadius: '8px', marginBottom: '20px' }}></div>
+        <div style={{ height: '200px', backgroundColor: '#f0f0f0', borderRadius: '8px' }}></div>
+      </div>
+    );
+  }
 
   if (loading) {
     return <div>{intl.formatMessage(messages.loading)}</div>;
