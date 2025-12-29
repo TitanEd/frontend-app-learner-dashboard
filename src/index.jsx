@@ -26,6 +26,7 @@ import {
 } from '@edx/frontend-platform';
 
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
+import { dynamicTheme } from 'titaned-frontend-library';
 import { configuration } from './config';
 
 import messages from './i18n';
@@ -39,7 +40,6 @@ import './index.scss';
 // import 'titaned-lib/dist/index.css';
 // import './styles/styles-overrides.scss';
 import Layout from './Layout';
-import { applyTheme } from './styles/themeLoader';
 
 // Load styles only for new UI
 const loadStylesForNewUI = (isOldUI) => {
@@ -111,7 +111,14 @@ const MainApp = () => {
   // Apply theme from JSON
   useEffect(() => {
     if (oldUI === 'false') {
-      applyTheme(); // Load default theme from /theme.json
+      (async () => {
+        try {
+          const response = await getAuthenticatedHttpClient().get(`${getConfig().LMS_BASE_URL}/titaned/api/v1/mfe_context/`);
+          dynamicTheme(response);
+        } catch (error) {
+          console.error('Error fetching theme config:', error);
+        }
+      })();
     }
   }, [oldUI]);
 
