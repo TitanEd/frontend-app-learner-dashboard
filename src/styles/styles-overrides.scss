@@ -32,10 +32,6 @@
       margin-top: -2rem !important;
     }
     
-    // .btn-primary {
-    //   background-color: var(--primary);
-    //   border-color: var(--primary);
-    // }
   }
 }
 
@@ -102,9 +98,6 @@ border: transparent !important;
 
 #dropdown-course-status.dropdown-toggle::after,
 #dropdown-sort.dropdown-toggle::after {
-// border-top: 0.4em solid var(--primary);     /* caret color */
-// border-right: 0.4em solid transparent;
-// border-left: 0.4em solid transparent;
 margin-left: 6px;                    /* space between text and arrow */
 // vertical-align: middle;              /* align with text */
 }
@@ -246,28 +239,6 @@ button {
   text-align: center;
   line-height: 32px; /* vertical alignment */
 }
-
-// /* Primary (solid purple) */
-// .btn-primary {
-//   background-color:  var(--primary) !important;
-//   border: none !important;
-//   color:  var(--text-white) !important;
-
-//   &:hover {
-//     background-color:  var(--primary-alt) !important;
-//   }
-// }
-
-/* Outline (purple border) */
-// .btn-outline-primary {
-//   background: var(--bg-surface) !important;
-//   color:  var(--primary) !important;
-//   border: 1px solid  var(--primary) !important;
-
-//   &:hover {
-//     background: #ede9fe !important;
-//   }
-// }
 }
 
 .cardContainer {
@@ -296,10 +267,6 @@ margin: 10px;
     text-overflow: ellipsis;
   }
 }
-/* Wrap the whole list and pagination in a relative container */
-// .course-list-wrapper {
-//   position: relative;
-// }
  
 .cardList-direction-alignment {
   display: flex !important;
@@ -315,12 +282,8 @@ margin: 10px;
 }
 /* Pagination at bottom-right */
 .pagination-container {
-  // position: relative;
-  // right: 2rem;
-  // bottom: 1rem;
   display: flex;
   justify-content: flex-end;
-  // width: auto; /* only take the width of the pagination itself */
 }
 
 .cardList-direction-alignment {
@@ -667,17 +630,6 @@ margin: 10px;
   margin: 0;
 }
 
-// .continue-learning-view-all {
-//   color: #1A237E;
-//   text-decoration: none;
-//   font-size: 16px;
-//   font-weight: 500;
-  
-//   &:hover {
-//     text-decoration: underline;
-//   }
-// }
-
 .dashboard-navigation-link {
   color: var(--primary) !important;
   &:hover {
@@ -697,7 +649,6 @@ margin: 10px;
 
 .continue-learning-card-wrapper {
   border: none !important;
-  // box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
   border-radius: 8px !important;
 }
 
@@ -705,7 +656,6 @@ margin: 10px;
   display: flex !important;
   flex-direction: row !important;
   align-items: center !important;
-  // padding: 16px !important;
   gap: 16px !important;
 }
 
@@ -725,7 +675,6 @@ margin: 10px;
   flex: 1;
   display: flex;
   flex-direction: column;
-  // min-height: 120px;
 }
 
 .continue-learning-course-title {
@@ -749,8 +698,6 @@ margin: 10px;
 }
 
 .continue-learning-resume-btn {
-  // background-color: ;
-  // color: #ffffff;
   border: none;
   border-radius: 24px;
   padding: 10px 20px;
@@ -759,10 +706,6 @@ margin: 10px;
   cursor: pointer;
   align-self: center;
   transition: background-color 0.2s ease;
-  
-  // &:hover {
-  //   background-color: #0D1A5C;
-  // }
 }
 
 /* Responsive Design */
