@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+/* eslint-disable import/extensions */
 /* eslint-disable max-len */
 import React, { useState, useEffect } from 'react';
 import {
@@ -55,23 +57,19 @@ const Dashboard = () => {
 
   // Always call hooks (React requirement), but defer their effects
   useInitializeDashboard();
-  
+
   // Fetch widgets data - but defer the actual fetching
   const {
     widgets, loading: widgetsLoading, error: widgetsError, refreshWidgets,
   } = useWidgets();
 
-  const hasCourses = reduxHooks.useHasCourses();
-  const courseListData = useCourseListData();
   const coursesLoading = reduxHooks.useRequestIsPending(RequestKeys.initialize);
-
-  const { visibleList } = courseListData;
 
   const intl = useIntl();
 
   // Performance fix: Defer ALL API calls until after skeleton delay
   useEffect(() => {
-    if (!shouldInitialize) return;
+    if (!shouldInitialize) { return; }
     const fetchRecommendedCoursesData = async () => {
       try {
         const response = await getAuthenticatedHttpClient().get(`${getConfig().LMS_BASE_URL}/titaned/api/v1/recommended-courses/`);
@@ -84,7 +82,6 @@ const Dashboard = () => {
     };
     fetchRecommendedCoursesData();
   }, [shouldInitialize]);
-
 
   // Performance fix: Defer API calls
   useEffect(() => {
@@ -104,7 +101,6 @@ const Dashboard = () => {
     };
     fetchLeaderboardData();
   }, [shouldInitialize]);
-
 
   const getCourseListData = () => {
     if (isTodoEnabled && isTitanAISuggestionEnabled && isLeaderboardEnabled && isLaptopScreen) {
@@ -206,7 +202,6 @@ const Dashboard = () => {
     fetchSideBarRenderCardData();
   }, [shouldInitialize]);
 
-
   useEffect(() => {
     const handleResize = () => {
       setIsLaptopScreen(window.innerWidth < 1600);
@@ -220,14 +215,25 @@ const Dashboard = () => {
   if (!ready) {
     return (
       <div className="dashboard-wrapper" style={{ padding: '20px' }}>
-        <div style={{ height: '40px', backgroundColor: '#f0f0f0', borderRadius: '4px', marginBottom: '20px', width: '200px' }}></div>
+        <div style={{
+          height: '40px', backgroundColor: '#f0f0f0', borderRadius: '4px', marginBottom: '20px', width: '200px',
+        }}
+        />
         <div style={{ display: 'flex', gap: '20px', marginBottom: '30px' }}>
           {[1, 2, 3, 4].map(i => (
-            <div key={i} style={{ flex: 1, height: '120px', backgroundColor: '#f0f0f0', borderRadius: '8px' }}></div>
+            <div
+              key={i}
+              style={{
+                flex: 1, height: '120px', backgroundColor: '#f0f0f0', borderRadius: '8px',
+              }}
+            />
           ))}
         </div>
-        <div style={{ height: '300px', backgroundColor: '#f0f0f0', borderRadius: '8px', marginBottom: '20px' }}></div>
-        <div style={{ height: '200px', backgroundColor: '#f0f0f0', borderRadius: '8px' }}></div>
+        <div style={{
+          height: '300px', backgroundColor: '#f0f0f0', borderRadius: '8px', marginBottom: '20px',
+        }}
+        />
+        <div style={{ height: '200px', backgroundColor: '#f0f0f0', borderRadius: '8px' }} />
       </div>
     );
   }
