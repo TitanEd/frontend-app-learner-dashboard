@@ -1,5 +1,8 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable linebreak-style */
 import React from 'react';
 import PropTypes from 'prop-types';
+import { PluginSlot } from '@openedx/frontend-plugin-framework';
 
 import { Card } from '@openedx/paragon';
 
@@ -13,36 +16,44 @@ import CourseCardTitle from './components/CourseCardTitle';
 
 import './CourseCard.scss';
 
-export const CourseCard = ({
-  cardId,
-}) => {
+export const CourseCard = ({ cardId }) => {
   const isCollapsed = useIsCollapsed();
   const orientation = isCollapsed ? 'vertical' : 'horizontal';
+
   return (
-    <div className="mb-4.5 course-card" id={cardId} data-testid="CourseCard">
-      <Card orientation={orientation}>
-        <div className="d-flex flex-column w-100">
-          <div {...(!isCollapsed && { className: 'd-flex' })}>
-            <CourseCardImage cardId={cardId} orientation="horizontal" />
-            <Card.Body>
-              <Card.Header
-                title={<CourseCardTitle cardId={cardId} />}
-                actions={<CourseCardMenu cardId={cardId} />}
-              />
-              <Card.Section className="pt-0">
-                <CourseCardDetails cardId={cardId} />
-              </Card.Section>
-              <Card.Footer orientation={orientation}>
-                <CourseCardActions cardId={cardId} />
-              </Card.Footer>
-            </Card.Body>
+    <PluginSlot
+      id="custom_my_course_plugin_slot"
+      pluginProps={{
+        cardId,
+      }}
+    >
+      {/* default layout (used when no plugin overrides) */}
+      <div className="mb-4.5 course-card" id={cardId} data-testid="CourseCard">
+        <Card orientation={orientation}>
+          <div className="d-flex flex-column w-100">
+            <div {...(!isCollapsed && { className: 'd-flex' })}>
+              <CourseCardImage cardId={cardId} orientation={orientation} />
+              <Card.Body>
+                {/* <Card.Header
+                  title={<CourseCardTitle cardId={cardId} />}
+                  actions={<CourseCardMenu cardId={cardId} />}
+                /> */}
+                <Card.Section className="pt-0">
+                  <CourseCardDetails cardId={cardId} />
+                </Card.Section>
+                <Card.Footer orientation={orientation}>
+                  <CourseCardActions cardId={cardId} />
+                </Card.Footer>
+              </Card.Body>
+            </div>
+            <CourseCardBanners cardId={cardId} />
           </div>
-          <CourseCardBanners cardId={cardId} />
-        </div>
-      </Card>
-    </div>
+        </Card>
+      </div>
+    </PluginSlot>
   );
 };
+
 CourseCard.propTypes = {
   cardId: PropTypes.string.isRequired,
 };

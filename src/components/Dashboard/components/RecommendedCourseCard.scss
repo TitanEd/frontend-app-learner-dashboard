@@ -1,0 +1,119 @@
+.recommended-course-card {
+    border-radius: 16px !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    height: 100%;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    margin: 0 auto;
+    padding: 10px;
+    border: solid 1px #e0e0e0 !important;
+    cursor: pointer;
+
+    &:hover {
+        box-shadow: 0 4px 6px -2px rgba(0, 0, 0, 0.05), 0 10px 15px -3px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    .recommended-course-card-content-section {
+        padding: 0 6px !important;
+        // margin-bottom: 10px;
+
+    }
+}
+
+.recommended-course-card-image {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    margin-bottom: 1rem;
+
+    .pgn__card-image-cap {
+        border-radius: 12px !important;
+    }
+}
+
+.recommended-course-card-title-container {
+    height: 3rem;
+    margin-bottom: 0.5rem;
+    text-align: start;
+
+    // p {
+    //     font-size: 14px;
+    //     line-height: 1.2;
+    //     word-break: break-word;
+    //     display: -webkit-box;
+    //     -webkit-line-clamp: 2;
+    //     line-clamp: 2;
+    //     -webkit-box-orient: vertical;
+    //     overflow: hidden;
+    //     text-overflow: ellipsis;
+    // }
+}
+
+.recommended-course-card-title {
+    font-size: 1rem;
+    line-height: 1.2;
+    word-break: break-word;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--primary);
+    margin-bottom: 4px !important;
+}
+
+.recommended-course-card-buttons {
+    margin-top: 2.5rem;
+    display: flex;
+    gap: 0.2rem;
+    justify-content: space-between;
+    flex-wrap: wrap;
+
+    @media (max-width: 340px) {
+        flex-direction: column;
+    }
+
+    .btn-primary {
+        // flex: 1;
+        white-space: nowrap;
+        padding: 0.5rem 1rem !important;
+        font-size: 16px;
+        min-width: max-content;
+        line-height: 1.33;
+        width: 100%;
+    }
+
+    .btn-icon-primary {
+        padding: 0 !important;
+    }
+}
+
+.recommended-course-card-buttons-without-rerun {
+
+    button {
+        padding: 0.4rem 1.6rem !important;
+    }
+}
+
+.recommended-course-card-date {
+    margin-bottom: 0rem !important;
+    font-size: 14px !important;
+    color: var(--text-muted) !important;
+}
+
+.recommended-course-card-metadata {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end !important;
+    justify-content: space-between;
+    // gap: 0.2rem;
+    padding-top: 1.5rem;
+    margin-bottom: -1rem;
+}
+
+.metadata-item {
+    font-size: 15px !important;
+    color: var(--text-muted) !important;
+    font-weight: 400;
+}
