@@ -103,7 +103,7 @@ const Dashboard = () => {
   }, [shouldInitialize]);
 
   const getCourseListData = () => {
-    if (isTodoEnabled && isTitanAISuggestionEnabled && isLeaderboardEnabled && isLaptopScreen) {
+    if ((isTodoEnabled || isTitanAISuggestionEnabled || isLeaderboardEnabled) && isLaptopScreen) {
       return recommendedCoursesData.slice(0, 3);
     }
     return recommendedCoursesData.slice(0, 4);
