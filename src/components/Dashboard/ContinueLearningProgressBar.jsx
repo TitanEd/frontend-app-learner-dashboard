@@ -1,6 +1,5 @@
 /* eslint-disable no-console */
 import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 import { Card } from '@openedx/paragon';
 import { useIntl } from '@edx/frontend-platform/i18n';
 
@@ -8,41 +7,30 @@ import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 import { getConfig } from '@edx/frontend-platform';
 import messages from './components/messages';
 
-const ContinueLearningProgressBar = ({ onNoRecentCourses }) => {
+const ContinueLearningProgressBar = () => {
   const [recentCourses, setRecentCourses] = useState([]);
   const intl = useIntl();
   useEffect(() => {
     const fetchRecentCourses = async () => {
       try {
+        // const response = await fetch('http://localhost:3003/recent-courses');
         const response = await getAuthenticatedHttpClient().get(`${getConfig().LMS_BASE_URL}/titaned/api/v1/recent-courses/`);
+        // const response = await getAuthenticatedHttpClient().get('https://staging.titaned.com/titaned/api/v1/recent-courses/');
         const { data } = response;
-        
-        // Check if response is empty {} or empty array
         const isEmpty = !data || (typeof data === 'object' && Object.keys(data).length === 0) || (Array.isArray(data) && data.length === 0);
-        
+
         if (isEmpty) {
           setRecentCourses([]);
-          if (onNoRecentCourses) {
-            onNoRecentCourses(true);
-          }
         } else {
-          const courses = Array.isArray(data) ? data : [data];
-          setRecentCourses(courses);
-          if (onNoRecentCourses) {
-            onNoRecentCourses(false);
-          }
+          setRecentCourses(Array.isArray(data) ? data : [data]);
         }
       } catch (error) {
-        // eslint-disable-next-line no-console
         console.error('Error fetching recent courses:', error);
         setRecentCourses([]);
-        if (onNoRecentCourses) {
-          onNoRecentCourses(true);
-        }
       }
     };
     fetchRecentCourses();
-  }, [onNoRecentCourses]);
+  }, []);
 
 
   return (
@@ -93,14 +81,6 @@ const ContinueLearningProgressBar = ({ onNoRecentCourses }) => {
       )}
     </div>
   );
-};
-
-ContinueLearningProgressBar.propTypes = {
-  onNoRecentCourses: PropTypes.func,
-};
-
-ContinueLearningProgressBar.defaultProps = {
-  onNoRecentCourses: null,
 };
 
 export default ContinueLearningProgressBar;

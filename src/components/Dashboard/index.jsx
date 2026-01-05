@@ -41,7 +41,6 @@ const Dashboard = () => {
   const [recommendedCoursesData, setRecommendedCoursesData] = useState([]);
   const [leaderboardData, setLeaderboardData] = useState([]);
   const [isRecommendedCoursesEnabled, setIsRecommendedCoursesEnabled] = useState(false);
-  const [noRecentCourses, setNoRecentCourses] = useState(false);
 
   // Performance fix: Show skeleton first, defer ALL operations
   useEffect(() => {
@@ -271,25 +270,23 @@ const Dashboard = () => {
           ))}
         </div>
 
-        {/* Overview Section - Only show if there are recent courses */}
-        {!noRecentCourses && (
-          <div className="overview-section">
-            <div className="d-flex justify-content-between align-items-center mb-3">
-              <h3 className="mb-0">{intl.formatMessage(messages.continueLearningTitle)}</h3>
-              <a
-                href="my-courses"
-                style={{
-                  textDecoration: 'none', fontSize: '14px', fontWeight: '600',
-                }}
-                className="dashboard-navigation-link"
-              >
-                {intl.formatMessage(messages.viewAll)}
-              </a>
-            </div>
-            {/* <ContinueLearning /> */}
-            <ContinueLearningProgressBar onNoRecentCourses={setNoRecentCourses} />
+        {/* Overview Section */}
+        <div className="overview-section">
+          <div className="d-flex justify-content-between align-items-center mb-3">
+            <h3 className="mb-0">{intl.formatMessage(messages.continueLearningTitle)}</h3>
+            <a
+              href="my-courses"
+              style={{
+                textDecoration: 'none', fontSize: '14px', fontWeight: '600',
+              }}
+              className="dashboard-navigation-link"
+            >
+              {intl.formatMessage(messages.viewAll)}
+            </a>
           </div>
-        )}
+          {/* <ContinueLearning /> */}
+          <ContinueLearningProgressBar />
+        </div>
 
         {/* Recommended Courses Section */}
         {isRecommendedCoursesEnabled && (
