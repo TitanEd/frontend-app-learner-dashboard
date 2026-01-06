@@ -32,7 +32,7 @@ export const CourseCardMenu = ({ cardId }) => {
   const handleToggleDropdown = useHandleToggleDropdown(cardId);
   const { shouldShowUnenrollItem, shouldShowDropdown } = useOptionVisibility(cardId);
   const { isMasquerading } = reduxHooks.useMasqueradeData();
-  const { isEmailEnabled } = reduxHooks.useCardEnrollmentData(cardId);
+  const { isEmailEnabled, allowUnenrollment } = reduxHooks.useCardEnrollmentData(cardId);
 
   if (!shouldShowDropdown) {
     return null;
@@ -61,7 +61,7 @@ export const CourseCardMenu = ({ cardId }) => {
         </PluginSlot>
 
         <Dropdown.Menu>
-          {shouldShowUnenrollItem && (
+          {(shouldShowUnenrollItem || allowUnenrollment) && (
             <Dropdown.Item
               disabled={isMasquerading}
               onClick={unenrollModal.show}
