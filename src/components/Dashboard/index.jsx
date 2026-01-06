@@ -27,6 +27,7 @@ import RecommendedCourseCard from './components/RecommendedCourseCard.tsx';
 import { RequestKeys } from '../../data/constants/requests';
 import './index.scss';
 import Leaderboard from './components/Leaderboard.jsx';
+import ConfirmEmailBanner from '../../containers/LearnerDashboardHeader/ConfirmEmailBanner/index.jsx';
 // import { CSS } from '@dnd-kit/utilities';
 
 const Dashboard = () => {
@@ -257,6 +258,7 @@ const Dashboard = () => {
       </Helmet>
       <div className="dashboard-main-content">
         {/* Top Metric Cards */}
+        <ConfirmEmailBanner />
         <div className="dashboard-header">{intl.formatMessage(messages.dashboardPageTitle)}</div>
         <div className="metrics-container">
           {dashboardData.metrics && dashboardData.metrics.map((metric, index) => (
