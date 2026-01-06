@@ -17,7 +17,13 @@ const ContinueLearningProgressBar = () => {
         const response = await getAuthenticatedHttpClient().get(`${getConfig().LMS_BASE_URL}/titaned/api/v1/recent-courses/`);
         // const response = await getAuthenticatedHttpClient().get('https://staging.titaned.com/titaned/api/v1/recent-courses/');
         const { data } = response;
-        setRecentCourses(Array.isArray(data) ? data : [data]);
+        const isEmpty = !data || (typeof data === 'object' && Object.keys(data).length === 0) || (Array.isArray(data) && data.length === 0);
+
+        if (isEmpty) {
+          setRecentCourses([]);
+        } else {
+          setRecentCourses(Array.isArray(data) ? data : [data]);
+        }
       } catch (error) {
         console.error('Error fetching recent courses:', error);
         setRecentCourses([]);

@@ -9,6 +9,7 @@ import CustomDashboardLayoutWidget from './src/widgets/CustomDashboardLayoutWidg
 import CustomCourseFilterControls from './src/widgets/CustomCourseFilterControls/CustomCourseFilterControls';
 import CustomCourseListWidget from './src/widgets/CustomCourseListWidget';
 import CustomMasqueradeBar from './src/containers/MasqueradeBar/CustomMasqueradeBar';
+import CustomNoCoursesView from './src/containers/CoursesPanel/NoCoursesView/CustomNoCoursesView';
 
 const getPluginSlots = () => {
   if (typeof window !== 'undefined' && localStorage.getItem('oldUI') === 'true') {
@@ -116,6 +117,20 @@ const getPluginSlots = () => {
             type: DIRECT_PLUGIN,
             priority: 1,
             RenderWidget: (props) => <CustomMasqueradeBar {...props} />,
+          },
+        },
+      ],
+    },
+
+    custom_no_courses_view_slot: {
+      plugins: [
+        {
+          op: PLUGIN_OPERATIONS.Insert,
+          widget: {
+            id: 'custom_no_courses_view_slot',
+            type: DIRECT_PLUGIN,
+            priority: 1,
+            RenderWidget: (props) => <CustomNoCoursesView {...props} />,
           },
         },
       ],

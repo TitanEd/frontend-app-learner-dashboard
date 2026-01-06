@@ -7,6 +7,7 @@ import { baseAppUrl } from 'data/services/lms/urls';
 import emptyCourseSVG from 'assets/empty-course.svg';
 import { reduxHooks } from 'hooks';
 
+import { PluginSlot } from '@openedx/frontend-plugin-framework';
 import messages from './messages';
 import './index.scss';
 
@@ -19,20 +20,29 @@ export const NoCoursesView = () => {
       className="d-flex align-items-center justify-content-center mb-4.5"
     >
       <Image src={emptyCourseSVG} alt={formatMessage(messages.bannerAlt)} />
-      <h1>
-        {formatMessage(messages.lookingForChallengePrompt)}
-      </h1>
-      <p>
-        {formatMessage(messages.exploreCoursesPrompt)}
-      </p>
-      <Button
-        variant="brand"
-        as="a"
-        href={baseAppUrl(courseSearchUrl)}
-        iconBefore={Search}
+      <PluginSlot
+        id="custom_no_courses_view_slot"
+        pluginProps={{
+          buttonHref: baseAppUrl(courseSearchUrl),
+          formatMessage,
+          messages,
+        }}
       >
-        {formatMessage(messages.exploreCoursesButton)}
-      </Button>
+        <h1>
+          {formatMessage(messages.lookingForChallengePrompt)}
+        </h1>
+        <p>
+          {formatMessage(messages.exploreCoursesPrompt)}
+        </p>
+        <Button
+          variant="brand"
+          as="a"
+          href={baseAppUrl(courseSearchUrl)}
+          iconBefore={Search}
+        >
+          {formatMessage(messages.exploreCoursesButton)}
+        </Button>
+      </PluginSlot>
     </div>
   );
 };
