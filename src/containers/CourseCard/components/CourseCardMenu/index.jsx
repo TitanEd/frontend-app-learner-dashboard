@@ -38,6 +38,9 @@ export const CourseCardMenu = ({ cardId }) => {
     return null;
   }
 
+  console.log('allowUnenrollment', allowUnenrollment);
+  console.log('shouldShowUnenrollItem', shouldShowUnenrollItem);
+
   return (
     <>
       <Dropdown onToggle={handleToggleDropdown}>
