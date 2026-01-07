@@ -17,7 +17,6 @@ export const ResumeButton = ({ cardId }) => {
   const { allowResume } = reduxHooks.useCardEnrollmentData(cardId);
   // const allowResume = true;
 
-  console.log('allowResume', allowResume);
 
   const handleClick = reduxHooks.useTrackCourseEvent(
     track.course.enterCourseClicked,

@@ -38,9 +38,6 @@ export const CourseCardMenu = ({ cardId }) => {
     return null;
   }
 
-  console.log('allowUnenrollment', allowUnenrollment);
-  console.log('shouldShowUnenrollItem', shouldShowUnenrollItem);
-  console.log('Redux Enrollment Data', reduxHooks.useCardEnrollmentData(cardId));
 
   return (
     <>
