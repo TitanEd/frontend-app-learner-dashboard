@@ -40,8 +40,6 @@ export const useCardGradeData = useCourseCardData(courseCard.gradeData);
 export const useCardProviderData = useCourseCardData(courseCard.courseProvider);
 export const useCardRelatedProgramsData = useCourseCardData(courseCard.relatedPrograms);
 
-console.log('useCardEnrollmentData', useCardEnrollmentData);
-
 export const useCardSocialSettingsData = (cardId) => {
   const socialShareSettings = module.useSocialShareSettings();
   const { socialShareUrl } = module.useCardCourseData(cardId);

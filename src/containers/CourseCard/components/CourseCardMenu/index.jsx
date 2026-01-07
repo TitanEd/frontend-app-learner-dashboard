@@ -65,7 +65,7 @@ export const CourseCardMenu = ({ cardId }) => {
         </PluginSlot>
 
         <Dropdown.Menu>
-          {(shouldShowUnenrollItem || allowUnenrollment) && (
+          {(allowUnenrollment) && (
             <Dropdown.Item
               disabled={isMasquerading}
               onClick={unenrollModal.show}

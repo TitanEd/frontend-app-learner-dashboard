@@ -100,6 +100,8 @@ export const courseCard = StrictDict({
         hasOptedOutOfEmail: enrollment.hasOptedOutOfEmail,
         mode: enrollment.mode,
         isExecEd2UCourse: EXECUTIVE_EDUCATION_COURSE_MODES.includes(enrollment.mode),
+        allowUnenrollment: enrollment?.allowUnenrollment,
+        allowResume: enrollment?.allowResume,
       };
     },
   ),
