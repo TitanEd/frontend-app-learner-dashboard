@@ -774,3 +774,21 @@ margin: 10px;
     }
   }
 }
+
+/* Email Settings Modal Switch Styling */
+.pgn__modal-layer {
+  .pgn__form-switch {
+    input[type="checkbox"].pgn__form-switch-input:checked,
+    .pgn__form-switch-input:checked {
+      background-color: var(--primary) !important;
+      border-color: var(--primary) !important;
+    }
+
+    input[type="checkbox"].pgn__form-switch-input:checked:focus,
+    .pgn__form-switch-input:checked:focus {
+      background-color: var(--primary) !important;
+      border-color: var(--primary) !important;
+      box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.25) !important;
+    }
+  }
+}
