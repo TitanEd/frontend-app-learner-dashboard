@@ -173,8 +173,9 @@ const Dashboard = () => {
     const fetchSideBarRenderCardData = async () => {
       try {
         const response = await getAuthenticatedHttpClient().get(`${getConfig().STUDIO_BASE_URL}/titaned/api/v1/menu-config/`);
-        // const response = await getAuthenticatedHttpClient().get('https://studio.staging.titaned.com/titaned/api/v1/menu-config/');
-        // const response = await getAuthenticatedHttpClient().get('https://staging.titaned.com/titaned/api/v1/menu-config/');
+        // for local api fetch
+        // const response = await getAuthenticatedHttpClient().get('STUDIO_API_DOMAIN/titaned/api/v1/menu-config/');
+        // const response = await getAuthenticatedHttpClient().get('LMS_API_DOMAIN/titaned/api/v1/menu-config/');
         // if (!response.ok) {
         //   throw new Error(`HTTP error! status: ${response.status}`);
         // }

@@ -15,7 +15,8 @@ const ContinueLearningProgressBar = () => {
       try {
         // const response = await fetch('http://localhost:3003/recent-courses');
         const response = await getAuthenticatedHttpClient().get(`${getConfig().LMS_BASE_URL}/titaned/api/v1/recent-courses/`);
-        // const response = await getAuthenticatedHttpClient().get('https://staging.titaned.com/titaned/api/v1/recent-courses/');
+        // for local api fetch
+        // const response = await getAuthenticatedHttpClient().get('LMS_API_DOMAIN/titaned/api/v1/recent-courses/');
         const { data } = response;
         const isEmpty = !data || (typeof data === 'object' && Object.keys(data).length === 0) || (Array.isArray(data) && data.length === 0);
 
