@@ -19,11 +19,11 @@ import messages from './messages';
 const fetchNavigationItems = async () => {
   try {
     const response = await getAuthenticatedHttpClient().get(`${getConfig().STUDIO_BASE_URL}/titaned/api/v1/menu-config/`);
+    // for local api fetch
     // const response = await getAuthenticatedHttpClient().get(
-    //   'https://staging.titaned.com/titaned/api/v1/menu-config/'
+    //   'LMS_API_DOMAIN/titaned/api/v1/menu-config/'
     // );
 
-    // https://staging.titaned.com
     if (response.status !== 200) {
       throw new Error('Failed to fetch Navigation Items');
     }
@@ -84,7 +84,7 @@ const Layout = () => {
     const fetchUserMenuItemsFromAPI = async () => {
       try {
         const response = await getAuthenticatedHttpClient().get(`${getConfig().LMS_BASE_URL}/titaned/api/v1/user-dropdown-menu/`);
-        // const response = await getAuthenticatedHttpClient().get('https://staging.titaned.com/titaned/api/v1/user-dropdown-menu/');
+        // const response = await getAuthenticatedHttpClient().get('LMS_API_DOMAIN/titaned/api/v1/user-dropdown-menu/');
         const { data } = response;
         if (data) {
           setUserMenuItemsFromAPI(data);
