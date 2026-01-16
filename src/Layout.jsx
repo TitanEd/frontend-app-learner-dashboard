@@ -66,13 +66,13 @@ const Layout = () => {
   useEffect(() => {
     const fetchAlerts = async () => {
       try {
-        const systemResponse = await getAuthenticatedHttpClient().get(`${getConfig().STUDIO_BASE_URL}titaned/api/v1/system/alerts/`);
-        // const systemResponse = await getAuthenticatedHttpClient().get('STUDIO_API_DOMAIN/titaned/api/v1/system/alerts/');
+        const systemResponse = await getAuthenticatedHttpClient().get(`${getConfig().LMS_BASE_URL}titaned/api/v1/system/alerts/`);
+        // const systemResponse = await getAuthenticatedHttpClient().get('LMS_API_DOMAIN/titaned/api/v1/system/alerts/');
 
 
-        const userResponse = await getAuthenticatedHttpClient().get(`${getConfig().STUDIO_BASE_URL}titaned/api/v1/user/alerts/`);
+        const userResponse = await getAuthenticatedHttpClient().get(`${getConfig().LMS_BASE_URL}titaned/api/v1/user/alerts/`);
         // for local api fetch 
-        // const userResponse = await getAuthenticatedHttpClient().get('STUDIO_API_DOMAIN/titaned/api/v1/user/alerts/');
+        // const userResponse = await getAuthenticatedHttpClient().get('LMS_API_DOMAIN/titaned/api/v1/user/alerts/');
 
 
         if (systemResponse?.data) {
