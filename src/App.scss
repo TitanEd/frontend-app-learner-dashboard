@@ -24,9 +24,9 @@ $input-focus-box-shadow: var(--pgn-elevation-form-input-base); // hack to get up
   input[type=checkbox] {
     transform: none;
   }
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
+  // display: flex;
+  // flex-direction: column;
+  // min-height: 100vh;
 
   main {
     flex-grow: 1;

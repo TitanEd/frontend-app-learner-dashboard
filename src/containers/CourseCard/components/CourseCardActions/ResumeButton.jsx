@@ -8,7 +8,7 @@ import { baseAppUrl } from 'data/services/lms/urls';
 import track from 'tracking';
 import { useCourseTrackingEvent, useCourseData } from 'hooks';
 import { useInitializeLearnerHome } from 'data/hooks';
-import useActionDisabledState from '../hooks';
+// import useActionDisabledState from '../hooks';
 import ActionButton from './ActionButton';
 import messages from './messages';
 
@@ -22,19 +22,29 @@ export const ResumeButton = ({ cardId }) => {
     const { authOrgId } = learnerData.enterpriseDashboard || {};
     return isExecEd2UCourse ? `?org_id=${authOrgId}` : '';
   }, [courseData.enrollment.mode, learnerData.enterpriseDashboard]);
-  const { disableResumeCourse } = useActionDisabledState(cardId);
+  // const { disableResumeCourse } = useActionDisabledState(cardId);
+  const allowResume = courseData?.enrollment?.allowResume;
+  // const allowResume = true;
 
   const handleClick = useCourseTrackingEvent(
     track.course.enterCourseClicked,
     cardId,
     baseAppUrl(resumeUrl) + execEdTrackingParam,
   );
+  const isDisabled = allowResume === false;
   return (
     <ActionButton
-      disabled={disableResumeCourse}
+      disabled={isDisabled}
       as="a"
       href="#"
-      onClick={handleClick}
+      onClick={(e) => {
+        if (allowResume === false) {
+          e.preventDefault();
+          return;
+        }
+        handleClick(e);
+      }}
+      style={isDisabled ? { pointerEvents: 'none', opacity: 0.5 } : {}}
     >
       {formatMessage(messages.resume)}
     </ActionButton>

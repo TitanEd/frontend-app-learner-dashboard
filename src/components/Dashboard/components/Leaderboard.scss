@@ -1,0 +1,57 @@
+.leaderboard-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.leaderboard-item {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #f0f0f0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  gap: 12px;
+}
+
+.rank-number {
+  font-size: 24px;
+  font-weight: bold;
+  color: #000;
+  min-width: 30px;
+  text-align: center;
+}
+
+.user-avatar {
+  flex-shrink: 0;
+}
+
+.user-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.user-name {
+  font-weight: bold;
+  color: #000;
+  font-size: 14px;
+}
+
+.streak-info {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: #666;
+}
+
+.streak-icon {
+  font-size: 12px;
+}
+
+.streak-days {
+  color: #666;
+}

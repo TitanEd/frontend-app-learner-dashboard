@@ -31,9 +31,21 @@ jest.mock('@edx/frontend-platform', () => ({
   APP_INIT_ERROR: 'app-init-error',
   initialize: jest.fn(),
   subscribe: jest.fn(),
+  getConfig: jest.fn(() => ({})),
+}));
+
+jest.mock('@edx/frontend-platform/i18n', () => ({
+  ...jest.requireActual('@edx/frontend-platform/i18n'),
+  getMessages: jest.fn(() => ({})),
 }));
 
 jest.mock('./App', () => 'App');
+jest.mock('./Layout', () => 'Layout');
+jest.mock('./components/Dashboard', () => 'HomeDashboard');
+jest.mock('./utils/RegisterFontAwesome', () => jest.fn());
+jest.mock('titaned-frontend-library', () => ({
+  dynamicTheme: jest.fn(),
+}));
 
 describe('app registry', () => {
   let getElement;

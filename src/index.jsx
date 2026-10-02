@@ -1,8 +1,9 @@
+/* eslint-disable no-console */
 /* eslint-disable import/prefer-default-export */
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 
-import React, { StrictMode } from 'react';
+import React, { StrictMode, useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import {
   Route, Navigate, Routes,
@@ -13,21 +14,32 @@ import {
   ErrorPage,
   PageWrap,
 } from '@edx/frontend-platform/react';
+import { getMessages, IntlProvider } from '@edx/frontend-platform/i18n';
 import {
   APP_READY,
   APP_INIT_ERROR,
   initialize,
   subscribe,
   mergeConfig,
+  getConfig,
 } from '@edx/frontend-platform';
 
+import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { dynamicTheme } from 'titaned-frontend-library';
 import ContextProviders from 'data/context';
 import { configuration } from './config';
 
 import messages from './i18n';
 
+import registerFontAwesomeIcons from './utils/RegisterFontAwesome';
 import App from './App';
+import HomeDashboard from './components/Dashboard';
+import './index.scss';
+
+// import 'titaned-lib/dist/index.css';
+// import './styles/styles-overrides.scss';
+import Layout from './Layout';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -37,21 +49,153 @@ const queryClient = new QueryClient({
   },
 });
 
+// Load styles only for new UI
+const loadStylesForNewUI = (isOldUI) => {
+  document.body.className = isOldUI ? 'old-ui' : 'new-ui';
+  document.documentElement.className = isOldUI ? 'old-ui' : 'new-ui';
+
+  if (!isOldUI) {
+    import('titaned-frontend-library/dist/index.css');
+    import('./styles/styles-overrides.scss');
+  } else {
+    import('./styles/old-ui.scss');
+  }
+};
+
+registerFontAwesomeIcons();
+
+// Main App component with state management
+const MainApp = () => {
+  const [oldUI, setOldUI] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [menuConfig, setMenuConfig] = useState(null);
+
+  // Performance fix: Defer API calls to improve initial load
+  useEffect(() => {
+    const loadUIPreferenceAndMenuConfig = async () => {
+      try {
+        // First, load from localStorage for immediate display
+        const localStorageValue = localStorage.getItem('oldUI') || 'false';
+        setOldUI(localStorageValue);
+        setLoading(false);
+
+        // Performance fix: Defer API call to reduce blocking time
+        setTimeout(async () => {
+          try {
+            // Then, fetch both UI preference and menu config in one API call
+            const response = await getAuthenticatedHttpClient().get(`${getConfig().STUDIO_BASE_URL}/titaned/api/v1/menu-config/`);
+
+            if (response.status === 200 && response.data) {
+              setMenuConfig(response.data);
+
+              // Extract UI preference from the same response
+              const useNewUI = response.data.use_new_ui === true;
+              const apiOldUIValue = !useNewUI ? 'true' : 'false';
+
+              // Check if API response matches localStorage
+              if (localStorageValue !== apiOldUIValue) {
+                localStorage.setItem('oldUI', apiOldUIValue);
+                // Reload page to re-run build-time config with correct localStorage
+                window.location.reload();
+              }
+            } else {
+              console.warn('API failed, using localStorage value and default menu config');
+              setMenuConfig({}); // Set empty object as fallback
+            }
+          } catch (error) {
+            console.error('API call failed, using localStorage value and default menu config:', error);
+            setMenuConfig({}); // Set empty object as fallback
+          }
+        }, 500);
+      } catch (error) {
+        console.error('Error in loadUIPreferenceAndMenuConfig:', error);
+        setMenuConfig({});
+      }
+    };
+
+    loadUIPreferenceAndMenuConfig();
+  }, []);
+
+  // Apply theme from JSON
+  useEffect(() => {
+    if (oldUI === 'false') {
+      (async () => {
+        try {
+          const response = await getAuthenticatedHttpClient().get(`${getConfig().LMS_BASE_URL}/titaned/api/v1/mfe_context/`);
+          dynamicTheme(response);
+        } catch (error) {
+          console.error('Error fetching theme config:', error);
+        }
+      })();
+    }
+  }, [oldUI]);
+
+  useEffect(() => {
+    // Only load styles after we know the UI preference
+    if (oldUI !== null) {
+      loadStylesForNewUI(oldUI === 'true');
+    }
+  }, [oldUI]);
+
+  // Performance hack: Show lightweight skeleton first
+  if (loading || menuConfig === null) {
+    return (
+      <div className="d-flex justify-content-center align-items-center flex-column vh-100" style={{ backgroundColor: '#fff' }}>
+        <div style={{ width: '100%', maxWidth: '1200px', padding: '20px' }}>
+          <div style={{
+            height: '60px', backgroundColor: '#f0f0f0', borderRadius: '4px', marginBottom: '30px', width: '300px',
+          }}
+          />
+          <div style={{ display: 'flex', gap: '20px', marginBottom: '30px' }}>
+            {[1, 2, 3, 4].map(i => (
+              <div
+                key={i}
+                style={{
+                  flex: 1, height: '100px', backgroundColor: '#f0f0f0', borderRadius: '8px',
+                }}
+              />
+            ))}
+          </div>
+          <div style={{ height: '400px', backgroundColor: '#f0f0f0', borderRadius: '8px' }} />
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <AppProvider>
+      <ContextProviders>
+        <QueryClientProvider client={queryClient}>
+          <Routes>
+            {oldUI === 'false' ? (
+              <Route path="/" element={<Layout />}>
+                {/* <Route path="/" element={<PageWrap><App /></PageWrap>} /> */}
+                <Route path="/" element={<PageWrap><HomeDashboard /></PageWrap>} />
+                <Route path="/my-courses" element={<PageWrap><App /></PageWrap>} />
+                <Route path="*" element={<Navigate to="/" replace />} />
+              </Route>
+            ) : (
+              <>
+                <Route path="/" element={<PageWrap><App /></PageWrap>} />
+                <Route path="*" element={<Navigate to="/" replace />} />
+              </>
+            )}
+
+          </Routes>
+        </QueryClientProvider>
+      </ContextProviders>
+    </AppProvider>
+  );
+};
+
 subscribe(APP_READY, () => {
   const root = createRoot(document.getElementById('root'));
 
   root.render(
     <StrictMode>
-      <AppProvider>
-        <ContextProviders>
-          <QueryClientProvider client={queryClient}>
-            <Routes>
-              <Route path="/" element={<PageWrap><App /></PageWrap>} />
-              <Route path="*" element={<Navigate to="/" replace />} />
-            </Routes>
-          </QueryClientProvider>
-        </ContextProviders>
-      </AppProvider>
+      <IntlProvider locale={getConfig().language || 'en'} messages={getMessages()}>
+        <MainApp />
+      </IntlProvider>
     </StrictMode>,
   );
 });

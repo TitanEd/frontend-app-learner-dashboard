@@ -19,9 +19,25 @@ export const useEmailData = ({
   const courseId = courseData?.courseRun?.courseId;
   const [isOptedOut, setIsOptedOut] = module.state.toggle(hasOptedOutOfEmail);
   const { mutate: updateEmailSettings } = useUpdateEmailSettings();
+  const savedValueRef = React.useRef(hasOptedOutOfEmail);
+  const initialReduxValueRef = React.useRef(hasOptedOutOfEmail);
+
+  React.useEffect(() => {
+    if (initialReduxValueRef.current !== hasOptedOutOfEmail) {
+      initialReduxValueRef.current = hasOptedOutOfEmail;
+      savedValueRef.current = hasOptedOutOfEmail;
+    }
+  }, [hasOptedOutOfEmail]);
+
+  const resetToReduxValue = React.useCallback(() => {
+    setIsOptedOut(savedValueRef.current);
+  }, [setIsOptedOut]);
+
   const onToggle = () => setIsOptedOut(!isOptedOut);
   const save = () => {
-    updateEmailSettings({ courseId, enable: !isOptedOut });
+    const enableEmails = !isOptedOut;
+    updateEmailSettings({ courseId, enable: enableEmails });
+    savedValueRef.current = isOptedOut;
     closeModal();
   };
 
@@ -29,6 +45,7 @@ export const useEmailData = ({
     onToggle,
     save,
     isOptedOut,
+    resetToReduxValue,
   };
 };
 

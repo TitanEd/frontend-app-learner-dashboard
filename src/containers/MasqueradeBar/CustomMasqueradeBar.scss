@@ -1,0 +1,175 @@
+.custom-masquerade-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+
+  &__label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: var(--primary, #6c5ce7);
+  }
+
+  &__icon {
+    width: 18px;
+    height: 18px;
+    color: var(--primary, #6c5ce7);
+  }
+
+  &__form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  &__viewing {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  &__input-wrapper {
+    position: relative;
+    min-width: 200px;
+    display: flex;
+    align-items: center;
+    height: 33px; // Match button height
+    padding: 0;
+    margin: 0;
+  }
+
+  &__input-group {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    
+    // Target Paragon's form control decorator group to ensure proper alignment
+    .pgn__form-control-decorator-group {
+      margin: 0 !important;
+      padding: 0 !important;
+      display: flex;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+      border: none !important;
+    }
+    
+    .pgn__form-control-decorator-group-sm {
+      margin: 0 !important;
+      padding: 0 !important;
+      display: flex;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+      border: none !important;
+    }
+    
+    // Ensure the actual input field aligns properly
+    input.pgn__form-control {
+      margin: 0 !important;
+      height: 33px !important;
+      line-height: 1.5;
+    }
+  }
+
+  &__input {
+    height: 33px !important;
+    min-height: 33px;
+    max-height: 33px;
+    padding: 0.5rem 1rem !important;
+    border-radius: 8px;
+    font-size: 1rem;
+    border: 1px solid var(--border-color, #e0e0e0);
+    transition: all 0.2s ease-in-out;
+    margin: 0 !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+    line-height: 1.5;
+    box-sizing: border-box;
+    width: 100%;
+
+    &:focus {
+      border-color: var(--primary, #6c5ce7);
+      box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.1);
+      outline: none;
+    }
+
+    &::placeholder {
+      color: #999;
+    }
+  }
+
+  &__error {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: 4px;
+    font-size: 0.875rem;
+    color: #dc3545;
+    white-space: nowrap;
+  }
+
+  &__submit {
+    height: 33px;
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 1rem;
+    white-space: nowrap;
+    transition: all 0.2s ease-in-out;
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+
+  &__chip {
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    background-color: var(--primary-light, #e2e1f9);
+    color: var(--primary, #6c5ce7);
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+      background-color: var(--primary, #6c5ce7) !important;
+      color: white;
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .custom-masquerade-bar {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    width: 100%;
+
+    &__form {
+      width: 100%;
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    &__input-wrapper {
+      width: 100%;
+      min-width: unset;
+    }
+
+    &__submit {
+      width: 100%;
+    }
+  }
+}
+

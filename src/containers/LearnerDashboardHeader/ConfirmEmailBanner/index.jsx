@@ -27,23 +27,28 @@ export const ConfirmEmailBanner = () => {
   const { formatMessage } = useIntl();
 
   if (!isNeeded) { return null; }
+  // For testing: bypass isNeeded check
+  // const testMode = true;
+  // if (!testMode && !isNeeded) { return null; }
 
   return (
     <>
-      <PageBanner show={showPageBanner} dismissible onDismiss={closePageBanner}>
-        {formatMessage(messages.confirmEmailTextReminderBanner, {
-          confirmNowButton: (
-            <Button
-              className="confirm-email-now-button"
-              variant="link"
-              size="inline"
-              onClick={openConfirmModalButtonClick}
-            >
-              {formatMessage(messages.confirmNowButton)}
-            </Button>
-          ),
-        })}
-      </PageBanner>
+      <div className="custom-new-user-email-confirm-banner">
+        <PageBanner show={showPageBanner} dismissible onDismiss={closePageBanner}>
+          {formatMessage(messages.confirmEmailTextReminderBanner, {
+            confirmNowButton: (
+              <Button
+                className="confirm-email-now-button"
+                variant="link"
+                size="inline"
+                onClick={openConfirmModalButtonClick}
+              >
+                {formatMessage(messages.confirmNowButton)}
+              </Button>
+            ),
+          })}
+        </PageBanner>
+      </div>
       <MarketingModal
         title=""
         isOpen={showConfirmModal}

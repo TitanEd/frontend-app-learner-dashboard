@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { IntlProvider } from '@edx/frontend-platform/i18n';
-import { useCourseTrackingEvent } from 'hooks';
+import { useCourseTrackingEvent, useCourseData } from 'hooks';
 
 import track from 'tracking';
 import useActionDisabledState from '../hooks';
@@ -37,6 +37,10 @@ describe('ViewCourseButton', () => {
     expect(button).not.toHaveClass('disabled');
     expect(button).not.toHaveAttribute('aria-disabled', 'true');
   });
+  it('does not use action hooks disabled state (TELS uses enrollment.allowResume)', () => {
+    render(<IntlProvider locale="en"><ViewCourseButton {...defaultProps} /></IntlProvider>);
+    expect(useActionDisabledState).not.toHaveBeenCalled();
+  });
   it('calls trackCourseEvent on click', async () => {
     const mockedTrackCourseEvent = jest.fn();
     useCourseTrackingEvent.mockReturnValue(mockedTrackCourseEvent);
@@ -52,7 +56,10 @@ describe('ViewCourseButton', () => {
     expect(mockedTrackCourseEvent).toHaveBeenCalled();
   });
   it('learner cannot view course', () => {
-    useActionDisabledState.mockReturnValueOnce({ disableViewCourse: true });
+    useCourseData.mockReturnValueOnce({
+      enrollment: { allowResume: false },
+      courseRun: { homeUrl: 'homeUrl' },
+    });
     render(<IntlProvider locale="en"><ViewCourseButton {...defaultProps} /></IntlProvider>);
     const button = screen.getByRole('button', { name: 'View Course' });
     expect(button).toHaveClass('disabled');
