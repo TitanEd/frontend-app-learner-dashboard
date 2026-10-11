@@ -8,13 +8,14 @@ jest.mock('./hooks', () => ({
   useIsCollapsed: jest.fn(),
 }));
 
+// TELS: the Card.Header (CourseCardTitle / CourseCardMenu) is commented out in the default layout
 const namesMockComponents = [
   'CourseCardBanners',
   'CourseCardImage',
-  'CourseCardMenu',
+  // 'CourseCardMenu',
   'CourseCardActions',
   'CourseCardDetails',
-  'CourseCardTitle',
+  // 'CourseCardTitle',
 ];
 
 jest.mock('./components/CourseCardBanners', () => jest.fn(() => <div>CourseCardBanners</div>));

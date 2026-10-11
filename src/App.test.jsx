@@ -1,4 +1,6 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import {
+  act, render, screen, waitFor,
+} from '@testing-library/react';
 
 import { IntlProvider } from '@edx/frontend-platform/i18n';
 import { getConfig } from '@edx/frontend-platform';
@@ -41,7 +43,26 @@ useInitializeLearnerHome.mockReturnValue({
   isError: false,
 });
 
+// TELS: App shows a lightweight skeleton for 1s before rendering the page
+// Fake timers are only used to skip the skeleton delay; real timers are restored so
+// react-helmet (which captures the real requestAnimationFrame) can update the title.
+const renderApp = (intlProps = {}) => {
+  jest.useFakeTimers();
+  const utils = render(<IntlProvider locale="en" {...intlProps}><App /></IntlProvider>);
+  act(() => { jest.advanceTimersByTime(1000); });
+  jest.useRealTimers();
+  return utils;
+};
+
 describe('App router component', () => {
+  it('shows the loading skeleton before the page is ready', () => {
+    jest.useFakeTimers();
+    render(<IntlProvider locale="en"><App /></IntlProvider>);
+    expect(screen.queryByText('LearnerDashboardHeader')).toBeNull();
+    act(() => { jest.advanceTimersByTime(1000); });
+    expect(screen.getByText('LearnerDashboardHeader')).toBeInTheDocument();
+    jest.useRealTimers();
+  });
   describe('component', () => {
     const runBasicTests = () => {
       it('displays title in helmet component', async () => {
@@ -65,7 +86,7 @@ describe('App router component', () => {
       beforeEach(() => {
         jest.clearAllMocks();
         getConfig.mockReturnValue({});
-        render(<IntlProvider locale="en"><App /></IntlProvider>);
+        renderApp();
       });
       runBasicTests();
       it('loads dashboard', () => {
@@ -77,7 +98,7 @@ describe('App router component', () => {
       beforeEach(() => {
         jest.clearAllMocks();
         getConfig.mockReturnValue({ OPTIMIZELY_URL: 'fake.url' });
-        render(<IntlProvider locale="en"><App /></IntlProvider>);
+        renderApp();
       });
       runBasicTests();
       it('loads dashboard', () => {
@@ -89,7 +110,7 @@ describe('App router component', () => {
       beforeEach(() => {
         jest.clearAllMocks();
         getConfig.mockReturnValue({ OPTIMIZELY_PROJECT_ID: 'fakeId' });
-        render(<IntlProvider locale="en"><App /></IntlProvider>);
+        renderApp();
       });
       runBasicTests();
       it('loads dashboard', () => {
@@ -105,7 +126,7 @@ describe('App router component', () => {
           isError: true,
         });
         getConfig.mockReturnValue({});
-        render(<IntlProvider locale="en" messages={messages}><App /></IntlProvider>);
+        renderApp({ messages });
       });
       runBasicTests();
       it('loads error page', () => {
@@ -118,7 +139,7 @@ describe('App router component', () => {
     describe('refresh failure', () => {
       beforeEach(() => {
         getConfig.mockReturnValue({});
-        render(<IntlProvider locale="en"><App /></IntlProvider>);
+        renderApp();
       });
       runBasicTests();
       it('loads error page', () => {

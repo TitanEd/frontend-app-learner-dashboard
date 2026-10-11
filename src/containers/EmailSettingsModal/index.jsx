@@ -23,8 +23,17 @@ export const EmailSettingsModal = ({
     isOptedOut,
     onToggle,
     save,
+    resetToReduxValue,
   } = useEmailData({ closeModal, cardId });
   const { formatMessage } = useIntl();
+  const prevShowRef = React.useRef(show);
+
+  React.useEffect(() => {
+    if (show && !prevShowRef.current) {
+      resetToReduxValue();
+    }
+    prevShowRef.current = show;
+  }, [show, resetToReduxValue]);
 
   return (
     <ModalDialog

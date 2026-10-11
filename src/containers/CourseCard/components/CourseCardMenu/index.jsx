@@ -7,6 +7,7 @@ import { MoreVert } from '@openedx/paragon/icons';
 import EmailSettingsModal from 'containers/EmailSettingsModal';
 import UnenrollConfirmModal from 'containers/UnenrollConfirmModal';
 import { useCourseData, useIsMasquerading } from 'hooks';
+import { PluginSlot } from '@openedx/frontend-plugin-framework/dist/plugins';
 import SocialShareMenu from './SocialShareMenu';
 import {
   useEmailSettings,
@@ -26,11 +27,14 @@ export const CourseCardMenu = ({ cardId }) => {
   const courseData = useCourseData(cardId);
 
   const isEmailEnabled = courseData?.enrollment?.isEmailEnabled ?? false;
+  const allowUnenrollment = courseData?.enrollment?.allowUnenrollment;
 
   const emailSettings = useEmailSettings();
   const unenrollModal = useUnenrollData();
   const handleToggleDropdown = useHandleToggleDropdown(cardId);
-  const { shouldShowUnenrollItem, shouldShowDropdown } = useOptionVisibility(cardId);
+  // const { shouldShowUnenrollItem, shouldShowDropdown } = useOptionVisibility(cardId);
+  // Unenroll item visibility is driven by enrollment.allowUnenrollment (TELS)
+  const { shouldShowDropdown } = useOptionVisibility(cardId);
   const isMasquerading = useIsMasquerading();
 
   if (!shouldShowDropdown) {
@@ -40,16 +44,27 @@ export const CourseCardMenu = ({ cardId }) => {
   return (
     <>
       <Dropdown onToggle={handleToggleDropdown}>
-        <Dropdown.Toggle
-          id={`course-actions-dropdown-${cardId}`}
-          as={IconButton}
-          src={MoreVert}
-          iconAs={Icon}
-          variant="primary"
-          alt={formatMessage(messages.dropdownAlt)}
-        />
+        <PluginSlot
+          id="custom_unenroll_icon_plugin_slot"
+          pluginProps={{
+            cardId,
+            IconButton,
+            Icon,
+            altValue: formatMessage(messages.dropdownAlt),
+          }}
+        >
+          <Dropdown.Toggle
+            id={`course-actions-dropdown-${cardId}`}
+            as={IconButton}
+            src={MoreVert}
+            iconAs={Icon}
+            variant="primary"
+            alt={formatMessage(messages.dropdownAlt)}
+          />
+        </PluginSlot>
+
         <Dropdown.Menu>
-          {shouldShowUnenrollItem && (
+          {(allowUnenrollment) && (
             <Dropdown.Item
               disabled={isMasquerading}
               onClick={unenrollModal.show}
@@ -61,6 +76,7 @@ export const CourseCardMenu = ({ cardId }) => {
           <SocialShareMenu cardId={cardId} emailSettings={emailSettings} />
         </Dropdown.Menu>
       </Dropdown>
+
       <UnenrollConfirmModal
         show={unenrollModal.isVisible}
         closeModal={unenrollModal.hide}
