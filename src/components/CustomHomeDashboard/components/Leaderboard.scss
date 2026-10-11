@@ -1,0 +1,57 @@
+.leaderboard-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.leaderboard-item {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  background: var(--pgn-color-surface-base);
+  border-radius: 8px;
+  border: 1px solid var(--pgn-color-light-400);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  gap: 12px;
+}
+
+.rank-number {
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--pgn-color-text-base);
+  min-width: 30px;
+  text-align: center;
+}
+
+.user-avatar {
+  flex-shrink: 0;
+}
+
+.user-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.user-name {
+  font-weight: bold;
+  color: var(--pgn-color-text-base);
+  font-size: 14px;
+}
+
+.streak-info {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--pgn-color-text-muted);
+}
+
+.streak-icon {
+  font-size: 12px;
+}
+
+.streak-days {
+  color: var(--pgn-color-text-muted);
+}

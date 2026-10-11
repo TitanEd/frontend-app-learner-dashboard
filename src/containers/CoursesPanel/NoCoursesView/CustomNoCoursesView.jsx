@@ -4,6 +4,7 @@ import { Search } from '@openedx/paragon/icons';
 import React, { useState, useEffect } from 'react';
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 import { getConfig } from '@edx/frontend-platform';
+import customMessages from '../../../customMessages';
 
 const CustomNoCoursesView = (props) => {
   const { formatMessage, messages, buttonHref } = props;
@@ -38,7 +39,7 @@ const CustomNoCoursesView = (props) => {
       <div className="text-center d-flex justify-content-center align-items-center" style={{ minHeight: '200px' }}>
         <Spinner
           animation="border"
-          screenReaderText="Loading empty dashboard content..."
+          screenReaderText={formatMessage(customMessages.loadingEmptyDashboard)}
         />
       </div>
     );

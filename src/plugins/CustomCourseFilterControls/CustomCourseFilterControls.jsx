@@ -7,7 +7,7 @@ import FilterForm from '../../containers/CourseFilterControls/components/FilterF
 import SortForm from '../../containers/CourseFilterControls/components/SortForm';
 import { useFilters } from '../../data/context';
 import messages from '../../containers/CourseFilterControls/messages';
-import MasqueradeBar from '../../containers/MasqueradeBar';
+import CustomMasqueradeBarContainer from '../../containers/MasqueradeBar/CustomMasqueradeBarContainer';
 import './CustomCourseFilterControls.scss';
 
 const CustomCourseFilterControls = ({
@@ -38,7 +38,7 @@ const CustomCourseFilterControls = ({
       }}
     >
       {/* Masquerade Bar */}
-      <MasqueradeBar />
+      <CustomMasqueradeBarContainer />
       {/* Course Status and Sort Row */}
       <div className="filter-buttons-row">
         {/* Course Status Dropdown */}
@@ -49,7 +49,7 @@ const CustomCourseFilterControls = ({
             disabled={!hasCourses}
             size="sm"
           >
-            {formatMessage(messages.courseStatus) || 'Course Status'}
+            {formatMessage(messages.courseStatus)}
           </Dropdown.Toggle>
 
           {/* IMPORTANT: stopPropagation prevents dropdown from auto-closing when interacting with the form */}
@@ -77,7 +77,7 @@ const CustomCourseFilterControls = ({
             disabled={!hasCourses}
             size="sm"
           >
-            {formatMessage(messages.sort) || 'Sort'}
+            {formatMessage(messages.sort)}
           </Dropdown.Toggle>
 
           <Dropdown.Menu

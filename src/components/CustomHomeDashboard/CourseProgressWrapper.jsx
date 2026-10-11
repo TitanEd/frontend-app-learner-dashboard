@@ -24,12 +24,12 @@ const CourseProgressBar = ({ progress = 0, loading = false }) => {
           xmlns="http://www.w3.org/2000/svg"
           style={{ marginBottom: '8px' }}
         >
-          <rect width={barWidth} height={barHeight} rx="4" fill="#F5F5F5" />
+          <rect width={barWidth} height={barHeight} rx="4" style={{ fill: 'var(--pgn-color-light-300)' }} />
           <rect
             width={barWidth}
             height={barHeight}
             rx="4"
-            fill="#F5F5F5"
+            style={{ fill: 'var(--pgn-color-light-300)' }}
             style={{
               animation: 'pulse 1.5s ease-in-out infinite alternate',
             }}
@@ -52,16 +52,16 @@ const CourseProgressBar = ({ progress = 0, loading = false }) => {
         xmlns="http://www.w3.org/2000/svg"
         style={{ marginBottom: '8px' }}
         role="img"
-        aria-label={`Course progress: ${progressPercentage}%`}
+        aria-label={intl.formatMessage(messages.courseProgressAriaLabel, { percent: progressPercentage })}
       >
         {/* Background bar */}
-        <rect width={barWidth} height={barHeight} rx="4" fill="#F5F5F5" />
+        <rect width={barWidth} height={barHeight} rx="4" style={{ fill: 'var(--pgn-color-light-300)' }} />
         {/* Progress bar */}
         <rect
           width={completedWidth}
           height={barHeight}
           rx="4"
-          fill="#2B2399"
+          style={{ fill: 'var(--pgn-color-primary-base)' }}
           style={{
             transition: 'width 0.3s ease',
           }}

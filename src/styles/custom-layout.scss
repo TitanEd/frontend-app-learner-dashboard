@@ -11,25 +11,13 @@
 @import "~@edx/frontend-component-footer/dist/footer";
 @import "~@edx/frontend-component-header/dist/index";
 
-html, body.new-ui {
-  overflow: hidden !important; /* Prevent outer scrollbar for new UI */
+html,
+body {
+  overflow: hidden !important;
 }
 
-/* Allow scrolling for old UI */
-html, body.old-ui {
-  overflow: auto !important; /* Allow scrolling for old UI */
-}
-
-html.old-ui {
-  overflow: auto !important; /* Allow scrolling for old UI */
-}
-
-html.new-ui {
-  overflow: hidden !important; /* Prevent outer scrollbar for new UI */
-
-  body {
-    font-family: Inter, sans-serif !important;
-  }
+html body {
+  font-family: var(--pgn-typography-font-family-base);
 }
 
 
@@ -102,7 +90,7 @@ html.new-ui {
 
 .sequence {
   @media (min-width: map-get($grid-breakpoints, "sm")) {
-    border: solid 1px #eaeaea;
+    border: solid 1px var(--pgn-color-light-400);
     border-radius: 4px;
   }
 }
@@ -138,7 +126,7 @@ html.new-ui {
     flex-grow: 1;
     display: inline-flex;
     border-radius: 0;
-    border: solid 1px #eaeaea;
+    border: solid 1px var(--pgn-color-light-400);
     border-left-width: 0;
     position: relative;
     font-weight: 400;
@@ -172,7 +160,7 @@ html.new-ui {
     }
 
     &.complete {
-      background-color: #eef7e5;
+      background-color: var(--pgn-color-success-100, var(--pgn-color-light-200));
       color: $success;
     }
 
@@ -470,6 +458,9 @@ html.new-ui {
   height: 56px !important;
 }
 
+// MainHeader footprint shared across custom MFE shells (no Paragon chrome-height token).
+$tels-custom-header-height: 6.25rem; // 100px
+
 .app-container {
   display: flex;
   flex-direction: column;
@@ -485,25 +476,35 @@ html.new-ui {
   overflow: hidden;
 }
 
+.sidebar-loading {
+  height: 100%;
+  width: var(--pgn-spacing-spacer-5-5, 4rem);
+  padding-top: var(--pgn-spacing-spacer-3, 1rem);
+}
+
 .main-content {
   flex: 1;
-  // padding: 20px;
-  padding-left: 0px;
-  padding-bottom: 0px;
+  padding-left: 0;
+  padding-bottom: 0;
   padding-top: 0;
   box-sizing: border-box;
   overflow-y: auto;
-  height: calc(100vh - 100px);
-  background-color: var(--bg-body);
+  height: calc(100vh - #{$tels-custom-header-height});
+  background-color: var(--bg-body, var(--pgn-color-primary-light));
 
   .page-content {
     flex-grow: 1;
+    width: 100%;
+  }
+
+  #main {
+    outline: none;
   }
 }
 
 .pgn-btn-active {
-  color: #454545;
-  background-color: #E1DDDB;
+  color: var(--pgn-color-text-base);
+  background-color: var(--pgn-color-light-300);
   border-color: transparent;
 }
 
@@ -515,30 +516,29 @@ html.new-ui {
   overflow-y: auto;
   flex-shrink: 0;
   overflow-x: hidden;
-  height: calc(100vh - 0px);
+  height: 100vh;
 
-  @media (max-height: 690px) {
-    height: calc(100vh - 5rem);
+  @media (max-height: 43.125rem) {
+    height: calc(100vh - var(--pgn-spacing-spacer-5, 3rem));
   }
 }
 
-/* Styles for the sidebar scrollbar */
 .sidebar-container::-webkit-scrollbar {
-  width: 4px; /* width of the vertical scrollbar */
+  width: var(--pgn-spacing-spacer-1, 0.25rem);
   z-index: 10;
 }
 
 .sidebar-container::-webkit-scrollbar-track {
-  background: transparent; /* color of the track */
+  background: transparent;
 }
 
 .sidebar-container::-webkit-scrollbar-thumb {
-  background-color: #888; /* color of the scrollbar thumb */
-  border-radius: 4px; /* roundness of the scrollbar thumb */
+  background-color: var(--pgn-color-gray-300);
+  border-radius: var(--pgn-size-border-radius-sm, 0.25rem);
 }
 
 .sidebar-container::-webkit-scrollbar-thumb:hover {
-  background-color: #555; /* color of the scrollbar thumb on hover */
+  background-color: var(--pgn-color-gray-500);
 }
 
 /* Loading animation for progress bars */
@@ -575,7 +575,7 @@ html.new-ui {
 
 /* Individual course card styling */
 .course-card-individual {
-  border: 1px solid #D5D7DA;
+  border: 1px solid var(--pgn-color-light-400);
   border-radius: 12px;
   padding: 16px 16px 16px 0;
 }
@@ -587,7 +587,7 @@ html.new-ui {
 
 /* Widget card styling */
 .overview-card {
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--pgn-color-light-400);
   border-radius: 12px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   transition: box-shadow 0.2s ease;
@@ -597,59 +597,15 @@ html.new-ui {
   }
 }
 
-
-
- 
-/* UI Switch Button Styles */
-.ui-switch-button {
-  position: absolute;
-  top: 2rem !important;
-  // transform: translateY(-50%);
-  border-radius: 6px;
-  z-index: 9999;
-  background-color: var(--primary);
-  color: white;
-  padding: 8px 12px;
-  text-align: center;
-  font-size: 14px;
-  font-weight: bold;
-  width: fit-content;
-  border: none;
-  cursor: pointer;
-  white-space: nowrap;
- 
-  /* Use left positioning to stay consistent relative to header content */
-  left: 50%;
-  transform: translateY(-50%) translateX(-50px);
-  /* Center horizontally, then move right towards search icon */
- 
-  /* Responsive adjustments - move right more as screen gets bigger */
-  @media (min-width: 680px) {
-    transform: translateY(-50%) translateX(0px);
-  }
- 
-  @media (min-width: 841px) {
-    transform: translateY(-50%) translateX(115px);
-  }
- 
-  @media (min-width: 841px) and (max-width:920px) {
-    padding: 6px 4px;
-    font-size: 12px;
-  }
- 
-  @media (min-width: 1440px) {
-    transform: translateY(-50%) translateX(100px);
-  }
- 
-  @media (min-width: 1920px) {
-    transform: translateY(-50%) translateX(150px);
-  }
- 
-  /* Fallback for very small screens */
-  @media (max-width: 480px) {
-    transform: translateY(-50%) translateX(-80px);
-    font-size: 12px;
-    padding: 6px 10px;
-  }
+.cardList-direction-alignment {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
 }
- 
+
+// Stock App.scss makes #root a 100vh flex column; the custom layout manages
+// its own height (header + scrolling .main-content).
+html.tels-custom-learner-dashboard #root {
+  display: block;
+  min-height: 0;
+}

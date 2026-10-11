@@ -22,7 +22,7 @@ import './index.scss';
 */
 export const CoursesPanel = () => {
   const { formatMessage } = useIntl();
-  const { data, isSuccess } = useInitializeLearnerHome();
+  const { data } = useInitializeLearnerHome();
   const hasCourses = useMemo(() => data?.courses?.length > 0, [data]);
 
   const {
@@ -55,26 +55,6 @@ export const CoursesPanel = () => {
     visibleList,
     showFilters: filters.length > 0,
   };
-  // Request is considered completed once the initialize query has resolved
-  // (or backed-up data is available while masquerading).
-  const initIsCompleted = isSuccess || !!data;
-
-  // Only show courses/no courses view after initialization is completed
-  // Show loading while pending or not yet completed
-  let content;
-  if (!initIsCompleted) {
-    content = (
-      <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '200px' }}>
-        <div className="spinner-border text-primary" role="status">
-          <span className="sr-only">Loading courses...</span>
-        </div>
-      </div>
-    );
-  } else if (hasCourses) {
-    content = <CourseListSlot courseListData={courseListData} />;
-  } else {
-    content = <NoCoursesViewSlot />;
-  }
 
   return (
     <div className="course-list-container">
@@ -84,7 +64,7 @@ export const CoursesPanel = () => {
           <CourseFilterControls />
         </div>
       </div>
-      {content}
+      {hasCourses ? <CourseListSlot courseListData={courseListData} /> : <NoCoursesViewSlot />}
     </div>
   );
 };

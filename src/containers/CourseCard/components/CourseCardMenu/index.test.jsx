@@ -73,8 +73,6 @@ const mockHooks = (returnVals = {}) => {
     {
       enrollment: {
         isEmailEnabled: !!returnVals.isEmailEnabled,
-        // TELS: unenroll item visibility is driven by enrollment.allowUnenrollment
-        allowUnenrollment: !!returnVals.allowUnenrollment,
       },
     },
     { isCardHook: true },
@@ -130,7 +128,6 @@ describe('CourseCardMenu', () => {
           shouldShowDropdown: true,
           isEmailEnabled: true,
           shouldShowUnenrollItem: true,
-          allowUnenrollment: true,
         };
         describe('unenroll modal toggle', () => {
           describe('not masquerading', () => {
