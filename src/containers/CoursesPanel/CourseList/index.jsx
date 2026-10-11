@@ -2,8 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { Pagination } from '@openedx/paragon';
-import { PluginSlot } from '@openedx/frontend-plugin-framework/dist/plugins';
-import { ActiveCourseFilters } from 'containers/CourseFilterControls';
+import {
+  ActiveCourseFilters,
+} from 'containers/CourseFilterControls';
 import CourseCard from 'containers/CourseCard';
 
 import { useIsCollapsed } from './hooks';
@@ -21,30 +22,20 @@ export const CourseList = ({ courseListData }) => {
           <ActiveCourseFilters />
         </div>
       )}
-      <PluginSlot
-        id="custom_course_list_plugin_slot"
-        pluginProps={{
-          visibleList,
-          numPages,
-          setPageNumber,
-          isCollapsed,
-        }}
-      >
-        <div className="d-flex flex-column flex-grow-1">
-          {visibleList.map(({ cardId }) => (
-            <CourseCard key={cardId} cardId={cardId} />
-          ))}
-          {numPages > 1 && (
-            <Pagination
-              variant={isCollapsed ? 'reduced' : 'secondary'}
-              paginationLabel="Course List"
-              className="mx-auto mb-2"
-              pageCount={numPages}
-              onPageSelect={setPageNumber}
-            />
-          )}
-        </div>
-      </PluginSlot>
+      <div className="d-flex flex-column flex-grow-1">
+        {visibleList.map(({ cardId }) => (
+          <CourseCard key={cardId} cardId={cardId} />
+        ))}
+        {numPages > 1 && (
+          <Pagination
+            variant={isCollapsed ? 'reduced' : 'secondary'}
+            paginationLabel="Course List"
+            className="mx-auto mb-2"
+            pageCount={numPages}
+            onPageSelect={setPageNumber}
+          />
+        )}
+      </div>
     </>
   );
 };

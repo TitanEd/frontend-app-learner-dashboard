@@ -6,7 +6,7 @@
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     margin: 0 auto;
     padding: 10px;
-    border: solid 1px #e0e0e0 !important;
+    border: solid 1px var(--pgn-color-light-400) !important;
     cursor: pointer;
 
     &:hover {

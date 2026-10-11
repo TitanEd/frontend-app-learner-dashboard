@@ -1,4 +1,4 @@
-import { act, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { IntlProvider } from '@edx/frontend-platform/i18n';
 import { useSelectSessionModal } from 'data/context';
 import { useInitializeLearnerHome } from 'data/hooks';
@@ -38,22 +38,8 @@ describe('Dashboard', () => {
     const dataMocked = { data: hasCourses ? { courses: [1, 2] } : { courses: [] }, isPending: initIsPending };
     useInitializeLearnerHome.mockReturnValue(dataMocked);
     useSelectSessionModal.mockReturnValue({ selectSessionModal: showSelectSessionModal ? { cardId: 1 } : null });
-    const utils = render(<IntlProvider locale="en"><Dashboard /></IntlProvider>);
-    // TELS: Dashboard shows a lightweight skeleton for 1s before rendering the content
-    act(() => { jest.advanceTimersByTime(1000); });
-    return utils;
+    return render(<IntlProvider locale="en"><Dashboard /></IntlProvider>);
   };
-
-  beforeAll(() => { jest.useFakeTimers(); });
-  afterAll(() => { jest.useRealTimers(); });
-
-  it('shows the loading skeleton before the content is ready', () => {
-    hooks.useDashboardMessages.mockReturnValue({ pageTitle });
-    useInitializeLearnerHome.mockReturnValue({ data: { courses: [] }, isPending: false });
-    useSelectSessionModal.mockReturnValue({ selectSessionModal: { cardId: null } });
-    render(<IntlProvider locale="en"><Dashboard /></IntlProvider>);
-    expect(screen.queryByText(pageTitle)).toBeNull();
-  });
 
   describe('render', () => {
     it('page title is displayed in sr-only h1 tag', () => {

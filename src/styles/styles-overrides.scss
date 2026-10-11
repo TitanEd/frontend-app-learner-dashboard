@@ -1,5 +1,6 @@
-#root {
-  background-color: var(--bg-body);
+.tels-custom-learner-dashboard #root,
+.tels-custom-learner-dashboard {
+  background-color: var(--bg-body, var(--pgn-color-primary-light));
 }
 
 .ai-suggestions-icon {
@@ -35,10 +36,14 @@
   }
 }
 
+// Align with content column edge (Container tels-content-width gutter).
+// No extra L/R offset — same as Dashboard / Account / Profile page titles.
+// Top spacing comes from #dashboard-content page inset (1rem), not title margin.
 .course-list-title {
   font-size: 22px;
-  margin-top: 1rem;
-  margin-left: 11px !important;
+  margin-top: 0 !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
 }
 
 .course-list-container {
@@ -112,7 +117,7 @@ color: var(--primary);
 /* Keep hover effect for active dropdowns */
 .dropdown.show > #dropdown-course-status:hover,
 .dropdown.show > #dropdown-sort:hover {
-background-color: #E2E1F9 !important; /* existing hover color */
+background-color: var(--pgn-color-primary-light) !important; /* existing hover color */
 color: var(--primary);
 }
 
@@ -120,15 +125,13 @@ color: var(--primary);
 
 // CustomMyCourse Css Code 
 .cardContainer {
-border-radius: 16px !important;
-border: 2px solid rgb(235, 12, 235) !important;
+border-radius: var(--pgn-size-border-radius-lg) !important;
 box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 width: 100%;
-// height: 100%;
 transition: transform 0.2s ease, box-shadow 0.2s ease;
 margin: 0 auto;
-padding: 10px;
-border: solid 1px var(--border-color) !important;
+padding: var(--pgn-spacing-spacer-2-5, 0.75rem);
+border: solid 1px var(--border-color, var(--pgn-color-light-400)) !important;
 
 &:hover {
   box-shadow: 0 4px 6px -2px rgba(0, 0, 0, 0.05),
@@ -531,12 +534,12 @@ margin: 10px;
   .overview-section {
     overflow-x: hidden !important;
     box-sizing: border-box !important;
-    padding-left: 12px !important;
-    padding-right: 12px !important;
   }
 
   .dashboard-main-content {
-    padding-left: 0px !important;
+    // Keep token L/R pad (half gutter); do not zero or hardcode px.
+    padding-left: calc(var(--pgn-spacing-grid-gutter-width) * 0.5) !important;
+    padding-right: calc(var(--pgn-spacing-grid-gutter-width) * 0.5) !important;
   }
 
   .recommended-course-card {
@@ -571,10 +574,11 @@ margin: 10px;
 .recommended-course-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2rem;
+  gap: var(--pgn-spacing-spacer-4-5, 2rem);
   padding: 0;
-  padding-right: 1rem;
-  max-width: 1800px;
+  padding-right: var(--pgn-spacing-spacer-3, 1rem);
+  // Width comes from parent tels-content-width / Container xl — do not hardcode.
+  max-width: 100%;
   margin: 0 auto;
 
   @media (min-width: 768px) {
@@ -609,7 +613,7 @@ margin: 10px;
 
 /* Continue Learning Section Styles */
 .continue-learning-section {
-  background-color: #ffffff;
+  background-color: var(--pgn-color-bg-base);
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   padding: 24px;
@@ -626,7 +630,7 @@ margin: 10px;
 .continue-learning-title {
   font-size: 24px;
   font-weight: 700;
-  color: #333333;
+  color: var(--pgn-color-text-base);
   margin: 0;
 }
 
@@ -744,7 +748,7 @@ margin: 10px;
 
   .pgn__pageBanner-component {
     background-color: var(--primary) !important;
-    color: var(--text-white) !important;
+    color: var(--pgn-color-white) !important;
     border-radius: 10px !important;
   }
 
@@ -757,7 +761,7 @@ margin: 10px;
   }
 
   .btn-icon-black {
-    color: var(--text-white) !important;
+    color: var(--pgn-color-white) !important;
 
     &:hover {
       background-color: var(--primary-light) !important;
@@ -789,6 +793,112 @@ margin: 10px;
       background-color: var(--primary) !important;
       border-color: var(--primary) !important;
       box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.25) !important;
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Custom UI shapes and sizes from the design tokens (--pgn-*).
+.tels-custom-learner-dashboard {
+  // Shapes and sizes: titaned-frontend-library hardcodes these for Paragon /
+  // Bootstrap components (e.g. 1rem radios against Paragon's 20px min-width,
+  // which drew them as ovals). Use the design tokens instead.
+  .pgn__form-checkbox-input,
+  .pgn__form-radio-input {
+    width: var(--pgn-size-form-control-indicator-base);
+    height: var(--pgn-size-form-control-indicator-base);
+    min-width: var(--pgn-size-form-control-indicator-base);
+    min-height: var(--pgn-size-form-control-indicator-base);
+    flex-shrink: 0;
+  }
+
+  .pgn__form-radio-input {
+    border-radius: 50%;
+  }
+
+  // Focused/selected Paragon Menu item: brand tint from the existing
+  // primary-light token (the menu token keeps its Paragon default).
+  .pgn__menu-item:focus {
+    background-color: var(--pgn-color-primary-light);
+  }
+
+  // Indicator centered on its label (Paragon offsets it with a fixed
+  // margin-top, which drifts when the label font/line-height changes).
+  // Options with a description keep the top alignment.
+  .pgn__form-checkbox:not(:has(.pgn__form-control-description)),
+  .pgn__form-radio:not(:has(.pgn__form-control-description)) {
+    display: flex;
+    align-items: center;
+
+    > .pgn__form-checkbox-input,
+    > .pgn__form-radio-input {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+
+    .pgn__form-label {
+      margin-bottom: 0;
+    }
+  }
+
+  // Page content and modals only: the header/sidebar keep their own shapes
+  // (pill language selector, user menu).
+  .main-content,
+  .pgn__modal-layer {
+    .btn:not(.btn-icon) {
+      border-radius: var(--pgn-size-btn-border-radius-base) !important;
+    }
+
+    .btn-sm:not(.btn-icon) {
+      border-radius: var(--pgn-size-btn-border-radius-sm) !important;
+    }
+
+    .btn-lg:not(.btn-icon) {
+      border-radius: var(--pgn-size-btn-border-radius-lg) !important;
+    }
+
+    // Button groups stay joined (only the outer corners are rounded).
+    .btn-group > .btn:not(:last-child):not(.dropdown-toggle):not(.btn-icon),
+    .btn-group > .btn-group:not(:last-child) > .btn:not(.btn-icon) {
+      border-top-right-radius: 0 !important;
+      border-bottom-right-radius: 0 !important;
+    }
+
+    .btn-group > .btn:not(:first-child):not(.btn-icon),
+    .btn-group > .btn-group:not(:first-child) > .btn:not(.btn-icon) {
+      border-top-left-radius: 0 !important;
+      border-bottom-left-radius: 0 !important;
+    }
+
+    .form-control,
+    .pgn__form-control-decorator-group .form-control {
+      border-radius: var(--pgn-size-form-input-radius-border-base);
+    }
+
+    .card,
+    .pgn__card {
+      border-radius: var(--pgn-size-card-border-radius-base);
+    }
+
+    .badge {
+      border-radius: var(--pgn-size-badge-border-radius-base);
+    }
+
+    .alert {
+      border-radius: var(--pgn-size-alert-border-radius);
+    }
+
+    .dropdown-menu {
+      border-radius: var(--pgn-size-dropdown-border-radius-base);
+    }
+
+    .modal-content,
+    .pgn__modal {
+      border-radius: var(--pgn-size-modal-content-border-radius);
+    }
+
+    .pgn__selectable_box {
+      border-radius: var(--pgn-size-border-radius-base);
     }
   }
 }

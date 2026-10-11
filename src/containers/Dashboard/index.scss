@@ -1,5 +1,22 @@
+// L/R pad lives on the parent Paragon Container (container-mw-xl /
+// tels-content-width). Nested column must not add a second gutter.
 .course-list-column {
-  padding: 0 var(--pgn-spacing-spacer-4);
+  padding: 0;
+}
+
+.container-mw-xl .course-list-column,
+.dashboard-main-content .course-list-column {
+  max-width: none;
+  margin-left: 0;
+  margin-right: 0;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+// Page top inset: 1rem — same as Account + Profile + home dashboard.
+#dashboard-content > .container-mw-xl,
+#dashboard-container .container-mw-xl.container-fluid {
+  padding-top: 1rem;
 }
 
 .sidebar-column {

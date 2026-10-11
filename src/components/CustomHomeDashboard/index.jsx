@@ -1,9 +1,10 @@
 /* eslint-disable no-console */
 /* eslint-disable import/extensions */
 /* eslint-disable max-len */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   Card,
+  Container,
   Icon,
 } from '@openedx/paragon';
 import {
@@ -13,10 +14,11 @@ import { Helmet } from 'react-helmet';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 import { getConfig } from '@edx/frontend-platform';
-import { useInitializeDashboard } from '../../containers/Dashboard/hooks';
+import { useInitializeDashboard } from '../../containers/Dashboard/customHooks';
 import customStarsIcon from '../../assets/custom-stars.svg';
 import MetricCard from './components/MetricCard';
 import messages from './components/messages';
+import customMessages from '../../customMessages';
 // import ContinueLearning from './ContinueLearning';
 import ContinueLearningProgressBar from './ContinueLearningProgressBar';
 import useWidgets from '../../hooks/useWidgets';
@@ -26,10 +28,33 @@ import { useInitializeLearnerHome } from '../../data/hooks';
 import RecommendedCourseCard from './components/RecommendedCourseCard.tsx';
 import './index.scss';
 import Leaderboard from './components/Leaderboard.jsx';
-import ConfirmEmailBanner from '../../containers/LearnerDashboardHeader/ConfirmEmailBanner/index.jsx';
+import {
+  getFallbackAISuggestions, getFallbackMetrics, getFallbackTodoList, getFallbackWidgets, withFallback,
+} from './fallbackData';
+import ConfirmEmailBanner from '../../containers/LearnerDashboardHeader/ConfirmEmailBanner/CustomConfirmEmailBanner.jsx';
 // import { CSS } from '@dnd-kit/utilities';
 
-const Dashboard = () => {
+
+const normalizeList = (data) => {
+  if (Array.isArray(data)) {
+    return data;
+  }
+  if (Array.isArray(data?.results)) {
+    return data.results;
+  }
+  if (Array.isArray(data?.metrics)) {
+    return data.metrics;
+  }
+  if (Array.isArray(data?.widgets)) {
+    return data.widgets;
+  }
+  if (Array.isArray(data?.data)) {
+    return data.data;
+  }
+  return [];
+};
+
+const CustomHomeDashboard = () => {
   const [ready, setReady] = useState(false);
   const [dashboardData, setDashboardData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -66,6 +91,10 @@ const Dashboard = () => {
   const { isPending: coursesLoading } = useInitializeLearnerHome();
 
   const intl = useIntl();
+
+  // When the TitanEd dashboard APIs return nothing, use the db.json mock data
+  // (see fallbackData.js).
+  const displayWidgets = useMemo(() => withFallback(widgets, getFallbackWidgets), [widgets]);
 
   // Performance fix: Defer ALL API calls until after skeleton delay
   useEffect(() => {
@@ -138,9 +167,9 @@ const Dashboard = () => {
         //     client.get(`${baseUrl}/todo-list`),
         //   ]);
 
-        //   const metrics = metricsRes.status === 'fulfilled' ? metricsRes.value.data : [];
-        //   const titanAISuggestions = aiRes.status === 'fulfilled' ? aiRes.value.data : [];
-        //   const todoList = todoRes.status === 'fulfilled' ? todoRes.value.data : [];
+        //   const metrics = metricsRes.status === 'fulfilled' ? normalizeList(metricsRes.value.data) : [];
+        //   const titanAISuggestions = aiRes.status === 'fulfilled' ? normalizeList(aiRes.value.data) : [];
+        //   const todoList = todoRes.status === 'fulfilled' ? normalizeList(todoRes.value.data) : [];
 
         //   setDashboardData({
         //     metrics, titanAISuggestions, todoList,
@@ -155,15 +184,22 @@ const Dashboard = () => {
           client.get(`${baseUrl}/ai-suggestions`),
           client.get(`${baseUrl}/todo-list`),
         ]);
-        const metrics = metricsRes.status === 'fulfilled' ? metricsRes.value.data : [];
+        const metrics = metricsRes.status === 'fulfilled' ? normalizeList(metricsRes.value.data) : [];
         // const leaderboard = leaderboardRes.status === 'fulfilled' ? leaderboardRes.value.data : [];
-        const titanAISuggestions = aiRes.status === 'fulfilled' ? aiRes.value.data : [];
-        const todoList = todoRes.status === 'fulfilled' ? todoRes.value.data : [];
+        const titanAISuggestions = aiRes.status === 'fulfilled' ? normalizeList(aiRes.value.data) : [];
+        const todoList = todoRes.status === 'fulfilled' ? normalizeList(todoRes.value.data) : [];
         setDashboardData({
-          metrics, titanAISuggestions, todoList,
+          metrics,
+          titanAISuggestions: withFallback(titanAISuggestions, getFallbackAISuggestions),
+          todoList: withFallback(todoList, getFallbackTodoList),
         });
       } catch (error) {
         console.error('Error fetching dashboard data:', error);
+        setDashboardData({
+          metrics: [],
+          titanAISuggestions: [],
+          todoList: [],
+        });
       } finally {
         setLoading(false);
       }
@@ -215,26 +251,28 @@ const Dashboard = () => {
   // Performance hack: Show lightweight skeleton first
   if (!ready) {
     return (
-      <div className="dashboard-wrapper" style={{ padding: '20px' }}>
-        <div style={{
-          height: '40px', backgroundColor: '#f0f0f0', borderRadius: '4px', marginBottom: '20px', width: '200px',
-        }}
-        />
-        <div style={{ display: 'flex', gap: '20px', marginBottom: '30px' }}>
-          {[1, 2, 3, 4].map(i => (
-            <div
-              key={i}
-              style={{
-                flex: 1, height: '120px', backgroundColor: '#f0f0f0', borderRadius: '8px',
-              }}
-            />
-          ))}
-        </div>
-        <div style={{
-          height: '300px', backgroundColor: '#f0f0f0', borderRadius: '8px', marginBottom: '20px',
-        }}
-        />
-        <div style={{ height: '200px', backgroundColor: '#f0f0f0', borderRadius: '8px' }} />
+      <div className="dashboard-wrapper">
+        <Container fluid size="xl" className="dashboard-main-content">
+          <div style={{
+            height: '40px', backgroundColor: 'var(--pgn-color-light-300)', borderRadius: '4px', marginBottom: '20px', width: '200px',
+          }}
+          />
+          <div style={{ display: 'flex', gap: '20px', marginBottom: '30px' }}>
+            {[1, 2, 3, 4].map(i => (
+              <div
+                key={i}
+                style={{
+                  flex: 1, height: '120px', backgroundColor: 'var(--pgn-color-light-300)', borderRadius: '8px',
+                }}
+              />
+            ))}
+          </div>
+          <div style={{
+            height: '300px', backgroundColor: 'var(--pgn-color-light-300)', borderRadius: '8px', marginBottom: '20px',
+          }}
+          />
+          <div style={{ height: '200px', backgroundColor: 'var(--pgn-color-light-300)', borderRadius: '8px' }} />
+        </Container>
       </div>
     );
   }
@@ -256,12 +294,12 @@ const Dashboard = () => {
         <title>{intl.formatMessage(messages.pageTitle)}</title>
         <link rel="shortcut icon" href={getConfig().FAVICON_URL} type="image/x-icon" />
       </Helmet>
-      <div className="dashboard-main-content">
+      <Container fluid size="xl" className="dashboard-main-content">
         {/* Top Metric Cards */}
         <ConfirmEmailBanner />
-        <div className="dashboard-header">{intl.formatMessage(messages.dashboardPageTitle)}</div>
+        <h1 className="dashboard-header">{intl.formatMessage(messages.dashboardPageTitle)}</h1>
         <div className="metrics-container">
-          {dashboardData.metrics && dashboardData.metrics.map((metric, index) => (
+          {withFallback(dashboardData.metrics, getFallbackMetrics).map((metric, index) => (
             <MetricCard
               key={metric.id}
               icon={metric.icon}
@@ -311,7 +349,7 @@ const Dashboard = () => {
           {coursesLoading && (
             <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '200px' }}>
               <div className="spinner-border text-primary" role="status">
-                <span className="sr-only">Loading recommended courses...</span>
+                <span className="sr-only">{intl.formatMessage(customMessages.loadingRecommendedCourses)}</span>
               </div>
             </div>
           )}
@@ -368,7 +406,7 @@ const Dashboard = () => {
           </div>
         )}
 
-        {!widgetsLoading && widgets.length > 0 && widgets
+        {!widgetsLoading && displayWidgets.length > 0 && displayWidgets
           .filter(widget => widget.enabled)
           .map(widget => (
             <div key={widget.id} className="overview-section">
@@ -382,7 +420,7 @@ const Dashboard = () => {
             </div>
           ))}
 
-        {!widgetsLoading && widgets.length === 0 && (
+        {!widgetsLoading && displayWidgets.length === 0 && (
           <div className="overview-section">
             <div className="text-center py-5">
               <p className="text-muted">{intl.formatMessage(messages.noWidgetsAvailable)}</p>
@@ -398,7 +436,7 @@ const Dashboard = () => {
           </div>
         )}
 
-      </div>
+      </Container>
 
       {/* Sidebar */}
       <div
@@ -421,7 +459,7 @@ const Dashboard = () => {
               {intl.formatMessage(messages.titanAiSuggestion)}
               <img
                 src={customStarsIcon}
-                alt="Custom Stars"
+                alt={intl.formatMessage(customMessages.aiSuggestionIconAlt)}
                 style={{ width: '23px', height: '25px' }}
               />
             </h4>
@@ -437,7 +475,7 @@ const Dashboard = () => {
                       {suggestion}
                       <img
                         src={customStarsIcon}
-                        alt="Custom Stars"
+                        alt={intl.formatMessage(customMessages.aiSuggestionIconAlt)}
                         className="ai-suggestions-icon"
                       />
                     </div>
@@ -465,7 +503,7 @@ const Dashboard = () => {
                         src={RadioButtonUnchecked}
                         style={{
                           marginRight: '0.75rem',
-                          color: '#454545',
+                          color: 'var(--pgn-color-text-base)',
                           minWidth: 22,
                           minHeight: 22,
                         }}
@@ -487,4 +525,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default CustomHomeDashboard;

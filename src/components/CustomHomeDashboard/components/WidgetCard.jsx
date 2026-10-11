@@ -3,25 +3,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Card } from '@openedx/paragon';
+import { useIntl } from '@edx/frontend-platform/i18n';
 import DOMPurify from 'dompurify';
 import ReactApexChart from 'react-apexcharts';
 import './WidgetCard.scss';
+import { tokenColor, tokenPalette } from '../../../utils/tokenColor';
+import messages from './messages';
 
 const WidgetCard = ({
   title, content, type,
 }) => {
-  const generateColors = (count) => {
-    const colors = [];
-    const backgroundColors = []; // Still needed for some chart types if we want to keep similar look
-
-    for (let i = 0; i < count; i++) {
-      const hue = (i * 360) / count;
-      colors.push(`hsla(${hue}, 70%, 50%, 1)`);
-      backgroundColors.push(`hsla(${hue}, 70%, 50%, 0.2)`); // Retaining for potential area fill
-    }
-
-    return { solidColors: colors, backgroundColors }; // ApexCharts typically uses a flat array of colors
-  };
+  const intl = useIntl();
+  // Series colors come from the design tokens (utils/tokenColor.js).
+  const generateColors = (count) => ({ solidColors: tokenPalette(count) });
 
   const getChartOptionsAndSeries = () => {
     if (type === 'chart' && content && content.data) {
@@ -117,10 +111,10 @@ const WidgetCard = ({
             position: 'bottom',
             fontSize: '16px',
             fontWeight: 500,
-            labels: { colors: ['#22223b'] },
+            labels: { colors: [tokenColor('--pgn-color-text-base', '#22223b')] },
           };
           options.grid = {
-            borderColor: '#e5e7eb',
+            borderColor: tokenColor('--pgn-color-light-400', '#e5e7eb'),
             strokeDashArray: 4,
           };
         }
@@ -130,7 +124,9 @@ const WidgetCard = ({
         }
         // If referenceLabels are not provided, try to infer from data if possible
         if (!options.xaxis.categories.length && series.length > 0 && series[0].data.length) {
-          options.xaxis.categories = series[0].data.map((_, i) => `Point ${i + 1}`);
+          options.xaxis.categories = series[0].data.map((_, i) => (
+            intl.formatMessage(messages.chartPointLabel, { index: i + 1 })
+          ));
         }
         return { series, options };
       }
@@ -195,14 +191,14 @@ const WidgetCard = ({
                 options={{
                   ...chartOptions,
                   grid: {
-                    borderColor: '#e5e7eb',
+                    borderColor: tokenColor('--pgn-color-light-400', '#e5e7eb'),
                     strokeDashArray: 4,
                   },
                   legend: {
                     ...chartOptions.legend,
                     fontSize: '14px',
                     fontWeight: 500,
-                    labels: { colors: ['#22223b'] },
+                    labels: { colors: [tokenColor('--pgn-color-text-base', '#22223b')] },
                   },
                   plotOptions: {
                     ...chartOptions.plotOptions,
@@ -236,7 +232,7 @@ const WidgetCard = ({
             <div className="video-wrapper">
               <iframe
                 src={`https://www.youtube.com/embed/${content.videoId}${content.autoplay ? '?autoplay=1' : ''}`}
-                title={content.title || 'YouTube video'}
+                title={content.title || intl.formatMessage(messages.youtubeDefaultTitle)}
                 frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen

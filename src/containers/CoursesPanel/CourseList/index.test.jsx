@@ -7,10 +7,6 @@ jest.mock('./hooks', () => ({
   useIsCollapsed: jest.fn(),
 }));
 
-jest.mock('@openedx/frontend-plugin-framework/dist/plugins', () => ({
-  PluginSlot: ({ children }) => children, // eslint-disable-line react/prop-types
-}));
-
 jest.mock('containers/CourseCard', () => jest.fn(() => <div>CourseCard</div>));
 jest.mock('containers/CourseFilterControls', () => ({
   ActiveCourseFilters: jest.fn(() => <div>ActiveCourseFilters</div>),

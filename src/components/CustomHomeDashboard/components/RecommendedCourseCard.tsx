@@ -6,6 +6,8 @@ import {
   Card, Button,
 } from '@openedx/paragon';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useIntl } from '@edx/frontend-platform/i18n';
+import customMessages from '../../../customMessages';
 import './RecommendedCourseCard.scss';
 import { useFormatDate } from '../../../utils/hooks';
 // import { Repeat } from '@openedx/paragon/icons';
@@ -38,6 +40,7 @@ const RecommendedCourseCard: React.FC<RecommendedCourseCardProps> = ({
   // isReRunEnabled = false,
 }) => {
   const formatDate = useFormatDate();
+  const intl = useIntl();
   const displayBannerSrc = imageSrc
     && !imageSrc.includes('images_course_image.jpg')
     && !imageSrc.includes('pencils.jpg')
@@ -48,7 +51,7 @@ const RecommendedCourseCard: React.FC<RecommendedCourseCardProps> = ({
     <Card style={{ width: '19rem' }} className="recommended-course-card" onClick={onViewLive}>
       <Card.ImageCap
         src={displayBannerSrc === null ? fallbackImage : displayBannerSrc}
-        srcAlt="Course cover"
+        srcAlt={intl.formatMessage(customMessages.courseCoverAlt)}
         className="recommended-course-card-image"
       />
       <Card.Section className="text-center recommended-course-card-content-section">
@@ -59,11 +62,11 @@ const RecommendedCourseCard: React.FC<RecommendedCourseCardProps> = ({
         <div className="recommended-course-card-metadata">
           <p className="metadata-item">
             <FontAwesomeIcon icon="book" className="mr-1" />
-            {noOfLessons != null ? `${noOfLessons} Lessons` : '10 Lessons'}
+            {intl.formatMessage(customMessages.lessonsCount, { count: noOfLessons ?? 10 })}
           </p>
           <p className="metadata-item">
             <FontAwesomeIcon icon="users" className="mr-1" />
-            {noOfStudents != null ? `${noOfStudents} Students` : '32 Students'}
+            {intl.formatMessage(customMessages.studentsCount, { count: noOfStudents ?? 32 })}
           </p>
           {/* <Button size="sm" variant="primary" onClick={onViewLive}>View Course</Button> */}
           {/* <Button size="sm" variant="outline-primary" onClick={onEditCourse}>Edit course</Button>

@@ -121,6 +121,21 @@ const messages = defineMessages({
     defaultMessage: '{days} Days',
     description: 'Streak days label',
   },
+  courseProgressAriaLabel: {
+    id: 'dashboard.course.progress.aria.label',
+    defaultMessage: 'Course progress: {percent}%',
+    description: 'Accessible label for the course progress bar',
+  },
+  chartPointLabel: {
+    id: 'dashboard.chart.point.label',
+    defaultMessage: 'Point {index}',
+    description: 'Fallback category label for a chart data point',
+  },
+  streakIconAriaLabel: {
+    id: 'dashboard.streak.icon.aria.label',
+    defaultMessage: 'Streak',
+    description: 'Accessible label for the streak fire icon',
+  },
 });
 
 export default messages;

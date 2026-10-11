@@ -53,17 +53,14 @@ describe('ResumeButton', () => {
     it('initializes course run data with cardId', () => {
       expect(useCourseData).toHaveBeenCalledWith(props.cardId);
     });
-    it('does not use action hooks disabled state (TELS uses enrollment.allowResume)', () => {
-      expect(useActionDisabledState).not.toHaveBeenCalled();
+    it('loads disabled states for resume action from action hooks', () => {
+      expect(useActionDisabledState).toHaveBeenCalledWith(props.cardId);
     });
   });
   describe('behavior', () => {
     describe('disabled', () => {
       beforeEach(() => {
-        useCourseData.mockReturnValueOnce({
-          enrollment: { mode: 'executive-education', allowResume: false },
-          courseRun: { resumeUrl: '/resume-url' },
-        });
+        useActionDisabledState.mockReturnValueOnce({ disableResumeCourse: true });
       });
       it('should be disabled', () => {
         render(<IntlProvider locale="en"><ResumeButton {...props} /></IntlProvider>);

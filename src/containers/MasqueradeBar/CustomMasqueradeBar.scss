@@ -11,13 +11,13 @@
     white-space: nowrap;
     font-size: 1.125rem;
     font-weight: 500;
-    color: var(--primary, #6c5ce7);
+    color: var(--primary, var(--pgn-color-primary-base));
   }
 
   &__icon {
     width: 18px;
     height: 18px;
-    color: var(--primary, #6c5ce7);
+    color: var(--primary, var(--pgn-color-primary-base));
   }
 
   &__form {
@@ -87,7 +87,7 @@
     padding: 0.5rem 1rem !important;
     border-radius: 8px;
     font-size: 1rem;
-    border: 1px solid var(--border-color, #e0e0e0);
+    border: 1px solid var(--border-color, var(--pgn-color-light-400));
     transition: all 0.2s ease-in-out;
     margin: 0 !important;
     padding-left: 1rem !important;
@@ -97,13 +97,13 @@
     width: 100%;
 
     &:focus {
-      border-color: var(--primary, #6c5ce7);
+      border-color: var(--primary, var(--pgn-color-primary-base));
       box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.1);
       outline: none;
     }
 
     &::placeholder {
-      color: #999;
+      color: var(--pgn-color-text-muted);
     }
   }
 
@@ -113,7 +113,7 @@
     left: 0;
     margin-top: 4px;
     font-size: 0.875rem;
-    color: #dc3545;
+    color: var(--pgn-color-danger-base);
     white-space: nowrap;
   }
 
@@ -136,14 +136,14 @@
     padding: 0.5rem 1rem;
     border-radius: 8px;
     font-size: 1rem;
-    background-color: var(--primary-light, #e2e1f9);
-    color: var(--primary, #6c5ce7);
+    background-color: var(--primary-light, var(--pgn-color-primary-light));
+    color: var(--primary, var(--pgn-color-primary-base));
     cursor: pointer;
     transition: all 0.2s ease-in-out;
 
     &:hover {
-      background-color: var(--primary, #6c5ce7) !important;
-      color: white;
+      background-color: var(--primary, var(--pgn-color-primary-base)) !important;
+      color: var(--pgn-color-white);
     }
   }
 }

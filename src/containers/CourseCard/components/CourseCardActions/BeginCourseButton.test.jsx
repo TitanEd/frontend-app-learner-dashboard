@@ -53,18 +53,15 @@ describe('BeginCourseButton', () => {
       renderComponent();
       expect(useCourseData).toHaveBeenCalledWith(props.cardId);
     });
-    it('does not use action hooks disabled state (TELS uses enrollment.allowResume)', () => {
+    it('loads disabled states for begin action from action hooks', () => {
       renderComponent();
-      expect(useActionDisabledState).not.toHaveBeenCalled();
+      expect(useActionDisabledState).toHaveBeenCalledWith(props.cardId);
     });
   });
   describe('behavior', () => {
     describe('disabled', () => {
       it('should be disabled', () => {
-        useCourseData.mockReturnValueOnce({
-          enrollment: { mode: 'executive-education', allowResume: false },
-          courseRun: { homeUrl: 'home-url' },
-        });
+        useActionDisabledState.mockReturnValueOnce({ disableBeginCourse: true });
         renderComponent();
         const button = screen.getByRole('button', { name: 'Begin Course' });
         expect(button).toHaveClass('disabled');

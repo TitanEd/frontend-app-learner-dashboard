@@ -15,7 +15,7 @@ const Leaderboard = ({ leaderboardData = [] }) => {
         {/* <a
           href="www.google.com"
           style={{
-            color: '#8B5CF6', textDecoration: 'none', fontSize: '14px', marginRight: '1rem', paddingBottom: '6px',
+            color: 'var(--pgn-color-primary-base)', textDecoration: 'none', fontSize: '14px', marginRight: '1rem', paddingBottom: '6px',
           }}
         >
           {intl.formatMessage(messages.viewAll)}
@@ -37,7 +37,7 @@ const Leaderboard = ({ leaderboardData = [] }) => {
                 <div className="user-info">
                   <div className="user-name">{entry.name}</div>
                   <div className="streak-info">
-                    <span className="streak-icon">🔥</span>
+                    <span className="streak-icon" role="img" aria-label={intl.formatMessage(messages.streakIconAriaLabel)}>🔥</span>
                     <span className="streak-days">
                       {intl.formatMessage(messages.streakDays, { days: entry.streak })}
                     </span>

@@ -449,7 +449,7 @@ describe('dataTransformers', () => {
           SortKeys.title,
           2,
         ) as VisibleListResult;
-        expect(result.visibleList).toHaveLength(Math.min(ListPageSize, listSize - ListPageSize));
+        expect(result.visibleList).toHaveLength(listSize - ListPageSize);
         const expectedFirstCourse = `Course ${ListPageSize.toString().padStart(2, '0')}`;
         expect(result.visibleList[0].course.courseName).toBe(expectedFirstCourse);
       });

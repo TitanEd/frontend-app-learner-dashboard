@@ -14,10 +14,10 @@ const MetricCard = ({
   // Define colors based on card position/index
   const getCardStyle = (cardIndex) => {
     const colors = [
-      { background: '#ffe4ef', iconBg: '#ff4d92' }, // Pink
-      { background: '#fffbe7', iconBg: '#ffb200' }, // Yellow
-      { background: '#eaffef', iconBg: '#22c55e' }, // Green
-      { background: '#e6f8ff', iconBg: '#1cb0f6' }, // Blue
+      { background: 'var(--pgn-color-danger-100, var(--pgn-color-light-200))', iconBg: 'var(--pgn-color-danger-base)' }, // Pink
+      { background: 'var(--pgn-color-warning-100, var(--pgn-color-light-200))', iconBg: 'var(--pgn-color-warning-base)' }, // Yellow
+      { background: 'var(--pgn-color-success-100, var(--pgn-color-light-200))', iconBg: 'var(--pgn-color-success-base)' }, // Green
+      { background: 'var(--pgn-color-info-100, var(--pgn-color-light-200))', iconBg: 'var(--pgn-color-info-base)' }, // Blue
     ];
 
     return colors[cardIndex % colors.length];
@@ -36,9 +36,9 @@ const MetricCard = ({
           style={{ background: cardStyle.iconBg }}
         >
           {SUPPORTED_ICON_CLASSES.includes(icon) ? (
-            <FontAwesomeIcon icon={icon.replace('fas fa-', '')} />
+            <FontAwesomeIcon icon={icon.replace(/^fas fa-/, '')} />
           ) : (
-            <FontAwesomeIcon icon="fas fa-chart-bar" />
+            <FontAwesomeIcon icon="chart-bar" />
           )}
         </div>
         <div className="metric-card-visual-text">

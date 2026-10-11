@@ -6,6 +6,7 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 import { getConfig } from '@edx/frontend-platform';
 import messages from './components/messages';
+import customMessages from '../../customMessages';
 
 const ContinueLearningProgressBar = () => {
   const [recentCourses, setRecentCourses] = useState([]);
@@ -67,7 +68,7 @@ const ContinueLearningProgressBar = () => {
                   </div>
                   {/* Resume Course Button */}
                   <button type="button" className="btn btn-primary continue-learning-resume-btn" onClick={() => { window.location.href = course.course_resume_url; }}>
-                    Resume Course
+                    {intl.formatMessage(customMessages.resumeCourse)}
                   </button>
                 </Card.Body>
               </Card>

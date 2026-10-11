@@ -13,14 +13,12 @@ import { useIntl } from "@edx/frontend-platform/i18n";
 import useCardDetailsData from "../../containers/CourseCard/components/CourseCardDetails/hooks";
 
 import SelectSessionButton from "../../containers/CourseCard/components/CourseCardActions/SelectSessionButton";
-import BeginCourseButton from "../../containers/CourseCard/components/CourseCardActions/BeginCourseButton";
-import ResumeButton from "../../containers/CourseCard/components/CourseCardActions/ResumeButton";
-import ViewCourseButton from "../../containers/CourseCard/components/CourseCardActions/ViewCourseButton";
-// import "./CustomMyCourseWidget.scss";
-import CourseCardActions from "../../containers/CourseCard/components/CourseCardActions";
-import CourseCardMenu from "../../containers/CourseCard/components/CourseCardMenu";
+import BeginCourseButton from "../../containers/CourseCard/components/CourseCardActions/CustomBeginCourseButton";
+import ResumeButton from "../../containers/CourseCard/components/CourseCardActions/CustomResumeButton";
+import ViewCourseButton from "../../containers/CourseCard/components/CourseCardActions/CustomViewCourseButton";
+import CourseCardMenu from "../../containers/CourseCard/components/CourseCardMenu/CustomCourseCardMenu";
 import ActionButton from "../../containers/CourseCard/components/CourseCardActions/ActionButton";
-import messages from "../../messages";
+import messages from "../../customMessages";
 
 const fallbackImage = "https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg";
 
@@ -28,7 +26,7 @@ const CustomMyCourseWidget = ({ cardId }) => {
   const { formatMessage } = useIntl();
   const courseData = useCourseData(cardId);
   // Get course basic details
-  const courseName = courseData?.course?.courseName || "Untitled Course";
+  const courseName = courseData?.course?.courseName || formatMessage(messages.untitledCourse);
   const bannerImgSrc = courseData?.course?.bannerImgSrc
     ? baseAppUrl(courseData.course.bannerImgSrc)
     : fallbackImage;
@@ -61,7 +59,7 @@ const CustomMyCourseWidget = ({ cardId }) => {
     <Card style={{ width: "19rem" }} className="cardContainer">
       <Card.ImageCap
         src={displayBannerSrc === null ? fallbackImage : displayBannerSrc}
-        srcAlt="Course cover"
+        srcAlt={formatMessage(messages.courseCoverAlt)}
         className="cardContainer-image"
       />
       <Card.Section className="text-center card-content-section">

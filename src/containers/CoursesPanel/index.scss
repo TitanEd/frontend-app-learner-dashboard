@@ -7,7 +7,8 @@
 
 .course-list-title {
   font-size: var(--pgn-typography-font-size-h2-base);
-  margin: var(--pgn-spacing-spacer-3) 0;
+  // Top inset is on the page container (1rem); keep vertical rhythm below only.
+  margin: 0 0 var(--pgn-spacing-spacer-3);
 }
 
 .course-list-loading {
@@ -38,10 +39,3 @@
     margin: var(--pgn-spacing-spacer-2) 0;
   }
 }
-
-.cardList-direction-alignment{
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-}
- 
