@@ -103,6 +103,26 @@ const messages = defineMessages({
     defaultMessage: 'Course cover',
     description: 'Alt text of a course card image',
   },
+  courseCardStarts: {
+    id: 'learner-dashboard.custom.course-card.starts',
+    defaultMessage: 'Starts {date}',
+    description: 'Start date of a course run that has not started yet, on a course card',
+  },
+  courseCardStarted: {
+    id: 'learner-dashboard.custom.course-card.started',
+    defaultMessage: 'Started {date}',
+    description: 'Start date of a course run that has already started, on a course card',
+  },
+  courseCardEnds: {
+    id: 'learner-dashboard.custom.course-card.ends',
+    defaultMessage: 'Ends {date}',
+    description: 'End date of a course run that has not ended yet, on a course card',
+  },
+  courseCardEnded: {
+    id: 'learner-dashboard.custom.course-card.ended',
+    defaultMessage: 'Ended {date}',
+    description: 'End date of a course run that has ended, on a course card',
+  },
   untitledCourse: {
     id: 'learner-dashboard.custom.untitled-course',
     defaultMessage: 'Untitled Course',

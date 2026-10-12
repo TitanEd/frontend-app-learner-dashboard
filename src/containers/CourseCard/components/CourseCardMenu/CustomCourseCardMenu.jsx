@@ -14,6 +14,7 @@ import {
   useUnenrollData,
   useHandleToggleDropdown,
   useOptionVisibility,
+  useCardSocialSettingsData,
 } from './hooks';
 
 import messages from './messages';
@@ -29,15 +30,21 @@ export const CourseCardMenu = ({ cardId }) => {
   const isEmailEnabled = courseData?.enrollment?.isEmailEnabled ?? false;
   const allowUnenrollment = courseData?.enrollment?.allowUnenrollment;
 
+  const { facebook, twitter } = useCardSocialSettingsData(cardId);
+  const hasOtherItems = isEmailEnabled || facebook.isEnabled || twitter.isEnabled;
+
   const emailSettings = useEmailSettings();
   const unenrollModal = useUnenrollData();
   const handleToggleDropdown = useHandleToggleDropdown(cardId);
-  // const { shouldShowUnenrollItem, shouldShowDropdown } = useOptionVisibility(cardId);
-  // Unenroll item visibility is driven by enrollment.allowUnenrollment (TELS)
-  const { shouldShowDropdown } = useOptionVisibility(cardId);
+  // Same rule as the stock menu (active enrollment, no earned certificate).
+  // The learner-home API has no enrollment.allowUnenrollment field; it is only
+  // honoured as an extra veto when a backend explicitly sends `false`.
+  const { shouldShowUnenrollItem, shouldShowDropdown } = useOptionVisibility(cardId);
+  const showUnenrollItem = shouldShowUnenrollItem && allowUnenrollment !== false;
   const isMasquerading = useIsMasquerading();
 
-  if (!shouldShowDropdown) {
+  // No toggle when the menu would be empty.
+  if (!shouldShowDropdown || !(showUnenrollItem || hasOtherItems)) {
     return null;
   }
 
@@ -64,7 +71,7 @@ export const CourseCardMenu = ({ cardId }) => {
         </PluginSlot>
 
         <Dropdown.Menu>
-          {(allowUnenrollment) && (
+          {showUnenrollItem && (
             <Dropdown.Item
               disabled={isMasquerading}
               onClick={unenrollModal.show}

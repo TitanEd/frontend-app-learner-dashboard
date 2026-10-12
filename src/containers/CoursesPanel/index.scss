@@ -3,6 +3,8 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  // Keeps the title clear of the controls next to it (longer translated titles).
+  gap: var(--pgn-spacing-spacer-2);
 }
 
 .course-list-title {

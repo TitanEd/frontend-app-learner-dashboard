@@ -401,7 +401,7 @@ const CustomHomeDashboard = () => {
         {widgetsError && (
           <div className="overview-section">
             <div className="alert alert-warning" role="alert">
-              <strong>{intl.formatMessage(messages.warningLabel)}</strong> {widgetsError}
+              <strong>{intl.formatMessage(messages.warningLabel)}</strong> {intl.formatMessage(messages.widgetsLoadError)}
             </div>
           </div>
         )}

@@ -23,7 +23,7 @@ import messages from "../../customMessages";
 const fallbackImage = "https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg";
 
 const CustomMyCourseWidget = ({ cardId }) => {
-  const { formatMessage } = useIntl();
+  const { formatMessage, formatDate } = useIntl();
   const courseData = useCourseData(cardId);
   // Get course basic details
   const courseName = courseData?.course?.courseName || formatMessage(messages.untitledCourse);
@@ -38,6 +38,46 @@ const CustomMyCourseWidget = ({ cardId }) => {
     : null;
 
   const { providerName = "", accessMessage = "" } = useCardDetailsData({ cardId }) || {};
+
+  // Course run dates (learner-home API: courseRun.startDate / endDate, null
+  // when not set in Studio). Each one is left out when missing or unparsable.
+  // Short month keeps both dates on one line of the card.
+  const formatRunDate = (value) => (
+    value && !Number.isNaN(new Date(value).getTime())
+      ? formatDate(new Date(value), { year: "numeric", month: "short", day: "numeric" })
+      : null
+  );
+  const courseRun = courseData?.courseRun || {};
+  const enrollment = courseData?.enrollment || {};
+  // Same rule as the stock card: an advertised start replaces the start date
+  // until the run starts.
+  const startDate = (!courseRun.isStarted && courseRun.advertisedStart)
+    || formatRunDate(courseRun.startDate);
+  const endDate = formatRunDate(courseRun.endDate);
+  const courseDates = [
+    startDate && {
+      key: "start",
+      text: formatMessage(
+        courseRun.isStarted ? messages.courseCardStarted : messages.courseCardStarts,
+        { date: startDate },
+      ),
+    },
+    endDate && {
+      key: "end",
+      text: formatMessage(
+        courseRun.isArchived ? messages.courseCardEnded : messages.courseCardEnds,
+        { date: endDate },
+      ),
+    },
+  ].filter(Boolean);
+  // The stock access message repeats the start/end date except when it tells
+  // about the audit access expiry; only that case is kept next to the dates.
+  const isAccessExpiryMessage = Boolean(
+    courseRun.isStarted
+    && enrollment.isEnrolled
+    && enrollment.isAudit
+    && enrollment.accessExpirationDate,
+  );
 
   // Hooks for action decision
   const { isEntitlement, isFulfilled } = useEntitlementInfo(courseData);
@@ -68,12 +108,21 @@ const CustomMyCourseWidget = ({ cardId }) => {
           <section className="title-subsection">
             <div className="title-messages">
               <p className="text-muted small m-0">{providerName}</p>
-              <p className="text-muted small m-0">{accessMessage}</p>
+              {isAccessExpiryMessage && accessMessage && (
+                <p className="text-muted small m-0">{accessMessage}</p>
+              )}
             </div>
             <div className="title-icon">
               <CourseCardMenu cardId={cardId} />
             </div>
           </section>
+          {courseDates.length > 0 && (
+            <p className="course-card-dates text-muted small m-0">
+              {courseDates.map(({ key, text }) => (
+                <span key={key} className="course-card-dates__item">{text}</span>
+              ))}
+            </p>
+          )}
         </div>
 
         <div className="cardContainer-buttons">

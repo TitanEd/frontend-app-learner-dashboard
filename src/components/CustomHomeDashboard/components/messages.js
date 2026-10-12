@@ -51,6 +51,11 @@ const messages = defineMessages({
     defaultMessage: 'Warning:',
     description: 'Warning label for alerts',
   },
+  widgetsLoadError: {
+    id: 'dashboard.widgets.error',
+    defaultMessage: 'The widgets could not be loaded. Please try again later.',
+    description: 'Shown after the warning label when the dashboard widgets request fails',
+  },
   noWidgetsAvailable: {
     id: 'dashboard.widgets.none',
     defaultMessage: 'No widgets available at the moment.',

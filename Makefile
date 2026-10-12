@@ -51,6 +51,7 @@ pull_translations:
 	cd src/i18n/messages \
       && atlas pull $(ATLAS_OPTIONS) \
                translations/frontend-platform/src/i18n/messages:frontend-platform \
+               translations/frontend-plugin-notifications/src/i18n/messages:frontend-plugin-notifications \
                translations/paragon/src/i18n/messages:paragon \
                translations/frontend-component-header/src/i18n/messages:frontend-component-header \
                translations/frontend-component-footer/src/i18n/messages:frontend-component-footer \

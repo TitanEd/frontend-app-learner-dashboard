@@ -20,14 +20,13 @@ import CustomHomeDashboard from './components/CustomHomeDashboard';
 import messages from './customMessages';
 import customGetUserMenuItems from './utils/customGetUserMenuItems';
 import registerFontAwesomeIcons from './utils/RegisterFontAwesome';
+import HeaderExtras, { headerUser } from './customHeaderExtras';
 
 // Custom UI styles load after the stock Verawood styles (as in the previous
 // version), so on equal specificity the custom rules win.
 import('titaned-frontend-library/dist/index.css');
 import('./styles/styles-overrides.scss');
 import('./styles/custom-layout.scss');
-
-
 
 // Font Awesome icons used by the custom dashboard widgets (was done in index.jsx before).
 registerFontAwesomeIcons();
@@ -132,13 +131,8 @@ const CustomLayoutShell = () => {
     };
   }, []);
 
-  const updatedAuthenticatedUser = {
-    ...authenticatedUser,
-    username: userMenuItemsFromAPI?.username || authenticatedUser?.username,
-    avatar: userMenuItemsFromAPI?.profile_image?.has_image
-      ? userMenuItemsFromAPI.profile_image.image_url_small
-      : authenticatedUser?.avatar,
-  };
+  // Full name and profile picture, as the header shows them (customHeaderExtras.jsx).
+  const updatedAuthenticatedUser = headerUser(authenticatedUser, userMenuItemsFromAPI);
 
   const userMenuItems = customGetUserMenuItems({
     intl,
@@ -167,6 +161,7 @@ const CustomLayoutShell = () => {
             headerButtons={headerButtons}
             languageSelectorList={languageSelectorList}
           />
+          <HeaderExtras />
         </div>
         <div className="content-wrapper">
           <div className="sidebar-container">
