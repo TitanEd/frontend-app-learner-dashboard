@@ -2,7 +2,9 @@
 import React, { useContext, useEffect, useState } from 'react';
 
 import { Spinner } from '@openedx/paragon';
-import { Home, LmsBook } from '@openedx/paragon/icons';
+import {
+  Assignment, EmojiEvents, Home, LmsBook,
+} from '@openedx/paragon/icons';
 import {
   Navigate, Outlet, Route, Routes, useLocation, useNavigate,
 } from 'react-router-dom';
@@ -16,7 +18,9 @@ import { useIntl } from '@edx/frontend-platform/i18n';
 import { AppContext, PageWrap } from '@edx/frontend-platform/react';
 
 import CustomApp from './CustomApp';
-import CustomHomeDashboard from './components/CustomHomeDashboard';
+import CustomHomeDashboard from './components/CustomHomeDashboard/BoardHome';
+import AchievementsPage from './achievements/AchievementsPage';
+import AssessmentsPage from './assessments/AssessmentsPage';
 import messages from './customMessages';
 import customGetUserMenuItems from './utils/customGetUserMenuItems';
 import registerFontAwesomeIcons from './utils/RegisterFontAwesome';
@@ -79,6 +83,16 @@ const CustomLayoutShell = () => {
       label: intl.formatMessage(messages.sidebarMyCoursesTitle),
       path: '/my-courses',
       icon: <LmsBook />,
+    },
+    {
+      label: intl.formatMessage(messages.sidebarMyAssessmentsTitle),
+      path: '/assessments',
+      icon: <Assignment />,
+    },
+    {
+      label: intl.formatMessage(messages.sidebarMyAchievementsTitle),
+      path: '/achievements',
+      icon: <EmojiEvents />,
     },
   ];
 
@@ -204,6 +218,8 @@ const CustomLayout = () => (
     <Route element={<CustomLayoutShell />}>
       <Route path="/" element={<PageWrap><CustomHomeDashboard /></PageWrap>} />
       <Route path="/my-courses" element={<PageWrap><CustomApp /></PageWrap>} />
+      <Route path="/assessments" element={<PageWrap><AssessmentsPage /></PageWrap>} />
+      <Route path="/achievements" element={<PageWrap><AchievementsPage /></PageWrap>} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Route>
   </Routes>

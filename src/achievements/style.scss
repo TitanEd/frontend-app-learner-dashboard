@@ -1,0 +1,551 @@
+// "My Achievements" (AchievementsPage.jsx). Built on the design tokens, so it follows the
+// theme and dark mode; logical properties mirror it in right-to-left languages.
+
+.ta-page {
+  --ta-brand: var(--pgn-color-primary-base, #2b2399);
+  --ta-surface: var(--pgn-color-bg-base, #fff);
+  --ta-soft: color-mix(in srgb, var(--ta-brand) 10%, var(--ta-surface));
+  --ta-line: var(--pgn-color-light-400, #e3e8f0);
+  --ta-text: var(--pgn-color-text-base, #1f2937);
+  --ta-muted: var(--pgn-color-text-muted, var(--pgn-color-gray-500, #64748b));
+  --ta-gold: #f5b82e;
+  --ta-good: var(--pgn-color-success-base, #15803d);
+
+  min-block-size: 100%;
+  background: var(--bg-body, transparent);
+  color: var(--ta-text);
+}
+
+.ta-container {
+  display: grid;
+  gap: 1.25rem;
+  padding-block: 1rem 2.5rem;
+}
+
+.ta-muted {
+  margin: 0;
+  color: var(--ta-muted);
+}
+
+.ta-state {
+  display: grid;
+  justify-items: center;
+  gap: 1rem;
+  padding: 5rem 1rem;
+  color: var(--ta-muted);
+}
+
+.ta-chip {
+  display: inline-block;
+  margin-inline-start: .5rem;
+  padding: 0 .55rem;
+  border-radius: 999px;
+  background: var(--ta-brand);
+  color: #fff;
+  font-weight: 600;
+}
+
+// ---- hero ----
+
+.ta-hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 1.25rem 2rem;
+  align-items: center;
+  padding: clamp(1.25rem, 3vw, 2.25rem);
+  border-radius: 24px;
+  background:
+    radial-gradient(70% 140% at 100% 0%, color-mix(in srgb, var(--ta-gold) 38%, transparent), transparent 62%),
+    linear-gradient(120deg, color-mix(in srgb, var(--ta-brand) 62%, #05060f), var(--ta-brand));
+  color: #fff;
+  overflow: hidden;
+
+  [dir="rtl"] & {
+    background:
+      radial-gradient(70% 140% at 0% 0%, color-mix(in srgb, var(--ta-gold) 38%, transparent), transparent 62%),
+      linear-gradient(240deg, color-mix(in srgb, var(--ta-brand) 62%, #05060f), var(--ta-brand));
+  }
+
+  h1 {
+    margin: 0 0 .35rem;
+    font-size: clamp(1.5rem, 1.2rem + 1.4vw, 2.1rem);
+    color: #fff;
+  }
+
+  p {
+    margin: 0;
+    color: rgba(255, 255, 255, .86);
+  }
+
+  .ta-ring__track { stroke: rgba(255, 255, 255, .22); }
+  .ta-ring__value { stroke: var(--ta-gold); }
+  .ta-ring__inside { color: #fff; }
+}
+
+.ta-hero__bar {
+  block-size: 10px;
+  max-inline-size: 460px;
+  margin-block: 1rem .5rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .22);
+  overflow: hidden;
+
+  span {
+    display: block;
+    block-size: 100%;
+    border-radius: inherit;
+    background: var(--ta-gold);
+    transition: inline-size .8s ease;
+  }
+}
+
+.ta-hero__next {
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+  font-weight: 600;
+}
+
+.ta-hero__figures {
+  display: grid;
+  grid-auto-flow: column;
+  gap: .75rem;
+  margin: 0;
+
+  > div {
+    display: grid;
+    justify-items: center;
+    min-inline-size: 96px;
+    padding: .8rem 1rem;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, .12);
+    backdrop-filter: blur(6px);
+  }
+
+  dt {
+    font-weight: 400;
+    color: rgba(255, 255, 255, .8);
+  }
+
+  dd {
+    margin: 0;
+    font-size: 1.6rem;
+    font-weight: 800;
+    line-height: 1.2;
+    white-space: nowrap;
+
+    small {
+      font-size: 1rem;
+      font-weight: 600;
+      opacity: .8;
+    }
+  }
+}
+
+.ta-path {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  gap: .5rem;
+  margin: .5rem 0 0;
+  padding: 0;
+  list-style: none;
+
+  li {
+    position: relative;
+    display: grid;
+    justify-items: center;
+    gap: .2rem;
+    color: rgba(255, 255, 255, .7);
+    text-align: center;
+
+    &::before {
+      // The line to the next level.
+      content: "";
+      position: absolute;
+      inset-block-start: 15px;
+      inset-inline-start: 50%;
+      inline-size: 100%;
+      block-size: 3px;
+      background: rgba(255, 255, 255, .22);
+    }
+
+    &:last-child::before { display: none; }
+    &.is-done::before { background: var(--ta-gold); }
+
+    small { font-size: 1rem; }
+  }
+
+  &__dot {
+    position: relative;
+    display: grid;
+    place-items: center;
+    inline-size: 32px;
+    block-size: 32px;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--ta-brand) 55%, #05060f);
+    border: 2px solid rgba(255, 255, 255, .35);
+    font-weight: 700;
+  }
+
+  .is-done &__dot,
+  .is-now &__dot {
+    background: var(--ta-gold);
+    border-color: var(--ta-gold);
+    color: #2b1d00;
+  }
+
+  .is-now {
+    color: #fff;
+    font-weight: 700;
+  }
+
+  .is-now &__dot {
+    box-shadow: 0 0 0 6px rgba(245, 184, 46, .3);
+  }
+
+  &__name {
+    overflow: hidden;
+    max-inline-size: 100%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+// ---- rings and badge pictures ----
+
+.ta-ring {
+  position: relative;
+  display: inline-block;
+  flex: none;
+
+  svg { display: block; }
+
+  &__track,
+  &__value {
+    fill: none;
+    stroke-width: 10;
+  }
+
+  &__track { stroke: var(--ta-soft); }
+
+  &__value {
+    stroke: var(--ta-brand);
+    stroke-linecap: round;
+    transition: stroke-dashoffset 1s ease;
+  }
+
+  &__inside {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    text-align: center;
+    line-height: 1.2;
+
+    small { font-size: 1rem; }
+    strong { font-size: 1.15rem; }
+  }
+}
+
+.ta-art {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  inline-size: 64px;
+  block-size: 64px;
+
+  img,
+  > .pgn__icon {
+    inline-size: 100%;
+    block-size: 100%;
+    border-radius: 50%;
+    object-fit: contain;
+    background: var(--ta-soft);
+    color: var(--ta-brand);
+  }
+
+  &.is-locked img,
+  &.is-locked > .pgn__icon {
+    filter: grayscale(1);
+    opacity: .5;
+  }
+
+  &__lock {
+    position: absolute;
+    inset-block-end: -2px;
+    inset-inline-end: -2px;
+    display: grid;
+    place-items: center;
+    inline-size: 24px;
+    block-size: 24px;
+    border-radius: 50%;
+    background: var(--ta-surface);
+    border: 1px solid var(--ta-line);
+    color: var(--ta-muted);
+  }
+}
+
+// ---- cards ----
+
+.ta-columns {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr);
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.ta-main,
+.ta-side {
+  display: grid;
+  gap: 1.25rem;
+  min-inline-size: 0;
+}
+
+.ta-card {
+  padding: 1.25rem;
+  border: 1px solid var(--ta-line);
+  border-radius: 18px;
+  background: var(--ta-surface);
+
+  h2 {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    margin: 0 0 1rem;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--ta-text);
+
+    > .pgn__icon { color: var(--ta-brand); }
+  }
+}
+
+.ta-count {
+  margin-inline-start: auto;
+  padding: .05rem .6rem;
+  border-radius: 999px;
+  background: var(--ta-soft);
+  color: var(--ta-brand);
+  font-size: 1rem;
+}
+
+.ta-next {
+  border-color: color-mix(in srgb, var(--ta-gold) 60%, var(--ta-line));
+  background:
+    radial-gradient(50% 120% at 0% 0%, color-mix(in srgb, var(--ta-gold) 18%, transparent), transparent 70%),
+    var(--ta-surface);
+
+  [dir="rtl"] & {
+    background:
+      radial-gradient(50% 120% at 100% 0%, color-mix(in srgb, var(--ta-gold) 18%, transparent), transparent 70%),
+      var(--ta-surface);
+  }
+
+  h2 > .pgn__icon { color: var(--ta-gold); }
+
+  &__body {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 1.5rem;
+  }
+
+  &__text {
+    flex: 1 1 240px;
+    min-inline-size: 0;
+
+    strong { font-size: 1.25rem; }
+    p { margin: .2rem 0 0; color: var(--ta-muted); }
+  }
+
+  .ta-next__left {
+    color: var(--ta-text);
+    font-weight: 600;
+  }
+
+  .ta-ring__value { stroke: var(--ta-gold); }
+}
+
+.ta-badges {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ta-badge {
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: .35rem;
+  padding: 1.1rem .9rem;
+  border: 1px solid var(--ta-line);
+  border-radius: 16px;
+  text-align: center;
+  transition: translate .2s, box-shadow .2s;
+
+  &:hover {
+    translate: 0 -3px;
+    box-shadow: 0 12px 24px color-mix(in srgb, var(--ta-brand) 14%, transparent);
+  }
+
+  p {
+    margin: 0;
+    color: var(--ta-muted);
+  }
+
+  small {
+    font-size: 1rem;
+    color: var(--ta-muted);
+  }
+
+  &.is-earned {
+    border-color: color-mix(in srgb, var(--ta-gold) 55%, var(--ta-line));
+    background: color-mix(in srgb, var(--ta-gold) 7%, var(--ta-surface));
+
+    small {
+      color: var(--ta-good);
+      font-weight: 600;
+    }
+  }
+}
+
+.ta-meter {
+  inline-size: 100%;
+  block-size: 8px;
+  margin-block-start: .35rem;
+  border-radius: 999px;
+  background: var(--ta-soft);
+  overflow: hidden;
+
+  span {
+    display: block;
+    block-size: 100%;
+    border-radius: inherit;
+    background: var(--ta-brand);
+  }
+}
+
+.ta-ranks,
+.ta-ways {
+  display: grid;
+  gap: .4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ta-ranks {
+  li {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: .75rem;
+    align-items: center;
+    padding: .45rem .6rem;
+    border-radius: 12px;
+
+    &.is-me { background: var(--ta-soft); }
+  }
+
+  &__place {
+    display: grid;
+    place-items: center;
+    min-inline-size: 30px;
+    block-size: 30px;
+    padding-inline: .3rem;
+    border-radius: 999px;
+    background: var(--ta-soft);
+    font-weight: 700;
+
+    &--1 { background: #f5c542; color: #3b2f00; }
+    &--2 { background: #c9d1dc; color: #1f2937; }
+    &--3 { background: #e0a878; color: #3b1f00; }
+  }
+
+  &__name {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  &__note {
+    margin-block-start: .9rem;
+  }
+}
+
+.ta-ways {
+  margin-block-start: .9rem;
+
+  li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: .55rem .75rem;
+    border-radius: 12px;
+    background: var(--ta-soft);
+
+    strong {
+      color: var(--ta-brand);
+      white-space: nowrap;
+    }
+  }
+}
+
+@media (max-width: 991.98px) {
+  .ta-columns {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .ta-hero {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .ta-hero__figures {
+    grid-column: 1 / -1;
+    grid-auto-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 575.98px) {
+  .ta-hero {
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+    text-align: center;
+  }
+
+  .ta-hero__bar { margin-inline: auto; }
+  .ta-hero__next { justify-content: center; }
+
+  .ta-hero__figures > div {
+    min-inline-size: 0;
+    padding: .6rem .4rem;
+  }
+
+  .ta-hero__figures dd { font-size: 1.25rem; }
+
+  .ta-path {
+    &__name,
+    small { display: none; }
+
+    .is-now &__name { display: block; }
+  }
+
+  .ta-badges {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ta-next__body .btn { inline-size: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ta-badge,
+  .ta-ring__value,
+  .ta-hero__bar span { transition: none; }
+}
