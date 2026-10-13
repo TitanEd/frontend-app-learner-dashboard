@@ -70,6 +70,14 @@ const messages = defineMessages({
   resume: { id: 'tels.assessments.cta.resume', defaultMessage: 'Continue' },
   review: { id: 'tels.assessments.cta.review', defaultMessage: 'Review' },
   open: { id: 'tels.assessments.cta.open', defaultMessage: 'Open' },
+  pageRange: { id: 'tels.assessments.page.range', defaultMessage: 'Showing {from}–{to} of {total}' },
+  paginationLabel: { id: 'tels.assessments.page.label', defaultMessage: 'Pages of assessments' },
+  pagePrevious: { id: 'tels.assessments.page.previous', defaultMessage: 'Previous' },
+  pageNext: { id: 'tels.assessments.page.next', defaultMessage: 'Next' },
+  pageWord: { id: 'tels.assessments.page.word', defaultMessage: 'Page' },
+  pageCurrent: { id: 'tels.assessments.page.current', defaultMessage: 'Current page' },
+  pageOf: { id: 'tels.assessments.page.of', defaultMessage: 'of' },
+  unavailable: { id: 'tels.assessments.unavailable', defaultMessage: 'This page is not available on this site.' },
 });
 
 export default messages;

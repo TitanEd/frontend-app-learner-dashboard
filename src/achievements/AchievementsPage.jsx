@@ -73,7 +73,8 @@ const AchievementsPage = () => {
     getAuthenticatedHttpClient()
       .get(`${getConfig().LMS_BASE_URL}/titaned/api/v2/achievements/`)
       .then((response) => setData(response.data))
-      .catch(() => setFailed(true));
+      // 403: the feature this page belongs to is not part of the site's plan.
+      .catch((error) => setFailed(error?.response?.status === 403 ? 'unavailable' : true));
   }, []);
   useEffect(() => { load(); }, [load]);
 
@@ -93,8 +94,10 @@ const AchievementsPage = () => {
   if (failed) {
     body = (
       <div className="ta-state" role="alert">
-        <p>{intl.formatMessage(messages.error)}</p>
-        <Button variant="outline-primary" onClick={load}>{intl.formatMessage(messages.retry)}</Button>
+        <p>{intl.formatMessage(failed === 'unavailable' ? messages.unavailable : messages.error)}</p>
+        {failed !== 'unavailable' && (
+          <Button variant="outline-primary" onClick={load}>{intl.formatMessage(messages.retry)}</Button>
+        )}
       </div>
     );
   } else if (!data) {

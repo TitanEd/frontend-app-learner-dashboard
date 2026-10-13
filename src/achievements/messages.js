@@ -36,6 +36,7 @@ const messages = defineMessages({
   overtake: { id: 'tels.achievements.leaderboard.overtake', defaultMessage: '{count, plural, one {# point takes you one place up} other {# points take you one place up}}' },
   leading: { id: 'tels.achievements.leaderboard.leading', defaultMessage: 'You are in the lead. Keep it up!' },
   noPoints: { id: 'tels.achievements.leaderboard.none', defaultMessage: 'Earn your first points to join the leaderboard.' },
+  unavailable: { id: 'tels.achievements.unavailable', defaultMessage: 'This page is not available on this site.' },
 });
 
 export default messages;

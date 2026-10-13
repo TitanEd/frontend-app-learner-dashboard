@@ -9,7 +9,7 @@
  * grouping happen here, in the learner's own time zone.
  */
 import React, {
-  useCallback, useEffect, useMemo, useState,
+  useCallback, useEffect, useMemo, useRef, useState,
 } from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
@@ -17,7 +17,7 @@ import { getConfig } from '@edx/frontend-platform';
 import { getAuthenticatedHttpClient } from '@edx/frontend-platform/auth';
 import { useIntl } from '@edx/frontend-platform/i18n';
 import {
-  Button, Container, Form, Icon, Spinner,
+  Button, Container, Form, Icon, Pagination, Spinner,
 } from '@openedx/paragon';
 import {
   ArrowForward, Assignment, CheckCircle, Edit, HourglassEmpty, Quiz, Schedule, Search, Timer, UploadFile,
@@ -110,6 +110,8 @@ Ring.propTypes = {
   size: PropTypes.number,
 };
 
+const PAGE_SIZE = 20;
+
 const AssessmentsPage = () => {
   const intl = useIntl();
   const [data, setData] = useState(null);
@@ -119,13 +121,16 @@ const AssessmentsPage = () => {
   const [kind, setKind] = useState('');
   const [period, setPeriod] = useState('');
   const [query, setQuery] = useState('');
+  const [page, setPage] = useState(1);
+  const listTop = useRef(null);
 
   const load = useCallback(() => {
     setFailed(false);
     getAuthenticatedHttpClient()
       .get(`${getConfig().LMS_BASE_URL}/titaned/api/v2/my-assessments/`)
       .then((response) => setData(response.data))
-      .catch(() => setFailed(true));
+      // 403: the feature this page belongs to is not part of the site's plan.
+      .catch((error) => setFailed(error?.response?.status === 403 ? 'unavailable' : true));
   }, []);
   useEffect(() => { load(); }, [load]);
 
@@ -159,6 +164,25 @@ const AssessmentsPage = () => {
     return GROUPS.filter(([key]) => byGroup[key]).map(([key, label]) => ({ key, label, list: byGroup[key] }));
   }, [shown, now]);
 
+  // PAGE_SIZE assessments per page; a group that does not fit goes on over the next page.
+  useEffect(() => { setPage(1); }, [status, course, kind, period, query]);
+  const pageCount = Math.max(1, Math.ceil(shown.length / PAGE_SIZE));
+  const currentPage = Math.min(page, pageCount);
+  const pageGroups = useMemo(() => {
+    let skip = (currentPage - 1) * PAGE_SIZE;
+    let room = PAGE_SIZE;
+    return groups.map((group) => {
+      const list = group.list.slice(skip, skip + room);
+      skip = Math.max(0, skip - group.list.length);
+      room -= list.length;
+      return { ...group, total: group.list.length, list };
+    }).filter((group) => group.list.length > 0);
+  }, [groups, currentPage]);
+  const goToPage = (number) => {
+    setPage(number);
+    if (listTop.current) { listTop.current.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+  };
+
   const time = (date) => intl.formatTime(date, { hour: 'numeric', minute: '2-digit' });
   const day = (date) => intl.formatDate(date, {
     weekday: 'short', month: 'short', day: 'numeric', year: date.getFullYear() === now.getFullYear() ? undefined : 'numeric',
@@ -187,8 +211,10 @@ const AssessmentsPage = () => {
   if (failed) {
     body = (
       <div className="tas-state" role="alert">
-        <p>{intl.formatMessage(messages.error)}</p>
-        <Button variant="outline-primary" onClick={load}>{intl.formatMessage(messages.retry)}</Button>
+        <p>{intl.formatMessage(failed === 'unavailable' ? messages.unavailable : messages.error)}</p>
+        {failed !== 'unavailable' && (
+          <Button variant="outline-primary" onClick={load}>{intl.formatMessage(messages.retry)}</Button>
+        )}
       </div>
     );
   } else if (!data) {
@@ -315,9 +341,10 @@ const AssessmentsPage = () => {
               </div>
             )}
 
-            {groups.map((group) => (
+            <div ref={listTop} className="tas-list-top" />
+            {pageGroups.map((group) => (
               <section key={group.key} className={`tas-group tas-group--${group.key}`}>
-                <h2>{intl.formatMessage(group.label)} <span>{intl.formatNumber(group.list.length)}</span></h2>
+                <h2>{intl.formatMessage(group.label)} <span>{intl.formatNumber(group.total)}</span></h2>
                 <ul className="tas-list">
                   {group.list.map((item) => {
                     const meta = KINDS[item.kind] || KINDS.quiz;
@@ -380,6 +407,31 @@ const AssessmentsPage = () => {
                 </ul>
               </section>
             ))}
+
+            {pageCount > 1 && (
+              <div className="tas-pager">
+                <span aria-live="polite">
+                  {intl.formatMessage(messages.pageRange, {
+                    from: (currentPage - 1) * PAGE_SIZE + 1,
+                    to: Math.min(currentPage * PAGE_SIZE, shown.length),
+                    total: shown.length,
+                  })}
+                </span>
+                <Pagination
+                  paginationLabel={intl.formatMessage(messages.paginationLabel)}
+                  pageCount={pageCount}
+                  currentPage={currentPage}
+                  onPageSelect={goToPage}
+                  buttonLabels={{
+                    previous: intl.formatMessage(messages.pagePrevious),
+                    next: intl.formatMessage(messages.pageNext),
+                    page: intl.formatMessage(messages.pageWord),
+                    currentPage: intl.formatMessage(messages.pageCurrent),
+                    pageOfCount: intl.formatMessage(messages.pageOf),
+                  }}
+                />
+              </div>
+            )}
           </>
         )}
       </>

@@ -25,6 +25,7 @@ import messages from './customMessages';
 import customGetUserMenuItems from './utils/customGetUserMenuItems';
 import registerFontAwesomeIcons from './utils/RegisterFontAwesome';
 import HeaderExtras, { headerUser } from './customHeaderExtras';
+import { useSiteFeatures, withSiteFeatures } from './useSiteFeatures';
 
 // Custom UI styles load after the stock Verawood styles (as in the previous
 // version), so on equal specificity the custom rules win.
@@ -73,7 +74,9 @@ const CustomLayoutShell = () => {
   const [userMenuItemsFromAPI, setUserMenuItemsFromAPI] = useState({});
 
   // Sidebar items are pages of this MFE (see CustomLayout routes below).
-  const sidebarItems = [
+  // "My Assessments" and "My Achievements" are features a site may not have (useSiteFeatures.js).
+  const siteFeatures = useSiteFeatures();
+  const sidebarItems = withSiteFeatures([
     {
       label: intl.formatMessage(messages.sidebarDashboardTitle),
       path: '/',
@@ -87,14 +90,16 @@ const CustomLayoutShell = () => {
     {
       label: intl.formatMessage(messages.sidebarMyAssessmentsTitle),
       path: '/assessments',
+      feature: 'assessment_center',
       icon: <Assignment />,
     },
     {
       label: intl.formatMessage(messages.sidebarMyAchievementsTitle),
       path: '/achievements',
+      feature: 'gamification',
       icon: <EmojiEvents />,
     },
-  ];
+  ], siteFeatures);
 
   useEffect(() => {
     document.documentElement.classList.add(CUSTOM_UI_CLASS);
