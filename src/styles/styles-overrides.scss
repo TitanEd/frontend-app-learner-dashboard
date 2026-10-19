@@ -343,18 +343,30 @@ margin: 10px;
   }
 }
 
-/* 📱 When screen width ≤900px → stack vertically */
+/* 📱 When screen width ≤900px → a grid of as many columns as fit cards of at
+   least 16rem: two on tablets, one on phones. The card's own max-width and
+   margin (.cardContainer rules above) are for the desktop flex row only. */
 @media (max-width: 900px) {
-  .cardList-direction-alignment {
-    flex-direction: column !important;
-    flex-wrap: nowrap !important;
-    margin: 0;
+  .course-list-wrapper .cardList-direction-alignment {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr));
+    gap: 1rem;
+    margin: 0 !important;
+    padding: 0 !important;
   }
 
-  .cardList-direction-alignment > * {
-    flex: 0 0 auto;
-    width: 100%;
-    margin: 0 0 1rem 0; /* spacing between cards */
+  .course-list-wrapper .cardList-direction-alignment > * {
+    flex: none !important;
+    width: auto !important;
+    max-width: none !important;
+    min-width: 0;
+    margin: 0 !important;
+  }
+
+  .cardContainer-buttons button {
+    flex: 1 1 0;
+    width: auto;
+    min-width: 0;
   }
 }
 

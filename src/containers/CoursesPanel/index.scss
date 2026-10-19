@@ -5,12 +5,14 @@
   align-items: center;
   // Keeps the title clear of the controls next to it (longer translated titles).
   gap: var(--pgn-spacing-spacer-2);
+  // Space above the course cards, below whichever is taller: title or controls.
+  margin-bottom: var(--pgn-spacing-spacer-3);
 }
 
 .course-list-title {
   font-size: var(--pgn-typography-font-size-h2-base);
-  // Top inset is on the page container (1rem); keep vertical rhythm below only.
-  margin: 0 0 var(--pgn-spacing-spacer-3);
+  // Top inset is on the page container (1rem); the gap below is on the row.
+  margin: 0;
 }
 
 .course-list-loading {
@@ -25,19 +27,23 @@
   align-self: center;
 }
 
-@media (--pgn-size-breakpoint-max-width-md) {
+// Plain values: the build does not resolve Paragon's custom media queries
+// (--pgn-size-breakpoint-max-width-md), so that rule never applied.
+// Phones and small tablets: title first, controls below it at full width.
+@media (max-width: 767.98px) {
   .course-list-heading-container {
-    flex-direction: column-reverse;
-    align-items: flex-start;
+    flex-direction: column;
+    align-items: stretch;
   }
 
   .course-filter-controls-container {
-    text-align: left;
-    align-self: flex-start;
+    text-align: start;
+    align-self: stretch;
+    min-width: 0;
   }
 
   .course-list-title {
     font-size: var(--pgn-typography-font-size-h3-base);
-    margin: var(--pgn-spacing-spacer-2) 0;
+    margin: 0;
   }
 }

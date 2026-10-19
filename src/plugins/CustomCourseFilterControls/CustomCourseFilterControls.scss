@@ -41,20 +41,24 @@
 @media (max-width: 768px) {
   #course-filter-controls {
     flex-direction: column;
-    align-items: flex-start;
-    
-    // Filter buttons row stays inline
+    align-items: stretch !important; // the component sets align-items inline
+    width: 100%;
+    min-width: 0;
+
+    // Filter buttons row stays inline; wraps on the narrowest phones
     .filter-buttons-row {
       order: 1;
       display: flex;
       flex-direction: row;
+      flex-wrap: wrap;
       gap: 10px;
     }
-    
-    // Masquerade bar goes below
+
+    // Masquerade bar goes below, across the full width
     .custom-masquerade-bar {
       order: 2;
       width: 100%;
+      min-width: 0;
       
       // Form layout: row but wrap to create label on top, input+button on bottom
       // Override CustomMasqueradeBar mobile styles
@@ -64,7 +68,7 @@
         flex-wrap: wrap !important;
         align-items: center !important;
         gap: 10px;
-        width: auto !important;
+        width: 100% !important;
       }
       
       // Label takes full width (forces new line)
@@ -82,20 +86,21 @@
         align-items: center !important;
         gap: 10px;
         flex-wrap: nowrap !important;
-        flex: 0 0 auto;
-        width: auto;
+        flex: 1 1 100%;
+        width: 100%;
+        min-width: 0;
       }
       
-      // Input and submit stay in same row - prevent wrapping
+      // Input and submit stay in same row: the input takes the room the
+      // button leaves, so the row never runs off a phone screen.
       // Override CustomMasqueradeBar mobile styles
       &__input-wrapper {
-        flex: 0 0 auto !important;
+        flex: 1 1 auto !important;
         width: auto !important;
-        min-width: 200px !important;
+        min-width: 0 !important;
         max-width: none !important;
         margin: 0 !important;
         align-self: center !important;
-        flex-shrink: 0 !important;
       }
       
       // Submit button next to input - keep aligned even in pending state
@@ -137,8 +142,8 @@
         flex-direction: row !important;
         align-items: center !important;
         gap: 8px !important;
-        flex-wrap: nowrap !important;
-        width: 50% !important;
+        flex-wrap: wrap !important;
+        width: 100% !important;
       }
       
       &__viewing &__label {

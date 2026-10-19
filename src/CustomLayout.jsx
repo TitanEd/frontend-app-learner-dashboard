@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from 'react';
 
 import { Spinner } from '@openedx/paragon';
 import {
-  Assignment, EmojiEvents, Home, LmsBook,
+  Assignment, Calendar, EmojiEvents, Home, LmsBook, VideoCall,
 } from '@openedx/paragon/icons';
 import {
   Navigate, Outlet, Route, Routes, useLocation, useNavigate,
@@ -21,6 +21,8 @@ import CustomApp from './CustomApp';
 import CustomHomeDashboard from './components/CustomHomeDashboard/BoardHome';
 import AchievementsPage from './achievements/AchievementsPage';
 import AssessmentsPage from './assessments/AssessmentsPage';
+import CalendarPage from './calendar/CalendarPage';
+import MeetingsPage from './meetings/MeetingsPage';
 import messages from './customMessages';
 import customGetUserMenuItems from './utils/customGetUserMenuItems';
 import registerFontAwesomeIcons from './utils/RegisterFontAwesome';
@@ -74,7 +76,7 @@ const CustomLayoutShell = () => {
   const [userMenuItemsFromAPI, setUserMenuItemsFromAPI] = useState({});
 
   // Sidebar items are pages of this MFE (see CustomLayout routes below).
-  // "My Assessments" and "My Achievements" are features a site may not have (useSiteFeatures.js).
+  // Entries with a `feature` are sold features a site may not have (useSiteFeatures.js).
   const siteFeatures = useSiteFeatures();
   const sidebarItems = withSiteFeatures([
     {
@@ -92,6 +94,18 @@ const CustomLayoutShell = () => {
       path: '/assessments',
       feature: 'assessment_center',
       icon: <Assignment />,
+    },
+    {
+      label: intl.formatMessage(messages.sidebarMyMeetingsTitle),
+      path: '/meetings',
+      feature: 'zoom_integration',
+      icon: <VideoCall />,
+    },
+    {
+      label: intl.formatMessage(messages.sidebarMyCalendarTitle),
+      path: '/calendar',
+      feature: 'calendar',
+      icon: <Calendar />,
     },
     {
       label: intl.formatMessage(messages.sidebarMyAchievementsTitle),
@@ -224,6 +238,8 @@ const CustomLayout = () => (
       <Route path="/" element={<PageWrap><CustomHomeDashboard /></PageWrap>} />
       <Route path="/my-courses" element={<PageWrap><CustomApp /></PageWrap>} />
       <Route path="/assessments" element={<PageWrap><AssessmentsPage /></PageWrap>} />
+      <Route path="/meetings" element={<PageWrap><MeetingsPage /></PageWrap>} />
+      <Route path="/calendar" element={<PageWrap><CalendarPage audience="learner" /></PageWrap>} />
       <Route path="/achievements" element={<PageWrap><AchievementsPage /></PageWrap>} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Route>

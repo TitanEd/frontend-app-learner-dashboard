@@ -23,6 +23,16 @@ const messages = defineMessages({
     defaultMessage: 'My Assessments',
     description: 'Title of the my assessments sidebar item',
   },
+  sidebarMyMeetingsTitle: {
+    id: 'sidebar.my-meetings.title',
+    defaultMessage: 'My Meetings',
+    description: 'Title of the my meetings (Zoom live classes) sidebar item',
+  },
+  sidebarMyCalendarTitle: {
+    id: 'sidebar.my-calendar.title',
+    defaultMessage: 'My Calendar',
+    description: 'Title of the my calendar sidebar item',
+  },
   sidebarMyAchievementsTitle: {
     id: 'sidebar.my-achievements.title',
     defaultMessage: 'My Achievements',
