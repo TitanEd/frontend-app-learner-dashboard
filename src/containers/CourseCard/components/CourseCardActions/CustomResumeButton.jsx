@@ -9,6 +9,7 @@ import track from 'tracking';
 import { useCourseTrackingEvent, useCourseData } from 'hooks';
 import { useInitializeLearnerHome } from 'data/hooks';
 // import useActionDisabledState from '../hooks';
+import usePrerequisites from '../../../../plugins/CustomMyCourseWidget/usePrerequisites';
 import ActionButton from './ActionButton';
 import messages from './messages';
 
@@ -31,14 +32,16 @@ export const ResumeButton = ({ cardId }) => {
     cardId,
     baseAppUrl(resumeUrl) + execEdTrackingParam,
   );
-  const isDisabled = allowResume === false;
+  // Also off while the course waits for its prerequisite courses (the card says which).
+  const { isLocked } = usePrerequisites(cardId);
+  const isDisabled = allowResume === false || isLocked;
   return (
     <ActionButton
       disabled={isDisabled}
       as="a"
       href="#"
       onClick={(e) => {
-        if (allowResume === false) {
+        if (isDisabled) {
           e.preventDefault();
           return;
         }

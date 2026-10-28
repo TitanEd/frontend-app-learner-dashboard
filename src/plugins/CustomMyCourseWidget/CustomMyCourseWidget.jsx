@@ -8,7 +8,7 @@ import {
 } from "@openedx/paragon";
 import { useCourseData, useEntitlementInfo } from "hooks";
 import { baseAppUrl } from "data/services/lms/urls";
-import { Settings } from "@openedx/paragon/icons";
+import { Locked, Settings } from "@openedx/paragon/icons";
 import { useIntl } from "@edx/frontend-platform/i18n";
 import useCardDetailsData from "../../containers/CourseCard/components/CourseCardDetails/hooks";
 
@@ -19,12 +19,16 @@ import ViewCourseButton from "../../containers/CourseCard/components/CourseCardA
 import CourseCardMenu from "../../containers/CourseCard/components/CourseCardMenu/CustomCourseCardMenu";
 import ActionButton from "../../containers/CourseCard/components/CourseCardActions/ActionButton";
 import messages from "../../customMessages";
+import bannerMessages from "../../containers/CourseCard/components/CourseCardBanners/messages";
+import usePrerequisites from "./usePrerequisites";
 
 const fallbackImage = "https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg";
 
 const CustomMyCourseWidget = ({ cardId }) => {
-  const { formatMessage, formatDate } = useIntl();
+  const { formatMessage, formatDate, formatList } = useIntl();
   const courseData = useCourseData(cardId);
+  // Locked until the prerequisite courses are completed (Begin/Resume are disabled too).
+  const prerequisites = usePrerequisites(cardId);
   // Get course basic details
   const courseName = courseData?.course?.courseName || formatMessage(messages.untitledCourse);
   const bannerImgSrc = courseData?.course?.bannerImgSrc
@@ -125,6 +129,24 @@ const CustomMyCourseWidget = ({ cardId }) => {
             </p>
           )}
         </div>
+
+        {prerequisites.isLocked && (
+          <div className="course-card-prerequisite" role="note">
+            <Icon src={Locked} className="course-card-prerequisite__icon" />
+            <p className="m-0">
+              {prerequisites.courses.length > 0
+                ? formatMessage(messages.courseCardPrerequisite, {
+                  courses: formatList(
+                    prerequisites.courses.map((course) => (
+                      <a key={course.id} href={course.url}>{course.name}</a>
+                    )),
+                    { type: "conjunction" },
+                  ),
+                })
+                : formatMessage(bannerMessages.prerequisitesNotMet)}
+            </p>
+          </div>
+        )}
 
         <div className="cardContainer-buttons">
           {/* Action buttons logic */}

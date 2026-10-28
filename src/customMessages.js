@@ -143,6 +143,11 @@ const messages = defineMessages({
     defaultMessage: 'Ended {date}',
     description: 'End date of a course run that has ended, on a course card',
   },
+  courseCardPrerequisite: {
+    id: 'learner-dashboard.custom.course-card.prerequisite',
+    defaultMessage: 'Complete {courses} first to unlock this course.',
+    description: 'Notice on a course card when the learner must complete other courses (links) before starting this one',
+  },
   untitledCourse: {
     id: 'learner-dashboard.custom.untitled-course',
     defaultMessage: 'Untitled Course',

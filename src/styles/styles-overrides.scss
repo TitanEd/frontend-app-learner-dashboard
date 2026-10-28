@@ -951,3 +951,34 @@ margin: 10px;
     }
   }
 }
+
+// Course card locked by prerequisite courses (CustomMyCourseWidget): which course to finish first.
+.course-card-prerequisite {
+  display: flex;
+  align-items: flex-start;
+  gap: .5rem;
+  margin-bottom: .75rem;
+  padding: .5rem .75rem;
+  border-inline-start: 3px solid var(--pgn-color-warning-500);
+  border-radius: 6px;
+  // A tint of the warning colour and the card's text colour: readable in light and dark mode.
+  background-color: color-mix(in srgb, var(--pgn-color-warning-500) 14%, transparent);
+  color: inherit;
+  font-size: max(1rem, var(--pgn-typography-font-size-sm));
+  line-height: var(--pgn-typography-line-height-base);
+  text-align: start;
+
+  .course-card-prerequisite__icon {
+    flex: none;
+    width: 1.25rem;
+    height: 1.25rem;
+    margin-top: .15rem;
+    color: var(--pgn-color-warning-700);
+  }
+
+  a {
+    font-weight: 600;
+    color: var(--pgn-color-primary-base);
+    text-decoration: underline;
+  }
+}
