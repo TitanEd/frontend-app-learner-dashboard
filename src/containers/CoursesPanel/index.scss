@@ -5,6 +5,9 @@
   align-items: center;
   // Keeps the title clear of the controls next to it (longer translated titles).
   gap: var(--pgn-spacing-spacer-2);
+  // When the content column is narrow (sidebar open on a tablet), the controls
+  // move below the title instead of running off the page.
+  flex-wrap: wrap;
   // Space above the course cards, below whichever is taller: title or controls.
   margin-bottom: var(--pgn-spacing-spacer-3);
 }
@@ -25,6 +28,8 @@
 .course-filter-controls-container {
   text-align: right;
   align-self: center;
+  margin-inline-start: auto;
+  max-width: 100%;
 }
 
 // Plain values: the build does not resolve Paragon's custom media queries

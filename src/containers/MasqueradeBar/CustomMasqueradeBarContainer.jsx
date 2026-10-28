@@ -14,9 +14,10 @@ const CustomMasqueradeBarContainer = () => {
   const { formatMessage } = useIntl();
   const { isError, error, isPending } = useInitializeLearnerHome();
   const { authenticatedUser } = React.useContext(AppContext);
-  const [masqueradeInput, setMasqueradeInput] = React.useState('');
   const canMasquerade = authenticatedUser?.administrator;
   const { masqueradeUser, setMasqueradeUser } = useMasquerade();
+  // The bar is mounted again when the dashboard reloads for the chosen learner: start from that learner.
+  const [masqueradeInput, setMasqueradeInput] = React.useState(masqueradeUser || '');
   const handleMasqueradeInputChange = (e) => setMasqueradeInput(e.target.value);
   const handleClearMasquerade = () => {
     setMasqueradeUser(undefined);
@@ -44,6 +45,7 @@ const CustomMasqueradeBarContainer = () => {
       isMasqueradingFailed={isMasqueradingFailed}
       isMasqueradingPending={isMasqueradingPending}
       masqueradeInput={masqueradeInput}
+      masqueradeUser={masqueradeUser}
       masqueradeErrorMessage={masqueradeErrorMessage}
       handleMasqueradeInputChange={handleMasqueradeInputChange}
       handleClearMasquerade={handleClearMasquerade}

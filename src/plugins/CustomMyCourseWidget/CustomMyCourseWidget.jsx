@@ -104,7 +104,8 @@ const CustomMyCourseWidget = ({ cardId }) => {
       />
       <Card.Section className="text-center card-content-section">
         <div className="title-container">
-          <h6 className="card-title fw-bold">{courseName}</h6>
+          {/* Clamped to two lines; the full name shows on hover */}
+          <h6 className="card-title fw-bold" title={courseName}>{courseName}</h6>
           <section className="title-subsection">
             <div className="title-messages">
               <p className="text-muted small m-0">{providerName}</p>

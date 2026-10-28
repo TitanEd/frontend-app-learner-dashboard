@@ -151,6 +151,10 @@ border: solid 1px var(--border-color, var(--pgn-color-light-400)) !important;
 .card-content-section {
   padding: 0 6px !important;
   margin-bottom: 10px;
+  /* Fills the card so the buttons sit at the bottom of every card in a row */
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
 }
 }
 
@@ -229,19 +233,13 @@ justify-content: space-between;
 flex: 0 0 80%;
 }
 
-/* Course run dates: "Started … · Ends …"; wraps between the two dates */
+/* Course run dates: one line each ("Started …" above "Ends …"), both
+   starting at the same edge */
 .course-card-dates {
 display: flex;
-flex-wrap: wrap;
-}
-
-.course-card-dates__item {
-white-space: nowrap;
-}
-
-.course-card-dates__item + .course-card-dates__item::before {
-content: "\00b7";
-margin-inline: 0.375em;
+flex-direction: column;
+align-items: flex-start;
+gap: 2px;
 }
 
 .title-icon {
@@ -256,7 +254,7 @@ flex-direction: row;
 justify-content: flex-start; /* keep buttons left-aligned */
 align-items: center;
 gap: 10px; /* spacing between buttons */
-padding: 0 -1px 12px 16px; /* spacing from card edges */
+margin-top: auto; /* bottom of the card, whatever the title and dates take */
 
 button {
   width: 258px;
@@ -270,7 +268,6 @@ button {
 }
 
 .cardContainer {
-min-height: 316px; /* grows when the course dates wrap to a second line */
 margin: 10px;
 }
 
@@ -318,7 +315,7 @@ margin: 10px;
   display: flex !important;
   flex-wrap: wrap !important;
   justify-content: flex-start !important;
-  align-items: flex-start;
+  align-items: stretch; /* cards of one row share their height */
   margin: 0 -8px; /* compensate child margins */
 }
 
@@ -414,7 +411,6 @@ margin: 10px;
   }
 
 .title-container {
-    min-height: 90px; /* Same height for all cards; grows when the dates wrap */
     display: flex;
     flex-direction: column;
     justify-content: flex-start; /* Keep title at the top */
@@ -433,6 +429,7 @@ margin: 10px;
     text-overflow: ellipsis;
     color: var(--primary);
     margin: 0; /* Remove margin to prevent container stretching */
+    min-height: 2.4em; /* two lines, so the rows below line up across cards */
 }
 
 .dashboard-sidebar-no-display {

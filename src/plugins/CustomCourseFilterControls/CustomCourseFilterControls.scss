@@ -8,6 +8,11 @@
 // Desktop view - ensure everything stays in one row
 @media (min-width: 769px) {
   #course-filter-controls {
+    // "View as" and the two dropdowns are two groups; the dropdowns go to a
+    // second line when both do not fit.
+    flex-wrap: wrap;
+    justify-content: flex-end;
+
     .custom-masquerade-bar {
       // Form should keep everything inline on desktop - no wrapping
       &__form {

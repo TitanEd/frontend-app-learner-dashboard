@@ -20,6 +20,7 @@ const CustomMasqueradeBar = ({
   isMasqueradingFailed,
   isMasqueradingPending,
   masqueradeInput,
+  masqueradeUser,
   masqueradeErrorMessage,
   handleMasqueradeInputChange,
   handleClearMasquerade,
@@ -40,8 +41,9 @@ const CustomMasqueradeBar = ({
             className="custom-masquerade-bar__chip"
             iconAfter={Close}
             onClick={handleClearMasquerade}
+            title={masqueradeUser}
           >
-            {masqueradeInput}
+            {masqueradeUser}
           </Chip>
         </div>
       ) : (
