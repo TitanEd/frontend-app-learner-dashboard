@@ -267,6 +267,20 @@ button {
 }
 }
 
+/* Two actions (Resume + View Certificate): one full-width button per line. Side by side each
+   got half the card and "View Certificate" broke over two lines, taller than its neighbour. */
+.cardContainer-buttons:has(> :nth-child(2)) {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+
+  > .btn,
+  > button {
+    width: 100%;
+    white-space: nowrap;
+  }
+}
+
 .cardContainer {
 margin: 10px;
 }
