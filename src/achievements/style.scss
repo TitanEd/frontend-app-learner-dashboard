@@ -368,6 +368,13 @@
   }
 
   .ta-ring__value { stroke: var(--ta-gold); }
+
+  &__more { margin-block-start: 1.25rem; padding-block-start: 1rem; border-block-start: 1px solid var(--ta-line); }
+  &__more h3 { margin: 0 0 .75rem; font-size: .95rem; font-weight: 600; color: var(--ta-muted); }
+  &__more ul { display: grid; gap: .75rem; margin: 0; padding: 0; list-style: none; }
+  &__item { display: flex; align-items: center; gap: .75rem 1rem; flex-wrap: wrap; }
+  &__item-text { flex: 1 1 180px; min-inline-size: 0; display: flex; flex-direction: column; }
+  &__item-text small { color: var(--ta-muted); }
 }
 
 .ta-badges {
@@ -542,6 +549,7 @@
   }
 
   .ta-next__body .btn { inline-size: 100%; }
+  .ta-next__item .btn { inline-size: 100%; }
 }
 
 @media (prefers-reduced-motion: reduce) {

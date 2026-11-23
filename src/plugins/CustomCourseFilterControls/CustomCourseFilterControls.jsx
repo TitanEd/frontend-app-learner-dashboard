@@ -53,7 +53,9 @@ const CustomCourseFilterControls = ({
           </Dropdown.Toggle>
 
           {/* IMPORTANT: stopPropagation prevents dropdown from auto-closing when interacting with the form */}
+          {/* align="right" opens the menu leftwards, so it stays clear of the docked AI assistant panel */}
           <Dropdown.Menu
+            align="right"
             style={{
               minWidth: '320px',
               padding: '10px',
@@ -81,6 +83,7 @@ const CustomCourseFilterControls = ({
           </Dropdown.Toggle>
 
           <Dropdown.Menu
+            align="right"
             style={{
               minWidth: '260px',
               padding: '10px',

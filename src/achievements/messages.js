@@ -18,6 +18,7 @@ const messages = defineMessages({
   nextReward: { id: 'tels.achievements.next.title', defaultMessage: 'Your next reward' },
   nextRewardLeft: { id: 'tels.achievements.next.left', defaultMessage: '{count, plural, one {Only # more to go} other {Only # more to go}}' },
   nextRewardStart: { id: 'tels.achievements.next.start', defaultMessage: 'One step starts it' },
+  nextRewardMore: { id: 'tels.achievements.next.more', defaultMessage: 'Also within reach' },
   allEarned: { id: 'tels.achievements.next.all', defaultMessage: 'You have earned every badge. New ones will appear here.' },
   goLearning: { id: 'tels.achievements.cta.learning', defaultMessage: 'Go to my courses' },
   goCourses: { id: 'tels.achievements.cta.courses', defaultMessage: 'Browse courses' },
