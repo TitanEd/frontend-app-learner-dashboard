@@ -22,6 +22,9 @@ import {
 import messages from './messages';
 import './style.scss';
 
+// The card shows the next badge plus up to four more.
+const NEXT_REWARD_LIMIT = 5;
+
 const Ring = ({ percent, children, size = 132 }) => {
   const radius = 52;
   const length = 2 * Math.PI * radius;
@@ -156,22 +159,41 @@ const AchievementsPage = () => {
             <section className="ta-card ta-next">
               <h2><Icon src={Bolt} /> {intl.formatMessage(messages.nextReward)}</h2>
               {next ? (
-                <div className="ta-next__body">
-                  <Ring percent={next.percent} size={104}><BadgeArt badge={next} locked /></Ring>
-                  <div className="ta-next__text">
-                    <strong>{next.title}</strong>
-                    <p>{next.description}</p>
-                    <p className="ta-next__left">
-                      {next.current > 0
-                        ? intl.formatMessage(messages.nextRewardLeft, { count: next.remaining })
-                        : intl.formatMessage(messages.nextRewardStart)}
-                      {next.step && ` · ${next.step}`}
-                    </p>
+                <>
+                  <div className="ta-next__body">
+                    <Ring percent={next.percent} size={104}><BadgeArt badge={next} locked /></Ring>
+                    <div className="ta-next__text">
+                      <strong>{next.title}</strong>
+                      <p>{next.description}</p>
+                      <p className="ta-next__left">
+                        {next.current > 0
+                          ? intl.formatMessage(messages.nextRewardLeft, { count: next.remaining })
+                          : intl.formatMessage(messages.nextRewardStart)}
+                        {next.step && ` · ${next.step}`}
+                      </p>
+                    </div>
+                    <Button variant="primary" iconAfter={ArrowForward} onClick={() => go(next.place)}>
+                      {intl.formatMessage(cta[next.place] || messages.goLearning)}
+                    </Button>
                   </div>
-                  <Button variant="primary" iconAfter={ArrowForward} onClick={() => go(next.place)}>
-                    {intl.formatMessage(cta[next.place] || messages.goLearning)}
-                  </Button>
-                </div>
+                  {data.ahead.length > 1 && (
+                    <div className="ta-next__more">
+                      <h3>{intl.formatMessage(messages.nextRewardMore)}</h3>
+                      <ul>
+                        {data.ahead.slice(1, NEXT_REWARD_LIMIT).map((badge) => (
+                          <li key={badge.id} className="ta-next__item">
+                            <Ring percent={badge.percent} size={56}><BadgeArt badge={badge} locked /></Ring>
+                            <div className="ta-next__item-text">
+                              <strong>{badge.title}</strong>
+                              <small>{badge.current > 0 ? intl.formatMessage(messages.nextRewardLeft, { count: badge.remaining }) : intl.formatMessage(messages.nextRewardStart)}{badge.step && ` · ${badge.step}`}</small>
+                            </div>
+                            <Button variant="outline-primary" size="sm" onClick={() => go(badge.place)}>{intl.formatMessage(cta[badge.place] || messages.goLearning)}</Button>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </>
               ) : <p className="ta-muted">{intl.formatMessage(messages.allEarned)}</p>}
             </section>
 
