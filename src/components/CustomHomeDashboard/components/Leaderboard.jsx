@@ -15,7 +15,8 @@ const Leaderboard = ({ leaderboardData = [] }) => {
         {/* <a
           href="www.google.com"
           style={{
-            color: 'var(--pgn-color-primary-base)', textDecoration: 'none', fontSize: '14px', marginRight: '1rem', paddingBottom: '6px',
+            color: 'var(--pgn-color-primary-base)', textDecoration: 'none', fontSize: '14px',
+            marginRight: '1rem', paddingBottom: '6px',
           }}
         >
           {intl.formatMessage(messages.viewAll)}
