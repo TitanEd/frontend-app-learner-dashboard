@@ -326,6 +326,7 @@ const AssessmentsPage = () => {
                   value={query}
                   leadingElement={<Icon src={Search} />}
                   onChange={(event) => setQuery(event.target.value)}
+                  placeholder={intl.formatMessage(messages.filterPlaceholderSearch)}
                 />
               </Form.Group>
               <div className="tas-filters__foot">
