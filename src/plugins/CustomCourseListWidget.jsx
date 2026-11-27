@@ -13,23 +13,23 @@ const CustomCourseListWidget = ({
 }) => {
   const { formatMessage } = useIntl();
   return (
-  <div className="course-list-wrapper">
-    <div className="cardList-direction-alignment">
-      {visibleList?.map(({ cardId }) => (
-        <CustomMyCourseWidget key={cardId} cardId={cardId} />
-      ))}
+    <div className="course-list-wrapper">
+      <div className="cardList-direction-alignment">
+        {visibleList?.map(({ cardId }) => (
+          <CustomMyCourseWidget key={cardId} cardId={cardId} />
+        ))}
+      </div>
+      <div className="pagination-container">
+        {numPages > 1 && (
+          <Pagination
+            variant={isCollapsed ? 'reduced' : 'secondary'}
+            paginationLabel={formatMessage(customMessages.courseListLabel)}
+            pageCount={numPages}
+            onPageSelect={setPageNumber}
+          />
+        )}
+      </div>
     </div>
-    <div className="pagination-container">
-      {numPages > 1 && (
-        <Pagination
-          variant={isCollapsed ? 'reduced' : 'secondary'}
-          paginationLabel={formatMessage(customMessages.courseListLabel)}
-          pageCount={numPages}
-          onPageSelect={setPageNumber}
-        />
-      )}
-    </div>
-  </div>
   );
 };
 

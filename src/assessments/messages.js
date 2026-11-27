@@ -44,6 +44,11 @@ const messages = defineMessages({
   filterMonth: { id: 'tels.assessments.filter.due.month', defaultMessage: 'This month' },
   filterYear: { id: 'tels.assessments.filter.due.year', defaultMessage: 'This year' },
   search: { id: 'tels.assessments.filter.search', defaultMessage: 'Search assessments' },
+  filterPlaceholderSearch: {
+    id: 'tels.assessments.filter.placeholder.search',
+    defaultMessage: 'Search',
+    description: 'Placeholder of the search box in the assessments filters',
+  },
   showing: { id: 'tels.assessments.showing', defaultMessage: '{count, plural, one {# assessment} other {# assessments}}' },
 
   groupPastDue: { id: 'tels.assessments.group.past_due', defaultMessage: 'Past due' },

@@ -34,7 +34,6 @@ import {
 import ConfirmEmailBanner from '../../containers/LearnerDashboardHeader/ConfirmEmailBanner/CustomConfirmEmailBanner.jsx';
 // import { CSS } from '@dnd-kit/utilities';
 
-
 const normalizeList = (data) => {
   if (Array.isArray(data)) {
     return data;

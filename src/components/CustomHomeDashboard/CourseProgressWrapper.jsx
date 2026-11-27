@@ -29,8 +29,8 @@ const CourseProgressBar = ({ progress = 0, loading = false }) => {
             width={barWidth}
             height={barHeight}
             rx="4"
-            style={{ fill: 'var(--pgn-color-light-300)' }}
             style={{
+              fill: 'var(--pgn-color-light-300)',
               animation: 'pulse 1.5s ease-in-out infinite alternate',
             }}
           />
@@ -61,8 +61,8 @@ const CourseProgressBar = ({ progress = 0, loading = false }) => {
           width={completedWidth}
           height={barHeight}
           rx="4"
-          style={{ fill: 'var(--pgn-color-primary-base)' }}
           style={{
+            fill: 'var(--pgn-color-primary-base)',
             transition: 'width 0.3s ease',
           }}
         />

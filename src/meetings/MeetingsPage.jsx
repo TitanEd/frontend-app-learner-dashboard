@@ -25,6 +25,7 @@ import {
   Cancel, CheckCircle, EventAvailable, OndemandVideo, Person, PlayCircle, Repeat, Schedule, Search, VideoCall,
 } from '@openedx/paragon/icons';
 
+import { TelsDateInput } from '../calendar/TelsDateTimeInput';
 import messages from './messages';
 import {
   PAGE_SIZE, daysAway, downloadIcs, groupByDay, inPeriod, matchesText, paginateGroups, prepare, rangeParams, tabOf,
@@ -382,17 +383,35 @@ const MeetingsPage = () => {
           </Form.Group>
           <Form.Group controlId="mtg-search" className="mtg-filters__search">
             <Form.Label>{intl.formatMessage(messages.search)}</Form.Label>
-            <Form.Control type="search" value={query} leadingElement={<Icon src={Search} />} onChange={(event) => setQuery(event.target.value)} />
+            <Form.Control
+              type="search"
+              value={query}
+              leadingElement={<Icon src={Search} />}
+              onChange={(event) => setQuery(event.target.value)}
+              placeholder={intl.formatMessage(messages.filterPlaceholderSearch)}
+            />
           </Form.Group>
           {period === 'custom' && (
             <div className="mtg-filters__range">
               <Form.Group controlId="mtg-from">
                 <Form.Label>{intl.formatMessage(messages.filterFrom)}</Form.Label>
-                <Form.Control type="date" value={from} max={to || undefined} onChange={(event) => setFrom(event.target.value)} />
+                <TelsDateInput
+                  id="mtg-from"
+                  value={from}
+                  max={to || undefined}
+                  onChange={setFrom}
+                  placeholder={intl.formatMessage(messages.placeholderDate)}
+                />
               </Form.Group>
               <Form.Group controlId="mtg-to">
                 <Form.Label>{intl.formatMessage(messages.filterTo)}</Form.Label>
-                <Form.Control type="date" value={to} min={from || undefined} onChange={(event) => setTo(event.target.value)} />
+                <TelsDateInput
+                  id="mtg-to"
+                  value={to}
+                  min={from || undefined}
+                  onChange={setTo}
+                  placeholder={intl.formatMessage(messages.placeholderDate)}
+                />
               </Form.Group>
             </div>
           )}
